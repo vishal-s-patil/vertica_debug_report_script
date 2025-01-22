@@ -264,7 +264,7 @@ if __name__ == "__main__":
         help="Enable verbose mode to display executed queries.")
 
     args = parser.parse_args()
-    if args.help:
+    if help_flag:
         parser.print_help()
         exit(0)
 
