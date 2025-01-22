@@ -130,6 +130,8 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
 
                 query = replace_conditions(query, d)
 
+                print('query', query)
+
                 query = query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 print(f"\n\nQuery Name: {query_name}")
