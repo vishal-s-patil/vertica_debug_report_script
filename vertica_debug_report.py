@@ -233,11 +233,8 @@ if __name__ == "__main__":
     # parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
     args = parser.parse_args()
-    if args.help:
-        parser.print_help()
-        exit(0)
-    parser.add_argument("--subcluster_name", required=True, help="Name of the subcluster, it is a mandatory argument.")
-    parser.add_argument("--inputfilepath", required=True, help="Input file path, it is a mandatory argument.")
+    parser.add_argument("--subcluster_name", required=False if args.help else True, help="Name of the subcluster, it is a mandatory argument.")
+    parser.add_argument("--inputfilepath", required=False if args.help else True, help="Input file path, it is a mandatory argument.")
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
@@ -246,6 +243,9 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", required=False, action="store_true", help="Enable verbose output")
 
     args = parser.parse_args()
+    if args.help:
+        parser.print_help()
+        exit(0)
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
