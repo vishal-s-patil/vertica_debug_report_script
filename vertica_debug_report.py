@@ -138,7 +138,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
 
         with open(csv_file_path, mode='r') as file:
             csv_reader = csv.DictReader(file, delimiter='~')
-            
+            print("entered")
             for row in csv_reader:
                 qid = int(row['qid'])
                 query_name = row['query_name']
@@ -187,7 +187,6 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
 
 
 if __name__ == "__main__":
-    print("entered")
     parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--subcluster_name", required=True)
     parser.add_argument("--inputfilepath", required=True)
