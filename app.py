@@ -90,7 +90,7 @@ def replace_conditions(query, conditions_dict):
                 
                 query = query.replace(f"{{{match}}}", new_condition)
     
-    
+    print('query', query)
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
@@ -129,8 +129,6 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                         d[key] = val
 
                 query = replace_conditions(query, d)
-
-                print('query', query)
 
                 query = query.replace("<subcluster_name>", filters['subcluster_name'])
                 
