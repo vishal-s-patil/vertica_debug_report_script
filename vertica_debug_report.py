@@ -7,6 +7,7 @@ from tabulate import tabulate
 import argparse
 from datetime import datetime, timedelta
 import re
+import sys
 
 
 with open("config.json", "r") as config_file:
@@ -232,13 +233,16 @@ class MyArgumentParser(argparse.ArgumentParser):
 if __name__ == "__main__":
     parser = MyArgumentParser(description="Args")
     # parser = argparse.ArgumentParser(description="Args")
-    parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
-    args = parser.parse_args()
-
-    parser.add_argument("--subcluster_name", required=False if args.help else True, 
+    # parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
+    help_flag = False
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "--help":
+            help_flag = True
+        
+    parser.add_argument("--subcluster_name", required=False if help_flag else True, 
         help="Name of the subcluster.")
 
-    parser.add_argument("--inputfilepath", required=False if args.help else True, 
+    parser.add_argument("--inputfilepath", required=False if help_flag else True, 
         help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
 
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[], 
