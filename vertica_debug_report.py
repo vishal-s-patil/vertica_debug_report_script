@@ -113,6 +113,22 @@ def replace_conditions(query, conditions_dict):
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
+def highlight_text(query_result):
+    colors = {
+        "normal": "\033[92m",  # Green
+        "warning": "\033[93m",  # Orange/Yellow
+        "fatal": "\033[91m",  # Red
+    }
+    reset_color = "\033[0m"  # Reset to default
+
+    for severity, color_code in colors.items():
+        if severity in query_result.lower():
+            query_result = query_result.replace(
+                severity, f"{color_code}{severity}{reset_color}"
+            )
+
+    return query_result
+
 def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
@@ -158,6 +174,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 print(f"Query Description: {query_description}")
                 print("-" * len(f"Query Description: {query_description}"))
                 query_result = execute_vertica_query(vertica_connection, query)
+                query_result = highlight_text(query_result)
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
@@ -192,6 +209,5 @@ if __name__ == "__main__":
         "pool_name": args.pool_name,
         "table_name": args.table_name,
     }
-
 
     execute_queries_from_csv(csv_path, filters, queries_to_execute)
