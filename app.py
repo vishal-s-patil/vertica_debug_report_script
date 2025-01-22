@@ -83,6 +83,7 @@ def replace_conditions(query, conditions_dict):
 
             print("cop", column_name, operator, placeholder)
             
+            print('conditions_dict', conditions_dict)
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
                 
