@@ -118,6 +118,9 @@ def highlight_text(query_result):
     reset_color = "\033[0m"  # Reset to default
 
     for severity, color_code in colors.items():
+        print()
+        print(query_result)
+        print()
         if severity in query_result.lower():
             query_result = query_result.replace(
                 severity, f"{color_code}{severity}{reset_color}"
