@@ -234,14 +234,39 @@ if __name__ == "__main__":
     # parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
     args = parser.parse_args()
-    parser.add_argument("--subcluster_name", required=False if args.help else True, help="Name of the subcluster, it is a mandatory argument.")
-    parser.add_argument("--inputfilepath", required=False if args.help else True, help="Input file path, it is a mandatory argument.")
-    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
-    parser.add_argument("--from_date_time", required=False, default=None)
-    parser.add_argument("--to_date_time", required=False, default=None)
-    parser.add_argument("--pool_name", required=False, default='')
-    parser.add_argument("--table_name", required=False, default=None)
-    parser.add_argument("--verbose", required=False, action="store_true", help="Enable verbose output")
+    # parser.add_argument("--subcluster_name", required=False if args.help else True, help="Name of the subcluster")
+    # parser.add_argument("--inputfilepath", required=False if args.help else True, help="Input csv file path which ishould be in qid~query_name~query~query_description fromat")
+    # parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[], help="space separated list of queries names to execute, if empty then all will be executed")
+    # parser.add_argument("--from_date_time", required=False, default=None, help="Its is a where condition filter applicable to queries which has placeholder from_date_time")
+    # parser.add_argument("--to_date_time", required=False, default=None, help="Its is a where condition filter applicable to queries which has placeholder from_date_time")
+    # parser.add_argument("--pool_name", required=False, default='', help="Name of the pool, Applicable to only queries which have pool_name as place holder")
+    # parser.add_argument("--table_name", required=False, default=None, help="table name filter, Applicable to only queries which have table_name as place holder, LIKE and ILIKE can be used with % at the starting or end or both sides")
+    # parser.add_argument("--verbose", required=False, action="store_true", help="Show queries executed in verbose mode")
+
+
+    parser.add_argument("--subcluster_name", required=False if args.help else True, 
+        help="Name of the subcluster (mandatory unless --help is used).")
+
+    parser.add_argument("--inputfilepath", required=False if args.help else True, 
+        help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
+
+    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[], 
+        help="Space-separated list of query names to execute. If empty, all queries will be executed.")
+
+    parser.add_argument("--from_date_time", required=False, default=None, 
+        help="Filter condition for queries with the 'from_date_time' placeholder.")
+
+    parser.add_argument("--to_date_time", required=False, default=None, 
+        help="Filter condition for queries with the 'to_date_time' placeholder.")
+
+    parser.add_argument("--pool_name", required=False, default='', 
+        help="Name of the pool for queries with the 'pool_name' placeholder.")
+
+    parser.add_argument("--table_name", required=False, default=None, 
+        help="Filter for table names. Supports LIKE/ILIKE with % at the start, end, or both.")
+
+    parser.add_argument("--verbose", required=False, action="store_true", 
+        help="Enable verbose mode to display executed queries.")
 
     args = parser.parse_args()
     if args.help:
