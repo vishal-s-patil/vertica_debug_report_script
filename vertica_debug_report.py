@@ -7,6 +7,8 @@ from tabulate import tabulate
 import argparse
 from datetime import datetime, timedelta
 import re
+import textwrap
+
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
@@ -145,7 +147,7 @@ def process_query_result_and_highlight_text(query_result):
 
     return process_item(query_result)
 
-def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
+def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -167,15 +169,11 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 d = {}
                 if filters['from_date_time'] is not None:
                     query = replace_tables_in_query(query)
-                    # d['from_date_time'] = filters['from_date_time']
                     replaced_tables = True
                 if filters['to_date_time'] is not None:
                     if not replaced_tables:
                         query = replace_tables_in_query(query)
-                    # d['to_date_time'] = filters['to_date_time']
                 
-
-                print(filters)
                 for key, val in filters.items():
                     if val is not None:
                         d[key] = val
@@ -188,8 +186,13 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 print("-" * len(f"Query Name: {query_name}"))
                 print(f"Query Description: {query_description}")
                 print("-" * len(f"Query Description: {query_description}"))
+                
+                if verbose:
+                    print('query', query)
+                
                 query_result = execute_vertica_query(vertica_connection, query)
                 query_result = process_query_result_and_highlight_text(query_result)
+                
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
@@ -201,10 +204,19 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
         print(f"Error while processing the CSV file or executing queries: {e}")
 
 
+def format_help_text(description, width=40, padding=10):
+    """Formats the help text to align descriptions."""
+    wrapped_text = textwrap.fill(description, width=width)
+    # Adjust the wrapping to add padding after the description
+    lines = wrapped_text.splitlines()
+    for i in range(1, len(lines)):
+        lines[i] = ' ' * padding + lines[i]
+    return "\n".join(lines)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Args")
-    parser.add_argument("--subcluster_name", required=True)
-    parser.add_argument("--inputfilepath", required=True)
+    parser.add_argument("--subcluster_name", required=True, help=format_help_text("Name of the subcluster, it is a mandatory argument.")),
+    parser.add_argument("--inputfilepath", required=True, help=format_help_text("Input file path, it is a mandatory argument."))
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
@@ -214,11 +226,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.verbose:
-        print("Verbose mode is enabled.")
-    else:
-        print("Verbose mode is not enabled.")
-    
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
     csv_path = args.inputfilepath
@@ -231,4 +238,4 @@ if __name__ == "__main__":
         "table_name": args.table_name,
     }
 
-    execute_queries_from_csv(csv_path, filters, queries_to_execute)
+    execute_queries_from_csv(csv_path, filters, args.verbose, queries_to_execute)
