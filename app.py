@@ -155,7 +155,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 
                 print(f"\n\nQuery Name: {query_name}")
                 print("-" * len(f"Query Name: {query_name}"))
-                print(f"\n\nQuery Description: {query_description}")
+                print(f"Query Description: {query_description}")
                 print("-" * len(f"Query Description: {query_description}"))
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result:
