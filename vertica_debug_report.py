@@ -263,10 +263,11 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
 
-    args = parser.parse_args()
     if help_flag:
         parser.print_help()
         exit(0)
+        
+    args = parser.parse_args()
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
