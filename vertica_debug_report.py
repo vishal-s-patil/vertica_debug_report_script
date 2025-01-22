@@ -208,7 +208,7 @@ if __name__ == "__main__":
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
-    parser.add_argument("--pool_name", required=False, default=None)
+    parser.add_argument("--pool_name", required=False, default='')
     parser.add_argument("--table_name", required=False, default=None)
 
     args = parser.parse_args()
