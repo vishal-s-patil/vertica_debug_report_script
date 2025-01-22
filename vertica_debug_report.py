@@ -205,6 +205,10 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
 
 
 class MyArgumentParser(argparse.ArgumentParser):
+    def __init__(self, *args, **kwargs):
+        kwargs['add_help'] = False  # Suppress the default --help
+        super().__init__(*args, **kwargs)
+        
     def print_help(self, *args, **kwargs):
         """Override print_help to customize the output."""
         table_data = []
@@ -234,8 +238,13 @@ if __name__ == "__main__":
     parser.add_argument("--pool_name", required=False, default='')
     parser.add_argument("--table_name", required=False, default=None)
     parser.add_argument("--verbose", required=False, action="store_true", help="Enable verbose output")
+    parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
 
     args = parser.parse_args()
+
+    if args.help:
+        parser.print_help()
+        exit(0)
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
