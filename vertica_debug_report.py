@@ -208,6 +208,7 @@ class MyArgumentParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
         kwargs['add_help'] = False
         super().__init__(*args, **kwargs)
+        self.mandatory_arguments = ["subcluster_name", "inputfilepath"]
         
     def print_help(self, *args, **kwargs):
         """Override print_help to customize the output."""
@@ -216,7 +217,7 @@ class MyArgumentParser(argparse.ArgumentParser):
             # Add rows to the table
             table_data.append([
                 f"--{action.dest}",
-                "mandatory" if action.required else "optional",
+                "mandatory" if action.dest in self.mandatory_arguments else "optional",
                 action.help
             ])
         
