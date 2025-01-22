@@ -183,3 +183,4 @@ venv/
 *.temp
 *.tmp
 test*
+push.sh

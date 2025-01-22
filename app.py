@@ -91,7 +91,7 @@ def replace_conditions(query, conditions_dict):
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
-def execute_queries_from_csv(csv_file_path, filters, serial_numbers=None):
+def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -106,7 +106,7 @@ def execute_queries_from_csv(csv_file_path, filters, serial_numbers=None):
                 query_name = row['query_name']
                 query = row['query']
                 
-                if serial_numbers and qid not in serial_numbers:
+                if queries_to_execute and query_name not in queries_to_execute:
                     continue
                 
                 replaced_tables = False
@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    queries = []
+    queries_to_execute = ["long_running_queries"]
     csv_path = args.inputfilepath
     
     filters = {
@@ -164,4 +164,4 @@ if __name__ == "__main__":
     }
     
 
-    execute_queries_from_csv(csv_path, filters, queries)
+    execute_queries_from_csv(csv_path, filters, queries_to_execute)
