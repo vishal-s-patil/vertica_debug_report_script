@@ -1,0 +1,7 @@
+Date:2025-01-22
+Version:1.0.0
+Features
+1. Tabulated query results.
+2. Dynamic queries execution.
+3. Vertica database support.
+4. Execution of queries on live tables as well as backup tables with date filters.
