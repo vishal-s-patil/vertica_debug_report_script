@@ -90,7 +90,7 @@ def replace_conditions(query, conditions_dict):
                 
                 query = query.replace(f"{{{match}}}", new_condition)
     
-    print('query', query)
+    # print('query', query)
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
@@ -124,6 +124,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                     # d['to_date_time'] = filters['to_date_time']
                 
 
+                print(filters)
                 for key, val in filters.items():
                     if val is not None:
                         d[key] = val
