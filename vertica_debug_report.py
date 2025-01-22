@@ -204,19 +204,30 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
         print(f"Error while processing the CSV file or executing queries: {e}")
 
 
-def format_help_text(description, width=40, padding=40):
-    """Formats the help text to align descriptions."""
-    wrapped_text = textwrap.fill(description, width=width)
-    # Adjust the wrapping to add padding after the description
-    lines = wrapped_text.splitlines()
-    for i in range(1, len(lines)):
-        lines[i] = ' ' * padding + lines[i]
-    return "\n".join(lines)
+class MyArgumentParser(argparse.ArgumentParser):
+    def print_help(self, *args, **kwargs):
+        """Override print_help to customize the output."""
+        table_data = []
+        for action in self._actions:
+            # Add rows to the table
+            table_data.append([
+                f"--{action.dest}",
+                "mandatory" if action.required else "optional",
+                action.help
+            ])
+        
+        # Print the table with headers
+        print(tabulate(
+            table_data,
+            headers=["Argument", "Type", "Description"],
+            tablefmt="plain",
+            stralign="left"
+        ))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Args")
-    parser.add_argument("--subcluster_name", required=True, help=format_help_text("Name of the subcluster, it is a mandatory argument.")),
-    parser.add_argument("--inputfilepath", required=True, help=format_help_text("Input file path, it is a mandatory argument."))
+    parser.add_argument("--subcluster_name", required=True, help="Name of the subcluster, it is a mandatory argument.")
+    parser.add_argument("--inputfilepath", required=True, help="Input file path, it is a mandatory argument.")
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
