@@ -261,10 +261,10 @@ if __name__ == "__main__":
         help="Filter condition for queries with the 'to_date_time' placeholder.")
 
     parser.add_argument("--pool_name", required=False, default='', 
-        help="Name of the pool for queries with the 'pool_name' placeholder.")
+        help="Filter condition for queries with the 'pool_name' placeholder.")
 
     parser.add_argument("--table_name", required=False, default=None, 
-        help="Filter for table names. Supports LIKE/ILIKE with % at the start, end, or both.")
+        help="Filter condition for queries with the 'table_name' placeholder. Supports LIKE/ILIKE with % at the start, end, or both.")
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
