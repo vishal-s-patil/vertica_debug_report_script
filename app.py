@@ -65,13 +65,16 @@ def replace_tables_in_query(query):
 
 
 def replace_conditions(query, conditions_dict):
+    query = query.lower()
     pattern = re.compile(r'\{([^}]+)\}')
     
     matches = pattern.findall(query)
     
     for match in matches:
-        condition_parts = re.split(r'([<>!=]=?|[><]=?)', match, 1)
-        
+        # condition_parts = re.split(r'([<>!=]=?|[><]=?)', match, 1)
+        # condition_parts = re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)
+        condition_parts = [part.strip() for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)]
+
         if len(condition_parts) == 3:
             column_name = condition_parts[0].strip()
             operator = condition_parts[1].strip()
@@ -147,10 +150,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--subcluster_name", required=True)
     parser.add_argument("--inputfilepath", required=True)
+    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
     parser.add_argument("--pool_name", required=False, default=None)
-    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
+    parser.add_argument("--table_name", required=False, default=None)
 
     args = parser.parse_args()
     
@@ -163,7 +167,8 @@ if __name__ == "__main__":
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
         "pool_name": args.pool_name,
+        "table_name": args.table_name,
     }
-    
+
 
     execute_queries_from_csv(csv_path, filters, queries_to_execute)
