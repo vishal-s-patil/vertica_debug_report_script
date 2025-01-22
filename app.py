@@ -79,6 +79,8 @@ def replace_conditions(query, conditions_dict):
             column_name = condition_parts[0].strip()
             operator = condition_parts[1].strip()
             placeholder = match.split(operator, 1)[1].strip()
+
+            print("cop", column_name, operator, placeholder)
             
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
