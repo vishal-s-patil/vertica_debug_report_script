@@ -187,6 +187,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
 
 
 if __name__ == "__main__":
+    print("entered")
     parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--subcluster_name", required=True)
     parser.add_argument("--inputfilepath", required=True)
