@@ -204,7 +204,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
         print(f"Error while processing the CSV file or executing queries: {e}")
 
 
-def format_help_text(description, width=40, padding=10):
+def format_help_text(description, width=40, padding=40):
     """Formats the help text to align descriptions."""
     wrapped_text = textwrap.fill(description, width=width)
     # Adjust the wrapping to add padding after the description
