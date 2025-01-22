@@ -157,7 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
     parser.add_argument("--pool_name", required=False, default=None)
-    parser.add_argument("--table_name", required=False, default=None)
+    parser.add_argument("--projection_name", required=False, default=None)
 
     args = parser.parse_args()
     
@@ -170,7 +170,7 @@ if __name__ == "__main__":
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
         "pool_name": args.pool_name,
-        "table_name": args.table_name,
+        "projection_name": args.projection_name,
     }
 
 
