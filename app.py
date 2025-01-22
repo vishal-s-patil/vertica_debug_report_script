@@ -153,7 +153,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    queries_to_execute = ["long_running_queries"]
+    queries_to_execute = ["long_running_queries", "queue_status"]
     csv_path = args.inputfilepath
     
     filters = {
