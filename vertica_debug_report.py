@@ -210,8 +210,14 @@ if __name__ == "__main__":
     parser.add_argument("--to_date_time", required=False, default=None)
     parser.add_argument("--pool_name", required=False, default='')
     parser.add_argument("--table_name", required=False, default=None)
+    parser.add_argument("--verbose", required=False, action="store_true", help="Enable verbose output")
 
     args = parser.parse_args()
+
+    if args.verbose:
+        print("Verbose mode is enabled.")
+    else:
+        print("Verbose mode is not enabled.")
     
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
