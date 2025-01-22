@@ -246,7 +246,7 @@ if __name__ == "__main__":
 
 
     parser.add_argument("--subcluster_name", required=False if args.help else True, 
-        help="Name of the subcluster (mandatory unless --help is used).")
+        help="Name of the subcluster.")
 
     parser.add_argument("--inputfilepath", required=False if args.help else True, 
         help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
