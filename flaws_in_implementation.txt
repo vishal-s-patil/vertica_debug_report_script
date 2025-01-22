@@ -1,0 +1,7 @@
+1. func replace_tables_in_query does not work for complex queries
+    ->it replaces all the live tables with all the respective backup tables
+    ->in scenarios where joins include between live and backup tables occur 
+      this func fails.
+    ->fix: find a intelligent way to replace only necessary table names
+
+2. 

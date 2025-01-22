@@ -1,3 +1,9 @@
+Date:
+Version:1.1.0
+Fixes
+1. The date filter has been removed from long-running queries, as it is derived from the sessions table. Because query execution time can only be measured against the current timestamp. This logic is not applicable to the backup sessions table, and also there is no column to represent session duration.
+2. The script now replaces table names only when they include date filters.
+
 Date:2025-01-22
 Version:1.0.0
 Features
