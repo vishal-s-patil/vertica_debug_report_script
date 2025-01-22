@@ -206,7 +206,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
 
 class MyArgumentParser(argparse.ArgumentParser):
     def __init__(self, *args, **kwargs):
-        kwargs['add_help'] = False  # Suppress the default --help
+        kwargs['add_help'] = False
         super().__init__(*args, **kwargs)
         
     def print_help(self, *args, **kwargs):
@@ -229,7 +229,8 @@ class MyArgumentParser(argparse.ArgumentParser):
         ))
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Args")
+    parser = MyArgumentParser(description="Args")
+    # parser = argparse.ArgumentParser(description="Args")
     parser.add_argument("--subcluster_name", required=True, help="Name of the subcluster, it is a mandatory argument.")
     parser.add_argument("--inputfilepath", required=True, help="Input file path, it is a mandatory argument.")
     parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
