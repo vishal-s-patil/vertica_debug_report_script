@@ -121,10 +121,10 @@ def highlight_text(query_result):
         print()
         print(query_result)
         print()
-        if severity in query_result.lower():
-            query_result = query_result.replace(
-                severity, f"{color_code}{severity}{reset_color}"
-            )
+        # if severity in query_result.lower():
+        #     query_result = query_result.replace(
+        #         severity, f"{color_code}{severity}{reset_color}"
+        #     )
 
     return query_result
 
