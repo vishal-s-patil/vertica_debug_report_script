@@ -150,10 +150,12 @@ if __name__ == "__main__":
     parser.add_argument("--from_date_time", required=False, default=None)
     parser.add_argument("--to_date_time", required=False, default=None)
     parser.add_argument("--pool_name", required=False, default=None)
+    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[])
 
     args = parser.parse_args()
     
-    queries_to_execute = ["long_running_queries", "queue_status"]
+    # queries_to_execute = ["long_running_queries", "queue_status"]
+    queries_to_execute = args.queries_to_execute
     csv_path = args.inputfilepath
     
     filters = {
