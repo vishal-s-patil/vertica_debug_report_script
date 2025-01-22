@@ -89,9 +89,6 @@ def replace_conditions(query, conditions_dict):
             elif placeholder.endswith("%"):
                 flag = 2
 
-            print("cop", column_name, operator, placeholder)
-            
-            print('conditions_dict', conditions_dict)
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
                 
@@ -109,7 +106,6 @@ def replace_conditions(query, conditions_dict):
                 
                 query = query.replace(f"{{{match}}}", new_condition)
     
-    print('query', query)
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
@@ -138,7 +134,6 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
 
         with open(csv_file_path, mode='r') as file:
             csv_reader = csv.DictReader(file, delimiter='~')
-            print("entered")
             for row in csv_reader:
                 qid = int(row['qid'])
                 query_name = row['query_name']
@@ -174,7 +169,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 print(f"Query Description: {query_description}")
                 print("-" * len(f"Query Description: {query_description}"))
                 query_result = execute_vertica_query(vertica_connection, query)
-                # query_result = highlight_text(query_result)
+                query_result = highlight_text(query_result)
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
