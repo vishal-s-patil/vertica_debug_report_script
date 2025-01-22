@@ -127,6 +127,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 qid = int(row['qid'])
                 query_name = row['query_name']
                 query = row['query']
+                query_description = row['query_description']
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
@@ -154,6 +155,8 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 
                 print(f"\n\nQuery Name: {query_name}")
                 print("-" * len(f"Query Name: {query_name}"))
+                print(f"\n\nQuery Description: {query_description}")
+                print("-" * len(f"Query Description: {query_description}"))
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
