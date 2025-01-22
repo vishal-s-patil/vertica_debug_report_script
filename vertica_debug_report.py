@@ -109,7 +109,18 @@ def replace_conditions(query, conditions_dict):
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
-def highlight_text(query_result):
+def process_query_result_and_highlight_text(query_result):
+    """
+    Processes the query result to color specific substrings
+    (normal, warning, fatal) in string values.
+
+    Parameters:
+        query_result (list): The nested list query result.
+
+    Returns:
+        list: The processed query result with colored strings.
+    """
+    # Define colors for each severity level
     colors = {
         "normal": "\033[92m",  # Green
         "warning": "\033[93m",  # Orange/Yellow
@@ -117,16 +128,22 @@ def highlight_text(query_result):
     }
     reset_color = "\033[0m"  # Reset to default
 
-    for severity, color_code in colors.items():
-        print()
-        print(query_result)
-        print()
-        # if severity in query_result.lower():
-        #     query_result = query_result.replace(
-        #         severity, f"{color_code}{severity}{reset_color}"
-        #     )
+    def apply_color(text):
+        """Apply color to the string if it contains specific keywords."""
+        for severity, color_code in colors.items():
+            if severity in text.lower():
+                text = text.replace(severity, f"{color_code}{severity}{reset_color}")
+        return text
 
-    return query_result
+    def process_item(item):
+        """Recursively process each item in the query result."""
+        if isinstance(item, list):
+            return [process_item(sub_item) for sub_item in item]
+        elif isinstance(item, str):
+            return apply_color(item)
+        return item  # Return as-is for non-string, non-list items
+
+    return process_item(query_result)
 
 def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
     try:
@@ -172,7 +189,7 @@ def execute_queries_from_csv(csv_file_path, filters, queries_to_execute=None):
                 print(f"Query Description: {query_description}")
                 print("-" * len(f"Query Description: {query_description}"))
                 query_result = execute_vertica_query(vertica_connection, query)
-                query_result = highlight_text(query_result)
+                query_result = process_query_result_and_highlight_text(query_result)
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
