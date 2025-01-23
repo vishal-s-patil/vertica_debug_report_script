@@ -371,11 +371,11 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
         print(f"Error while processing the CSV file or executing queries: {e}")
     
 
-if __name__ == "__main__":
-    json_file_path = "queries.json"
-    execute_queries_from_json(json_file_path)
+# if __name__ == "__main__":
+#     json_file_path = "queries.json"
+#     execute_queries_from_json(json_file_path)
 
-if 1==2:#__name__ == "__main__":
+if __name__ == "__main__":
     parser = MyArgumentParser(description="Args")
     # parser = argparse.ArgumentParser(description="Args")
     # parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
