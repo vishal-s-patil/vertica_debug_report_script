@@ -68,7 +68,7 @@ def replace_tables_in_query(query):
     
     try:
         for old, new in replacements:
-            if "from_date_time" in query or "to_date_time" in query:
+            if "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
                 query = query.replace(old, new)
         return query
     except Exception as e:
