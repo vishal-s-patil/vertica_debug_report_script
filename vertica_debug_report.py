@@ -246,7 +246,8 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 else:
-                    print("No data returned")
+                    pass
+                    #print("No data returned")
         
         vertica_connection.close()
     except Exception as e:
