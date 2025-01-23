@@ -171,18 +171,19 @@ def process_query_result_and_highlight_text(query_result):
     return process_item(query_result)
 
 
-def check_if_past_query_present(query_name, file):
-    csv_reader = csv.DictReader(file, delimiter='~')
-    count = 0
-    for row in csv_reader:
-        query_name_new = row['query_name']
-        if query_name_new[-5:] == "_past":
-            query_name_new = query_name_new[:-5]
+def check_if_past_query_present(query_name, csv_file_path):
+    with open(csv_file_path, mode='r') as file:
+        csv_reader = csv.DictReader(file, delimiter='~')
+        count = 0
+        for row in csv_reader:
+            query_name_new = row['query_name']
+            if query_name_new[-5:] == "_past":
+                query_name_new = query_name_new[:-5]
 
-        if query_name_new == query_name:
-            count += 1
-    
-    return count == 2
+            if query_name_new == query_name:
+                count += 1
+        
+        return count == 2
 
 
 def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
@@ -205,7 +206,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
 
                 is_past_query_present = False
                 if not is_now:
-                    is_past_query_present = check_if_past_query_present(query_name, file)
+                    is_past_query_present = check_if_past_query_present(query_name, csv_file_path)
                     if is_past_query_present:
                         query_name = query_name + '_past'
                 
