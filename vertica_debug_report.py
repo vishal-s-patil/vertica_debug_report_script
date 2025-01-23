@@ -321,11 +321,14 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     continue
 
                 if is_now and "select null" not in query.lower():
+                    print('reaching if')
                     final_query = query
-                elif not is_now and "select null" not in query.lower():
+                elif not is_now and "select null" not in query_past.lower():
+                    print('reaching else')
                     final_query = query_past
 
                 if query_past == "":
+                    print("replacing")
                     final_query = replace_tables_in_query(final_query)
                 
                 """
@@ -365,6 +368,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     print(f"{query_name} does not have any rows")
+                print()
+                print("================================================")
         
         vertica_connection.close()
     except Exception as e:
@@ -419,6 +424,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     is_now = False
+    print()
+    print('is_now', is_now)
+    print()
     if args.to_date_time is None and args.from_date_time is None:
         if args.issue_time is None:
             is_now = True
