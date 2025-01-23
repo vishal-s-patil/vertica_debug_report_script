@@ -289,7 +289,93 @@ class MyArgumentParser(argparse.ArgumentParser):
             stralign="left"
         ))
 
+def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_to_execute=None):
+    try:
+        vertica_connection = get_vertica_connection()
+        if not vertica_connection:
+            print("Failed to connect to the Vertica database. Exiting.")
+            return
+
+        with open(json_file_path) as json_file:
+            json_data = json_file.read()
+            json_data = json.loads(json_data)
+            for row in json_data:
+                qid = row["qid"]
+                query_name = row["query_name"]
+                query = row["query"]
+                query_description = row["query_description"]
+                query_past = row.get("query_past", "")
+
+                # qid = int(row['qid'])
+                # query_name = row['query_name']
+                # query = row['query']
+                # query_description = row['query_description']
+
+                # is_past_query_present = False
+                # if not is_now:
+                #     is_past_query_present = check_if_past_query_present(query_name, csv_file_path)
+                #     if is_past_query_present:
+                #         query_name = query_name + '_past'
+                
+                if queries_to_execute and query_name not in queries_to_execute:
+                    continue
+
+                if is_now and "select null" not in query.lower():
+                    final_query = query
+                elif not is_now and "select null" not in query.lower():
+                    final_query = query_past
+
+                if query_past == "":
+                    final_query = replace_tables_in_query(final_query)
+                
+                """
+                cases
+                query_past not present => have same query for both
+                query_past present but = select null; then don't execute
+                query present but = select null; then don't execute
+                
+                which one to execute
+                if is_now and query present != select null
+                else if not is_now and query past != select null
+                """
+
+                d = {}
+                for key, val in filters.items():
+                    if val is not None:
+                        d[key] = val
+                
+                query = replace_conditions(query, d)
+                query = query.replace("<subcluster_name>", filters['subcluster_name'])
+                
+                if verbose:
+                    print('QUERY: ', f"{query}")
+                
+                query_result = execute_vertica_query(vertica_connection, query)
+                if query_result == -1:
+                    print("column not found")
+                    continue
+                query_result = process_query_result_and_highlight_text(query_result)
+
+                if query_result:
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
+                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
+                    print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                else:
+                    print(f"{query_name} does not have any rows")
+        
+        vertica_connection.close()
+    except Exception as e:
+        print(f"Error while processing the CSV file or executing queries: {e}")
+    
+
 if __name__ == "__main__":
+    json_file_path = "queries.json"
+    execute_queries_from_json(json_file_path)
+
+if 1==2:#__name__ == "__main__":
     parser = MyArgumentParser(description="Args")
     # parser = argparse.ArgumentParser(description="Args")
     # parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
@@ -350,5 +436,5 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
     }
-
-    execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
+    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, queries_to_execute)
+    # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
