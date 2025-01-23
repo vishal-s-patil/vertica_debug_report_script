@@ -331,18 +331,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
 
                 if query_past == "":
                     print("replacing")
+                    print('final_query_before_replacing', final_query)
                     final_query = replace_tables_in_query(final_query)
-                
-                """
-                cases
-                query_past not present => have same query for both
-                query_past present but = select null; then don't execute
-                query present but = select null; then don't execute
-                
-                which one to execute
-                if is_now and query present != select null
-                else if not is_now and query past != select null
-                """
 
                 d = {}
                 for key, val in filters.items():
