@@ -262,6 +262,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
+    
+    parser.add_argument("--issue_time", required=False, 
+        help="", default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     if help_flag:
         parser.print_help()
@@ -279,6 +282,7 @@ if __name__ == "__main__":
         "to_date_time": args.to_date_time,
         "pool_name": args.pool_name,
         "table_name": args.table_name,
+        "issue_time": args.issue_time,
     }
 
     execute_queries_from_csv(csv_path, filters, args.verbose, queries_to_execute)
