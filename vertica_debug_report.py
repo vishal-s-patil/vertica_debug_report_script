@@ -184,6 +184,11 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
                     replaced_tables = True
                 if filters['to_date_time'] is not None:
                     if not replaced_tables:
+                        replaced_tables = True
+                        query = replace_tables_in_query(query)
+                if filters['issue_time'] is not None:
+                    if not replaced_tables:
+                        replaced_tables = True
                         query = replace_tables_in_query(query)
                 
                 for key, val in filters.items():
