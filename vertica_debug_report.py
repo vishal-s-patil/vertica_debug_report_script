@@ -326,6 +326,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                 elif not is_now and "select null" not in query_past.lower():
                     print('reaching else')
                     final_query = query_past
+                else:
+                    continue
 
                 if query_past == "":
                     print("replacing")
@@ -347,13 +349,13 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     if val is not None:
                         d[key] = val
                 
-                query = replace_conditions(query, d)
-                query = query.replace("<subcluster_name>", filters['subcluster_name'])
+                final_query = replace_conditions(final_query, d)
+                final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 if verbose:
-                    print('QUERY: ', f"{query}")
+                    print('QUERY: ', f"{final_query}")
                 
-                query_result = execute_vertica_query(vertica_connection, query)
+                query_result = execute_vertica_query(vertica_connection, final_query)
                 if query_result == -1:
                     print("column not found")
                     continue
