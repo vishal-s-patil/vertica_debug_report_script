@@ -207,7 +207,6 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                     is_past_query_present = check_if_past_query_present(query_name, csv_reader)
                     if is_past_query_present:
                         query_name = query_name + '_past'
-                print('entered')
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
@@ -235,7 +234,9 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query = query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 if verbose:
-                    print('query', query)
+                    print('QUERY: ', f"{query}")
+                
+                print('entered')
                 
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result == -1:
