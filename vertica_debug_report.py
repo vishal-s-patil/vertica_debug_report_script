@@ -194,7 +194,6 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
         with open(csv_file_path, mode='r') as file:
             csv_reader = csv.DictReader(file, delimiter='~')
             for row in csv_reader:
-                print('entered')
                 qid = int(row['qid'])
                 query_name = row['query_name']
                 query = row['query']
@@ -208,6 +207,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                     is_past_query_present = check_if_past_query_present(query_name, csv_reader)
                     if is_past_query_present:
                         query_name = query_name + '_past'
+                print('entered')
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
