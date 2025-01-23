@@ -59,49 +59,7 @@ def replace_tables_in_query(query):
     try:
         for old, new in replacements:
             if "from_date_time" in query or "to_date_time" in query:
-                if old == "from sessions":
-                    query = """
-                    WITH ranked_sessions AS (
-                        SELECT user_name,
-                            snapshot_time,
-                            COUNT(1) AS cnt,
-                            CASE
-                                WHEN COUNT(1) > 100 THEN 'FATAL'
-                                WHEN COUNT(1) > 50 THEN 'WARNING'
-                                ELSE 'NORMAL'
-                            END AS status,
-                            ROW_NUMBER() OVER (
-                                PARTITION BY snapshot_time
-                                ORDER BY cnt DESC
-                            ) AS row_num
-                        FROM netstats.sessions_full
-                        WHERE 1=1 and snapshot_time >= (timestamp {issue_time} - INTERVAL '30 mins') 
-                            and  snapshot_time <= timestamp {issue_time}
-                        GROUP BY snapshot_time,
-                            user_name
-                    ),
-                    limited_snapshots AS (
-                        SELECT snapshot_time,
-                            ROW_NUMBER() OVER (
-                                ORDER BY snapshot_time
-                            ) AS snapshot_rank
-                        FROM ranked_sessions
-                        GROUP BY snapshot_time
-                        ORDER BY snapshot_time
-                    )
-                    SELECT rs.snapshot_time,
-                        rs.user_name,
-                        rs.cnt,
-                        rs.status
-                    FROM ranked_sessions rs
-                        JOIN limited_snapshots ls ON rs.snapshot_time = ls.snapshot_time
-                    WHERE ls.snapshot_rank <= 3
-                        AND rs.row_num <= 5
-                    ORDER BY rs.snapshot_time,
-                        rs.cnt DESC;
-                    """
-                else:
-                    query = query.replace(old, new)
+                query = query.replace(old, new)
         return query
     except Exception as e:
         print(f"Error while replacing strings in query: {e}")
