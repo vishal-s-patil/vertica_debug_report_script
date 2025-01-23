@@ -171,7 +171,8 @@ def process_query_result_and_highlight_text(query_result):
     return process_item(query_result)
 
 
-def check_if_past_query_present(query_name, csv_reader):
+def check_if_past_query_present(query_name, file):
+    csv_reader = csv.DictReader(file, delimiter='~')
     count = 0
     for row in csv_reader:
         query_name_new = row['query_name']
@@ -204,7 +205,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
 
                 is_past_query_present = False
                 if not is_now:
-                    is_past_query_present = check_if_past_query_present(query_name, csv_reader.copy())
+                    is_past_query_present = check_if_past_query_present(query_name, file)
                     if is_past_query_present:
                         query_name = query_name + '_past'
                 
