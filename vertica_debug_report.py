@@ -241,7 +241,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                     print("column not found")
                     continue
                 query_result = process_query_result_and_highlight_text(query_result)
-                
+                print('entered')
                 if query_result:
                     if query_name[-5:] == "_past":
                         query_name = query_name[:-5]
