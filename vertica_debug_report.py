@@ -107,6 +107,8 @@ def replace_conditions(query, conditions_dict):
                         new_condition = f"AND {column_name} {operator} '{value}'"
                 
                 query = query.replace(f"{{{match}}}", new_condition)
+        elif len(condition_parts) == 1:
+            print(condition_parts)
     
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
