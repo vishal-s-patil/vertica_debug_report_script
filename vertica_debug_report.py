@@ -199,6 +199,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query = row['query']
                 query_description = row['query_description']
 
+                is_past_query_present = False
                 if not is_now:
                     is_past_query_present = check_if_past_query_present(query_name, csv_reader)
                     if is_past_query_present:
@@ -209,14 +210,14 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 
                 replaced_tables = False
                 d = {}
-                if filters['from_date_time'] is not None:
+                if filters['from_date_time'] is not None and is_past_query_present:
                     query = replace_tables_in_query(query)
                     replaced_tables = True
-                if filters['to_date_time'] is not None:
+                if filters['to_date_time'] is not None and is_past_query_present:
                     if not replaced_tables:
                         replaced_tables = True
                         query = replace_tables_in_query(query)
-                if filters['issue_time'] is not None:
+                if filters['issue_time'] is not None and is_past_query_present:
                     if not is_now and not replaced_tables:
                         replaced_tables = True
                         query = replace_tables_in_query(query)
