@@ -426,7 +426,7 @@ if __name__ == "__main__":
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
-    csv_path = args.inputfilepath
+    json_file_path = args.inputfilepath
     
     filters = {
         "subcluster_name": args.subcluster_name,
