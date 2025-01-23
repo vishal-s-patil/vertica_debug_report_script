@@ -236,8 +236,6 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 if verbose:
                     print('QUERY: ', f"{query}")
                 
-                print('entered')
-                
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result == -1:
                     print("column not found")
