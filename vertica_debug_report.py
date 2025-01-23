@@ -395,6 +395,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--pool_name", required=False, default='', 
         help="Filter condition for queries with the 'pool_name' placeholder.")
+    
+    parser.add_argument("--user_name", required=False, default='', 
+        help="Filter condition for queries with the 'user_name' placeholder.")
 
     parser.add_argument("--table_name", required=False, default=None, 
         help="Filter condition for queries with the 'table_name' placeholder. Supports LIKE/ILIKE with % at the start, end, or both.")
@@ -427,6 +430,7 @@ if __name__ == "__main__":
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
         "pool_name": args.pool_name,
+        "user_name": args.user_name,
         "table_name": args.table_name,
         "issue_time": args.issue_time,
     }
