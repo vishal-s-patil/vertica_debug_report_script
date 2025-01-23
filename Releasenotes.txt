@@ -1,6 +1,8 @@
 Date:2025-01-23
 Version:1.1.0
 Features:
+Fixes:
+1. Fixed memory_errors and all_errors queries.
 
 Date:2025-01-22
 Version:1.1.0

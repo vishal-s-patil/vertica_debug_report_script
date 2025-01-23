@@ -159,6 +159,7 @@ def process_query_result_and_highlight_text(query_result):
 
     return process_item(query_result)
 
+
 def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
