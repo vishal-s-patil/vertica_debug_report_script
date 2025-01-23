@@ -171,7 +171,7 @@ def process_query_result_and_highlight_text(query_result):
     return process_item(query_result)
 
 
-def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute=None):
+def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -199,7 +199,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
                         replaced_tables = True
                         query = replace_tables_in_query(query)
                 if filters['issue_time'] is not None:
-                    if not replaced_tables:
+                    if not is_now and not replaced_tables:
                         replaced_tables = True
                         query = replace_tables_in_query(query)
                 
@@ -305,8 +305,10 @@ if __name__ == "__main__":
         
     args = parser.parse_args()
 
+    is_now = False
     if args.to_date_time is None and args.from_date_time is None:
         if args.issue_time is None:
+            is_now = True
             args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
@@ -322,4 +324,4 @@ if __name__ == "__main__":
         "issue_time": args.issue_time,
     }
 
-    execute_queries_from_csv(csv_path, filters, args.verbose, queries_to_execute)
+    execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
