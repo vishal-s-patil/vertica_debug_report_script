@@ -109,7 +109,7 @@ def replace_conditions(query, conditions_dict):
                 query = query.replace(f"{{{match}}}", new_condition)
         elif len(condition_parts) == 1:
             placeholder = condition_parts[0].strip("'")
-            print(condition_parts)
+            print(placeholder)
     
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
