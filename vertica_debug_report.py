@@ -199,6 +199,9 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query = row['query']
                 query_description = row['query_description']
 
+                if is_now and query_name[-5:] == "_past":
+                    continue
+
                 is_past_query_present = False
                 if not is_now:
                     is_past_query_present = check_if_past_query_present(query_name, csv_reader)
