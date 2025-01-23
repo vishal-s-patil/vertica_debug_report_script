@@ -8,6 +8,7 @@ import argparse
 from datetime import datetime, timedelta
 import re
 import sys
+from vertica_python import errors
 
 
 with open("config.json", "r") as config_file:
@@ -41,6 +42,15 @@ def execute_vertica_query(vertica_connection, query):
             cursor.execute(query)
             result = cursor.fetchall()
             return result
+    except errors.MissingColumn as e:
+        #print(f"Error: Column not present in the query. Details: {e}")
+        return -1
+    except errors.QueryError as e:
+        if "does not exist" in str(e):
+            #print(f"Error: Column or table does not exist. Details: {e}")
+            return -1
+        else:
+            print(f"Error executing query: {e}")
     except Exception as e:
         print(f"Error executing query: {e}")
         return None
@@ -210,6 +220,9 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, queries_to_execute
                     print('query', query)
                 
                 query_result = execute_vertica_query(vertica_connection, query)
+                if query_result == -1:
+                    print("column not found")
+                    continue
                 query_result = process_query_result_and_highlight_text(query_result)
                 
                 if query_result:
