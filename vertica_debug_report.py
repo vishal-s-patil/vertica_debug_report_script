@@ -175,6 +175,8 @@ def check_if_past_query_present(query_name, csv_reader):
     count = 0
     for row in csv_reader:
         query_name_new = row['query_name']
+        if query_name_new[-5:] == "_past":
+            query_name_new = query_name_new[:-5]
 
         if query_name_new == query_name:
             count += 1
