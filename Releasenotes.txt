@@ -1,6 +1,8 @@
 Date:2025-01-23
 Version:1.1.0
 Features:
+1. Does not incude table in the output of query result is empty.
+2. Handling past and current queries, past queries need to be appended with _past in queries.csv
 Fixes:
 1. Fixed memory_errors and all_errors queries.
 

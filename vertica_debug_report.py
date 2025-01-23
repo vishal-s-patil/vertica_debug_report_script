@@ -185,6 +185,7 @@ def check_if_past_query_present(query_name, csv_reader):
 
 
 def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
+    print('entered')
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
