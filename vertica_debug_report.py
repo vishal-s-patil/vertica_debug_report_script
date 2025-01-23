@@ -325,7 +325,10 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     final_query = query
                 elif not is_now and "select null" not in query_past.lower():
                     print('reaching else')
-                    final_query = query_past
+                    if query_past == "":
+                        final_query = query
+                    else:
+                        final_query = query_past
                 else:
                     continue
 
