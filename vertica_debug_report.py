@@ -276,13 +276,18 @@ if __name__ == "__main__":
         help="Enable verbose mode to display executed queries.")
     
     parser.add_argument("--issue_time", required=False, 
-        help="", default=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        help="", default=None)
 
     if help_flag:
         parser.print_help()
         exit(0)
+    
         
     args = parser.parse_args()
+
+    if args.to_date_time is None and args.from_date_time is None:
+        if args.issue_time is None:
+            args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
