@@ -171,6 +171,17 @@ def process_query_result_and_highlight_text(query_result):
     return process_item(query_result)
 
 
+def check_if_past_query_present(query_name, csv_reader):
+    count = 0
+    for row in csv_reader:
+        query_name_new = row['query_name']
+
+        if query_name_new == query_name:
+            count += 1
+    
+    return count == 2
+
+
 def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
@@ -185,6 +196,11 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query_name = row['query_name']
                 query = row['query']
                 query_description = row['query_description']
+
+                if not is_now:
+                    is_past_query_present = check_if_past_query_present(query_name, csv_reader)
+                    if is_past_query_present:
+                        query_name = query_name + '_past'
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
@@ -211,11 +227,6 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
 
                 query = query.replace("<subcluster_name>", filters['subcluster_name'])
                 
-                print(f"\n\nQuery Name: {query_name}")
-                print("-" * len(f"Query Name: {query_name}"))
-                print(f"Query Description: {query_description}")
-                print("-" * len(f"Query Description: {query_description}"))
-                
                 if verbose:
                     print('query', query)
                 
@@ -226,6 +237,12 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query_result = process_query_result_and_highlight_text(query_result)
                 
                 if query_result:
+                    if query_name[-5:] == "_past":
+                        query_name = query_name[:-5]
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 else:
