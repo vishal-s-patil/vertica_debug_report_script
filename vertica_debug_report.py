@@ -290,7 +290,7 @@ class MyArgumentParser(argparse.ArgumentParser):
         ))
 
 
-def analyze(query_name, query_result):
+def analyze(query_name, query_result, filters):
     thresholds_file_path = "thresholds.json"
     with open(thresholds_file_path, "r") as file:
         json_data = file.read()
@@ -301,6 +301,9 @@ def analyze(query_name, query_result):
             print("-" * len(f"Query Name: {query_name}"))
             print(tabulate(query_result, tablefmt='grid'))
 
+            message = row["message"]
+            message = message.replace("{threshold}", row["threshold"])
+            print('message', message)
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
@@ -431,7 +434,7 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
     
-    filters = {
+    filters = { # and replacements
         "subcluster_name": args.subcluster_name,
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
