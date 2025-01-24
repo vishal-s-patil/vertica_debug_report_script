@@ -289,7 +289,17 @@ class MyArgumentParser(argparse.ArgumentParser):
             stralign="left"
         ))
 
-def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_to_execute=None):
+
+def analyze(query_name, query_result):
+    thresholds_file_path = "thresholds.json"
+    with open(thresholds_file_path, "r") as file:
+        json_data = file.read()
+        thresholds = json.loads(json_data)
+        for row in thresholds:
+            print(query_name, row["query_name"], row["threshold"])
+
+
+def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -305,17 +315,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                 query = row["query"]
                 query_description = row["query_description"]
                 query_past = row.get("query_past", "")
-
-                # qid = int(row['qid'])
-                # query_name = row['query_name']
-                # query = row['query']
-                # query_description = row['query_description']
-
-                # is_past_query_present = False
-                # if not is_now:
-                #     is_past_query_present = check_if_past_query_present(query_name, csv_file_path)
-                #     if is_past_query_present:
-                #         query_name = query_name + '_past'
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
@@ -351,12 +350,15 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                 query_result = process_query_result_and_highlight_text(query_result)
 
                 if query_result:
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
-                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                    print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    if is_only_insight:
+                        res = analyze(query_name, query_result)
+                    else:
+                        print(f"\n\nQuery Name: {query_name}")
+                        print("-" * len(f"Query Name: {query_name}"))
+                        print(f"Query Description: {query_description}")
+                        print("-" * len(f"Query Description: {query_description}"))
+                        column_headers = [desc[0] for desc in vertica_connection.cursor().description]
+                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     pass
         
@@ -364,10 +366,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
     
-
-# if __name__ == "__main__":
-#     json_file_path = "queries.json"
-#     execute_queries_from_json(json_file_path)
 
 if __name__ == "__main__":
     parser = MyArgumentParser(description="Args")
@@ -404,6 +402,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
+
+    parser.add_argument("--only_insight", required=False, action="store_true",
+        help="")
     
     parser.add_argument("--issue_time", required=False, 
         help="", default=None)
@@ -412,7 +413,6 @@ if __name__ == "__main__":
         parser.print_help()
         exit(0)
     
-        
     args = parser.parse_args()
 
     is_now = False
@@ -420,6 +420,8 @@ if __name__ == "__main__":
         if args.issue_time is None:
             is_now = True
             args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    is_only_insight = args.only_insight
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
@@ -434,5 +436,5 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
     }
-    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, queries_to_execute)
+    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)

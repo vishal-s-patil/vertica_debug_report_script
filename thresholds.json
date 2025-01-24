@@ -1,0 +1,7 @@
+[
+    {
+        "query_name": "hourly_query_count_for_past_3_hours",
+        "threshold": 0,
+        "message_template": "In last 3 hours more than {threshold} query count has beed observed."
+    }
+]
