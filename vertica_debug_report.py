@@ -301,7 +301,7 @@ def analyze(query_name, query_result):
             print("-" * len(f"Query Name: {query_name}"))
             print(tabulate(query_result, tablefmt='grid'))
 
-            message_template = row["message"]
+            message_template = row["message_template"]
             print(message_template)
             message = message_template.replace("{threshold}", row["threshold"])
             print('message', message)
