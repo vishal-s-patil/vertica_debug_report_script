@@ -306,6 +306,9 @@ def analyze(query_name, query_result):
             message = message_template.replace("{threshold}", str(row["threshold"]))
             print(query_name, ": ", message, sep="")
 
+            print()
+            print(query_result)
+
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
     try:
@@ -355,9 +358,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 if query_result == -1:
                     print("column not found")
                     continue
-                query_result = process_query_result_and_highlight_text(query_result)
+                processed_query_result = process_query_result_and_highlight_text(query_result)
 
-                if query_result:
+                if processed_query_result:
                     if is_only_insight:
                         res = analyze(query_name, query_result)
                     else:
@@ -366,7 +369,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                         print(f"Query Description: {query_description}")
                         print("-" * len(f"Query Description: {query_description}"))
                         column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                        print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     pass
         
