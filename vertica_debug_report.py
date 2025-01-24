@@ -375,7 +375,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                         print("-" * len(f"Query Description: {query_description}"))
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
-                    pass
+                    print(query_name, ": no records found")
         
         vertica_connection.close()
     except Exception as e:
