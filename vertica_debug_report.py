@@ -406,7 +406,7 @@ if __name__ == "__main__":
     parser.add_argument("--to_date_time", required=False, default=None, 
         help="Filter condition for queries with the 'to_date_time' placeholder.")
 
-    parser.add_argument("--pool_name", required=False, default='', 
+    parser.add_argument("--pool_name", required=False, default=None, 
         help="Filter condition for queries with the 'pool_name' placeholder.")
     
     parser.add_argument("--user_name", required=False, default='', 
@@ -450,6 +450,7 @@ if __name__ == "__main__":
         "user_name": args.user_name,
         "table_name": args.table_name,
         "issue_time": args.issue_time,
+        "user_name": args.user_name
     }
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
