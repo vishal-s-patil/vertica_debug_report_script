@@ -290,7 +290,7 @@ class MyArgumentParser(argparse.ArgumentParser):
         ))
 
 
-def analyze(query_name, query_result, filters):
+def analyze(query_name, query_result):
     thresholds_file_path = "thresholds.json"
     with open(thresholds_file_path, "r") as file:
         json_data = file.read()
