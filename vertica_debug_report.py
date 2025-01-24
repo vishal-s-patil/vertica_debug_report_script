@@ -403,7 +403,7 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
 
-    parser.add_argument("--only_insight", required=False, action="store_true",
+    parser.add_argument("--only_insights", required=False, action="store_true",
         help="")
     
     parser.add_argument("--issue_time", required=False, 
@@ -421,7 +421,7 @@ if __name__ == "__main__":
             is_now = True
             args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    is_only_insight = args.only_insight
+    is_only_insight = args.only_insights
 
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
