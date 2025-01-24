@@ -290,12 +290,14 @@ class MyArgumentParser(argparse.ArgumentParser):
         ))
 
 
-def analyze(query_name, query_result):
+def analyze(query_name, query_result, column_headers):
     thresholds_file_path = "thresholds.json"
     with open(thresholds_file_path, "r") as file:
         json_data = file.read()
         thresholds = json.loads(json_data)
         for row in thresholds:
+            column_to_check = row.get("column", "cnt")
+            index = column_headers.index(column_to_check)
 
             print(f"\n\nQuery Name: {query_name}")
             print("-" * len(f"Query Name: {query_name}"))
@@ -306,9 +308,8 @@ def analyze(query_name, query_result):
             message = message_template.replace("{threshold}", str(row["threshold"]))
             print(query_name, ": ", message, sep="")
 
-            print()
-            print(query_result)
-
+            for result in query_result:
+                print(result[index])
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
     try:
@@ -361,14 +362,14 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 processed_query_result = process_query_result_and_highlight_text(query_result)
 
                 if processed_query_result:
+                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     if is_only_insight:
-                        res = analyze(query_name, query_result)
+                        res = analyze(query_name, query_result, column_headers)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
                         print(f"Query Description: {query_description}")
                         print("-" * len(f"Query Description: {query_description}"))
-                        column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     pass
