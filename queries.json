@@ -49,13 +49,13 @@
         "qid": 0,
         "query_name": "hourly_query_count_for_past_3_hours",
         "query_description": "description",
-        "query": "WITH ranked_queries AS ( SELECT n.subcluster_name, DATE_TRUNC('hour', qp.query_start::timestamp) AS date_trunc_hour, qp.user_name, COUNT(1) AS cnt, AVG(qp.query_duration_us) AS avg_query_duration_us, MIN(qp.query_duration_us) AS min_query_duration_us, MAX(qp.query_duration_us) AS max_query_duration_us, AVG(qp.processed_row_count) AS avg_processed_row_count, ROW_NUMBER() OVER ( PARTITION BY DATE_TRUNC('hour', qp.query_start::timestamp) ORDER BY COUNT(1) DESC ) AS rank_in_hour FROM netstats.query_profiles AS qp JOIN nodes AS n ON n.node_name = qp.node_name WHERE 1=1 {user_name='user_name'} and query_start>=(timestamp {'issue_time'} - '3 hours') and query_start<= {'issue_time'} and n.subcluster_name = '<subcluster_name>' and qp.query_start >= DATE_TRUNC('hour', query_start) - INTERVAL '3 hours' GROUP BY n.subcluster_name, date_trunc_hour, qp.user_name ) SELECT subcluster_name, date_trunc_hour, user_name, cnt, avg_query_duration_us, min_query_duration_us, max_query_duration_us, avg_processed_row_count FROM ranked_queries WHERE rank_in_hour <= 5 ORDER BY date_trunc_hour DESC, cnt DESC;"
+        "query": "WITH ranked_queries AS ( SELECT n.subcluster_name, DATE_TRUNC('hour', qp.query_start::timestamp) AS date_trunc_hour, qp.user_name, COUNT(1) AS cnt, AVG(qp.query_duration_us) AS avg_query_duration_us, MIN(qp.query_duration_us) AS min_query_duration_us, MAX(qp.query_duration_us) AS max_query_duration_us, AVG(qp.processed_row_count) AS avg_processed_row_count, ROW_NUMBER() OVER ( PARTITION BY DATE_TRUNC('hour', qp.query_start::timestamp) ORDER BY COUNT(1) DESC ) AS rank_in_hour FROM netstats.query_profiles AS qp JOIN nodes AS n ON n.node_name = qp.node_name WHERE 1=1 {user_name='user_name'} and query_start>=(timestamp {'issue_time'} - interval '3 hours') and query_start<= {'issue_time'} and n.subcluster_name = '<subcluster_name>' and qp.query_start >= DATE_TRUNC('hour', query_start) - INTERVAL '3 hour' GROUP BY n.subcluster_name, date_trunc_hour, qp.user_name ) SELECT subcluster_name, date_trunc_hour, user_name, cnt, avg_query_duration_us, min_query_duration_us, max_query_duration_us, avg_processed_row_count FROM ranked_queries WHERE rank_in_hour <= 5 ORDER BY date_trunc_hour DESC, cnt DESC;"
     },
     {
         "qid": 0,
         "query_name": "resource_pool_status",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 and date_trunc >= (timestamp {'issue_date'} - INTERVAL '3 hours') and date_trunc <= timestamp {'issue_time'} {pool_name='pool_name'};"
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 and date_trunc >= (timestamp {'issue_date'} - INTERVAL '3 hour') and date_trunc <= timestamp {'issue_time'} {pool_name='pool_name'};"
     },
     {
         "qid": 1,
