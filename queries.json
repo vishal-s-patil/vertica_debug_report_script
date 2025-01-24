@@ -37,7 +37,7 @@
         "query_name": "queue_status",
         "query_description": "description",
         "query": "SELECT n.subcluster_name, rq.pool_name, COUNT(1) AS cnt, CASE WHEN COUNT(1) > 100 THEN 'FATAL' WHEN COUNT(1) > 50 THEN 'WARNING' ELSE 'NORMAL' END AS status FROM resource_queues AS rq JOIN nodes AS n ON n.node_name = rq.node_name WHERE 1=1 {pool_name='pool_name'} and n.subcluster_name = '<subcluster_name>' GROUP BY n.subcluster_name, rq.pool_name ORDER BY cnt desc;",
-        "query_past": "select null; todo <need to be formed.>"
+        "query_past": "WITH ranked_sessions AS ( SELECT pool_name, snapshot_time, COUNT(1) AS cnt, CASE WHEN COUNT(1) > 100 THEN 'FATAL' WHEN COUNT(1) > 50 THEN 'WARNING' ELSE 'NORMAL' END AS status, ROW_NUMBER() OVER ( PARTITION BY snapshot_time ORDER BY cnt DESC ) AS row_num FROM netstats.resource_queue_full WHERE 1 = 1 { pool_name = 'user_name' } and snapshot_time >= (timestamp { 'issue_time' } - INTERVAL '30 mins') and snapshot_time <= timestamp { 'issue_time' } GROUP BY snapshot_time, pool_name ), limited_snapshots AS ( SELECT snapshot_time, ROW_NUMBER() OVER ( ORDER BY snapshot_time ) AS snapshot_rank FROM ranked_sessions GROUP BY snapshot_time ORDER BY snapshot_time ) SELECT rs.snapshot_time, rs.pool_name, rs.cnt, rs.status FROM ranked_sessions rs JOIN limited_snapshots ls ON rs.snapshot_time = ls.snapshot_time WHERE ls.snapshot_rank <= 3 AND rs.row_num <= 5 ORDER BY rs.snapshot_time, rs.cnt DESC;"
     },
     {
         "qid": 0,
@@ -55,7 +55,7 @@
         "qid": 0,
         "query_name": "resource_pool_status",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 {pool_name='pool_name'};",
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 {pool_name='pool_name'}; ",
         "query_past": "select null;"
     },
     {
@@ -74,6 +74,6 @@
         "qid": 1,
         "query_name": "catalog_size_in_memory",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_Status where 1=1 and pool_name='metadata' order by memory_size_kb desc, general_memory_borrowed_kb desc limit 10;"
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_Status where 1=1 and pool_name='metadata' order by memory_size_kb desc, general_memory_borrowed_kb desc;"
     }
 ]
