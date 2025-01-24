@@ -296,7 +296,11 @@ def analyze(query_name, query_result):
         json_data = file.read()
         thresholds = json.loads(json_data)
         for row in thresholds:
-            print(query_name, row["query_name"], row["threshold"])
+
+            print(f"\n\nQuery Name: {query_name}")
+            print("-" * len(f"Query Name: {query_name}"))
+            print(tabulate(query_result, tablefmt='grid'))
+
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
