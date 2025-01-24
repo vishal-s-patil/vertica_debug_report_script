@@ -303,7 +303,7 @@ def analyze(query_name, query_result):
 
             message_template = row["message_template"]
             print(message_template)
-            message = message_template.replace("{threshold}", row["threshold"])
+            message = message_template.replace("{threshold}", str(row["threshold"]))
             print('message', message)
 
 
