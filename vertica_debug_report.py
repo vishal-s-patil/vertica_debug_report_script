@@ -360,7 +360,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 if query_result == -1:
-                    print("column not found")
+                    print(query_name, ": column not found")
                     continue
                 processed_query_result = process_query_result_and_highlight_text(query_result)
 
