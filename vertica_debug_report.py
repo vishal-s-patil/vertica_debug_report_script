@@ -302,6 +302,7 @@ def analyze(query_name, query_result):
             print(tabulate(query_result, tablefmt='grid'))
 
             message_template = row["message"]
+            print(message_template)
             message = message_template.replace("{threshold}", row["threshold"])
             print('message', message)
 
