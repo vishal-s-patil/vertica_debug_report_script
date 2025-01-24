@@ -296,6 +296,9 @@ def analyze(query_name, query_result, column_headers):
         json_data = file.read()
         thresholds = json.loads(json_data)
         for row in thresholds:
+            if query_name!= row["query_name"]:
+                continue
+            column_to_check = row.get("column", "cnt")
             column_to_check = row.get("column", "cnt")
             index = column_headers.index(column_to_check)
 
@@ -313,6 +316,13 @@ def analyze(query_name, query_result, column_headers):
             
             if is_out_of_threshold:
                 print(query_name, ": ", message, sep="")
+        if "status" in column_headers:
+            print(f"\n\nQuery Name: {query_name}")
+            print("-" * len(f"Query Name: {query_name}"))
+            print(tabulate(query_result, tablefmt='grid'))
+
+
+
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
     try:
