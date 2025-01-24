@@ -304,7 +304,7 @@ def analyze(query_name, query_result):
             message_template = row["message_template"]
             print(message_template)
             message = message_template.replace("{threshold}", str(row["threshold"]))
-            print(query_name, ": ", message)
+            print(query_name, ": ", message, sep="")
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
