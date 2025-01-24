@@ -74,6 +74,6 @@
         "qid": 1,
         "query_name": "catalog_size_in_memory",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_Status where 1=1 and pool_name='metadata' order by memory_size_kb, general_memory_borrowed_kb limit 10;"
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_Status where 1=1 and pool_name='metadata' order by memory_size_kb desc, general_memory_borrowed_kb desc limit 10;"
     }
 ]
