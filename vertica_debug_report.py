@@ -317,9 +317,18 @@ def analyze(query_name, query_result, column_headers):
             if is_out_of_threshold:
                 print(query_name, ": ", message, sep="")
         if "status" in column_headers:
+            index = column_headers.index("status")
+
             print(f"\n\nQuery Name: {query_name}")
             print("-" * len(f"Query Name: {query_name}"))
             print(tabulate(query_result, tablefmt='grid'))
+
+            normal_count = 0
+            for result in query_result:
+                if result[index] == "normal":
+                    normal_count += 1
+            
+            print("normal_count: ", normal_count)
 
 
 
