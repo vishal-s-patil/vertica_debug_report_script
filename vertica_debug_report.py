@@ -236,11 +236,11 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 query = query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 if verbose:
-                    print('QUERY: ', f"{query}")
+                    print('QUERY: ', f"{query}", end="\n\n")
                 
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result == -1:
-                    print(query_name, ": column not found")
+                    print(query_name, ": column not found\n")
                     continue
                 query_result = process_query_result_and_highlight_text(query_result)
 
@@ -360,7 +360,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 if query_result == -1:
-                    print(query_name, ": column not found")
+                    print(query_name, ": column not found\n")
                     continue
                 processed_query_result = process_query_result_and_highlight_text(query_result)
 
