@@ -240,7 +240,7 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
                 
                 query_result = execute_vertica_query(vertica_connection, query)
                 if query_result == -1:
-                    print("column not found")
+                    print(query_name, ": column not found")
                     continue
                 query_result = process_query_result_and_highlight_text(query_result)
 
