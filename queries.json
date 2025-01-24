@@ -55,7 +55,8 @@
         "qid": 0,
         "query_name": "resource_pool_status",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 and date_trunc >= (timestamp {'issue_date'} - INTERVAL '3 hour') and date_trunc <= timestamp {'issue_time'} {pool_name='pool_name'};"
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_status where 1=1 {pool_name='pool_name'};",
+        "query_past": "select null;"
     },
     {
         "qid": 1,
@@ -68,5 +69,11 @@
         "query_name": "deleted_row_count",
         "query_description": "description",
         "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by 1,2,3,7 order by 5 desc limit 20;"
+    },
+    {
+        "qid": 1,
+        "query_name": "catalog_size_in_memory",
+        "query_description": "description",
+        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb from resource_pool_Status where 1=1 and and pool_name='metadata' limit 10;"
     }
 ]
