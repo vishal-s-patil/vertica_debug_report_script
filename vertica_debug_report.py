@@ -496,7 +496,7 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
         "user_name": args.user_name,
-        "duration": args.duration,
+        "duration": int(args.duration),
         "num_items": args.num_items,
         "err_type": args.err_type
     }
