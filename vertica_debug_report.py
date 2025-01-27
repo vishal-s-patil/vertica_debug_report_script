@@ -374,9 +374,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
-                if verbose:
-                    print('QUERY: ', f"{final_query}")
-                
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 if query_result == -1:
                     print(query_name, ": column not found\n")
@@ -392,6 +389,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                         print("-" * len(f"Query Name: {query_name}"))
                         print(f"Query Description: {query_description}")
                         print("-" * len(f"Query Description: {query_description}"))
+                        if verbose:
+                            print('QUERY: ', f"{final_query}")
+                        print("-" * 15)
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     print(query_name, ": no records found")
