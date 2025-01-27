@@ -153,11 +153,13 @@ def process_query_result_and_highlight_text(query_result):
     }
     reset_color = "\033[0m"  # Reset to default
 
+
+
     def apply_color(text):
         """Apply color to the string if it contains specific keywords."""
         for severity, color_code in colors.items():
             if severity in text.lower():
-                text = text.replace(severity, f"{color_code}{severity}{reset_color}")
+                text = text.replace(severity, f"{color_code}{severity.upper()}{reset_color}")
         return text
 
     def process_item(item):
@@ -391,7 +393,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                         print("-" * len(f"Query Description: {query_description}"))
                         if verbose:
                             print('QUERY: ', f"{final_query}")
-                        print("-" * 15)
+                            print("-" * 15)
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     print(query_name, ": no records found")
