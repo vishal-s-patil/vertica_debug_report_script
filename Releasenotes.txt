@@ -1,10 +1,11 @@
-Date:2025-01-23
-Version:1.1.0
+Date:2025-01-27
+Version:1.2.0
 Features:
 1. Does not incude table in the output of query result is empty.
 2. Handling past and current queries, past queries need to be appended with _past in queries.csv
 3. Replaced csv file json file for better handling
 4. Made duration(past number of hours to display) configurable.
+5. Removed all errors queries. Now, err_type can be passed in arg and default 5 errors will be shown for each type
 Fixes:
 1. Fixed memory_errors and all_errors queries.
 
