@@ -440,6 +440,9 @@ if __name__ == "__main__":
     parser.add_argument("--only_insights", required=False, action="store_true",
         help="")
     
+    parser.add_argument("--duration", required=False, default=3,
+        help="")
+    
     parser.add_argument("--issue_time", required=False, 
         help="", default=None)
 
@@ -469,7 +472,8 @@ if __name__ == "__main__":
         "user_name": args.user_name,
         "table_name": args.table_name,
         "issue_time": args.issue_time,
-        "user_name": args.user_name
+        "user_name": args.user_name,
+        "duration": args.duration
     }
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
