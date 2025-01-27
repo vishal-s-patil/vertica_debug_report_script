@@ -467,6 +467,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--err_type", required=False, 
         help="", default=None)
+    
+    parser.add_argument("--granularity", required=False, 
+        help="", default='hour')
 
     if help_flag:
         parser.print_help()
@@ -498,7 +501,8 @@ if __name__ == "__main__":
         "user_name": args.user_name,
         "duration": int(args.duration),
         "num_items": args.num_items,
-        "err_type": args.err_type
+        "err_type": args.err_type,
+        "granularity": args.granularity,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
