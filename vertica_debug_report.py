@@ -470,6 +470,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--granularity", required=False, 
         help="", default='hour')
+    
+    parser.add_argument("--order_by", required=False, 
+        help="", default=None)
 
     if help_flag:
         parser.print_help()
@@ -503,6 +506,7 @@ if __name__ == "__main__":
         "num_items": args.num_items,
         "err_type": args.err_type,
         "granularity": args.granularity,
+        "order_by": args.order_by,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
