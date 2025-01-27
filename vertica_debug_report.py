@@ -123,7 +123,7 @@ def replace_conditions(query, conditions_dict):
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
 
-                if isinstance(value, int):
+                if isinstance(value, int) or placeholder=="err_type":
                     new_condition = f"{value}"
                 else:
                     new_condition = f"'{value}'"
@@ -562,7 +562,5 @@ if __name__ == "__main__":
         "err_type": args.err_type
     }
 
-    if filters["err_type"] is None:
-        filters["err_type"] = "ilike '%memory%' or ilike '%session%' or ilike '%resource%'"
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
