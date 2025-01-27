@@ -24,13 +24,13 @@
         "qid": 3,
         "query_name": "memory_errors",
         "query_description": "description",
-        "query": "select n.subcluster_name, em.event_timestamp, em.user_name, em.message from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1=1 {user_name='user_name'} and em.event_timestamp >= (TIMESTAMP {'from_date_time'} {to_date_time} {'issue_time'} - INTERVAL '{duration} hour') and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= {'from_date_time'} {'to_date_time'} {'issue_time'} and em.message ilike '%memory%' ORDER BY event_timestamp limit 5;"
+        "query": "select n.subcluster_name, em.event_timestamp, em.user_name, em.message from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1=1 {user_name='user_name'} and em.event_timestamp >= (TIMESTAMP {'from_date_time'} {to_date_time} {'issue_time'} - INTERVAL '{duration} hour') and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= {'from_date_time'} {'to_date_time'} {'issue_time'} and em.message ilike '%memory%' ORDER BY event_timestamp limit {num_items};"
     },
     {
         "qid": 4,
         "query_name": "all_errors",
         "query_description": "description",
-        "query": "select n.subcluster_name, em.event_timestamp, em.user_name, em.message from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1=1 {user_name='user_name'} and em.event_timestamp >= (TIMESTAMP {'from_date_time'} {to_date_time} {'issue_time'} - INTERVAL '{duration} hour') and em.event_timestamp <= {'from_date_time'} {'to_date_time'} {'issue_time'} and n.subcluster_name = '<subcluster_name>' ORDER BY event_timestamp limit 5;"
+        "query": "select n.subcluster_name, em.event_timestamp, em.user_name, em.message from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1=1 {user_name='user_name'} and em.event_timestamp >= (TIMESTAMP {'from_date_time'} {to_date_time} {'issue_time'} - INTERVAL '{duration} hour') and em.event_timestamp <= {'from_date_time'} {'to_date_time'} {'issue_time'} and n.subcluster_name = '<subcluster_name>' ORDER BY event_timestamp limit {num_items};"
     },
     {
         "qid": 0,
@@ -62,13 +62,13 @@
         "qid": 1,
         "query_name": "delete_vectors_count",
         "query_description": "description",
-        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by 1,2,3,7 order by 6 desc limit 20;"
+        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by 1,2,3,7 order by 6 desc limit {num_items};"
     },
     {
         "qid": 1,
         "query_name": "deleted_row_count",
         "query_description": "description",
-        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by 1,2,3,7 order by 5 desc limit 20;"
+        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by 1,2,3,7 order by 5 desc limit {num_items};"
     },
     {
         "qid": 1,

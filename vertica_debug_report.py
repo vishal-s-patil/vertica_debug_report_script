@@ -449,6 +449,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--issue_time", required=False, 
         help="", default=None)
+    
+    parser.add_argument("--num_items", required=False, 
+        help="", default=5)
 
     if help_flag:
         parser.print_help()
@@ -477,7 +480,8 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
         "user_name": args.user_name,
-        "duration": args.duration
+        "duration": args.duration,
+        "num_items": args.num_items
     }
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
