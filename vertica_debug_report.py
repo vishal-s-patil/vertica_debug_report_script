@@ -333,7 +333,72 @@ def analyze(query_name, query_result, column_headers):
             print("normal_count: ", normal_count)
 
 
-
+def get_error_messages_query():
+    return """
+    select 
+        n.subcluster_name,
+        em.event_timestamp,
+        em.user_name,
+        em.message
+    from error_messages as em
+        JOIN nodes AS n ON n.node_name = em.node_name
+    where 1 = 1 { user_name = 'user_name' }
+        and em.event_timestamp >= (
+            TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour'
+        )
+        and n.subcluster_name = '<subcluster_name>'
+        and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' }
+        and em.message ilike '%memory%'
+    ORDER BY event_timestamp
+    limit { num_items }
+    UNION
+    select n.subcluster_name,
+        em.event_timestamp,
+        em.user_name,
+        em.message
+    from error_messages as em
+        JOIN nodes AS n ON n.node_name = em.node_name
+    where 1 = 1 { user_name = 'user_name' }
+        and em.event_timestamp >= (
+            TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour'
+        )
+        and n.subcluster_name = '<subcluster_name>'
+        and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' }
+        and em.message ilike '%sessions%'
+    ORDER BY event_timestamp
+    limit { num_items }
+    UNION
+    select n.subcluster_name,
+        em.event_timestamp,
+        em.user_name,
+        em.message
+    from error_messages as em
+        JOIN nodes AS n ON n.node_name = em.node_name
+    where 1 = 1 { user_name = 'user_name' }
+        and em.event_timestamp >= (
+            TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour'
+        )
+        and n.subcluster_name = '<subcluster_name>'
+        and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' }
+        and em.message ilike '%resource%'
+    ORDER BY event_timestamp
+    limit { num_items }
+    UNION
+    select n.subcluster_name,
+        em.event_timestamp,
+        em.user_name,
+        em.message
+    from error_messages as em
+        JOIN nodes AS n ON n.node_name = em.node_name
+    where 1 = 1 { user_name = 'user_name' }
+        and em.event_timestamp >= (
+            TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour'
+        )
+        and n.subcluster_name = '<subcluster_name>'
+        and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' }
+    ORDER BY event_timestamp
+    limit { num_items };
+    """
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
     try:
@@ -372,6 +437,11 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 for key, val in filters.items():
                     if val is not None:
                         d[key] = val
+                
+                if query_name == "error_messages":
+                    if filters["err_type"] is None:
+                        final_query = get_error_messages_query()
+
                 
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
@@ -452,6 +522,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--num_items", required=False, 
         help="", default=5)
+    
+    parser.add_argument("--err_type", required=False, 
+        help="", default=None)
 
     if help_flag:
         parser.print_help()
@@ -471,6 +544,7 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
     
+    
     filters = { # and replacements
         "subcluster_name": args.subcluster_name,
         "from_date_time": args.from_date_time,
@@ -481,7 +555,11 @@ if __name__ == "__main__":
         "issue_time": args.issue_time,
         "user_name": args.user_name,
         "duration": args.duration,
-        "num_items": args.num_items
+        "num_items": args.num_items,
+        "err_type": args.err_type
     }
+
+    if filters["err_type"] is None:
+        filters["err_type"] = "ilike '%memory%' or ilike '%session%' or ilike '%resource%'"
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
