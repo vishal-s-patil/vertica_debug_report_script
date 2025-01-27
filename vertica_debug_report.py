@@ -105,7 +105,7 @@ def replace_conditions(query, conditions_dict):
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
                 
-                if isinstance(value, int):
+                if isinstance(value, int) or isinstance(value, float):
                     new_condition = f"AND {column_name} {operator} {value}"
                 else:
                     if flag == 3:
@@ -123,7 +123,7 @@ def replace_conditions(query, conditions_dict):
             if placeholder in conditions_dict:
                 value = conditions_dict[placeholder]
 
-                if isinstance(value, int) or placeholder=="err_type":
+                if isinstance(value, int)  or isinstance(value, float) or placeholder=="err_type":
                     new_condition = f"{value}"
                 else:
                     new_condition = f"'{value}'"
@@ -499,7 +499,7 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
         "user_name": args.user_name,
-        "duration": int(args.duration),
+        "duration": float(args.duration),
         "num_items": args.num_items,
         "err_type": args.err_type,
         "granularity": args.granularity,
