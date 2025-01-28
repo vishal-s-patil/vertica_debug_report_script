@@ -442,16 +442,13 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
 
-
     type = args.type
     if type is not None:
         if args.queries_to_execute is not None and len(args.queries_to_execute) > 1:
             print(f"Multiple queries not allowed when --type is passed.")
             exit()
-            
-    query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
 
-    print("query_name", query_name)
+    query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
 
     pool_name = args.pool_name
     user_name = args.user_name
@@ -469,6 +466,8 @@ if __name__ == "__main__":
         else:
             session_type_placeholder = "is not"
             session_type_placeholder_2 = "null"
+    elif query_name == "error_messages" or query_name == "error_messages_raw":
+        err_type = type
     
     
     filters = { # and replacements
@@ -482,7 +481,7 @@ if __name__ == "__main__":
         "user_name": args.user_name,
         "duration": float(args.duration),
         "num_items": int(args.num_items),
-        "err_type": args.err_type,
+        "err_type": err_type,
         "granularity": args.granularity,
         "order_by": args.order_by,
         "snapshots": int(args.snapshots),
