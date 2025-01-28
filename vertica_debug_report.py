@@ -438,17 +438,17 @@ if __name__ == "__main__":
             is_now = True
             args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
-
     
     type = args.type
     print(type)
-    print(args.queries_to_execute)
+    if args.queries_to_execute is not None:
+        queries_to_execute = args.queries_to_execute[0].split()
+    print(queries_to_execute)
 
     if type is not None:
-        if args.queries_to_execute is not None and len(args.queries_to_execute) > 1:
+        if queries_to_execute is not None and len(queries_to_execute) > 1:
             print(f"Multiple queries not allowed when --type is passed.")
             exit()
 
