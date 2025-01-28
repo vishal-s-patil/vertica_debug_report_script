@@ -402,7 +402,7 @@ if __name__ == "__main__":
     parser.add_argument("--num-items", required=False, 
         help="", default=5)
     
-    parser.add_argument("--err-type", required=False, 
+    parser.add_argument("type", required=False, 
         help="", default=None)
     
     parser.add_argument("--granularity", required=False, 
@@ -441,7 +441,15 @@ if __name__ == "__main__":
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
-    session_type = args.type
+
+
+    type = args.type
+
+    query_name = args.queries_to_execute # will only work if passed only one value as general type added.
+
+    print(query_name)
+    exit()
+
     pool_name = args.pool_name
     user_name = args.user_name
 
