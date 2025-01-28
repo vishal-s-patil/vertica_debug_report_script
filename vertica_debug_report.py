@@ -137,7 +137,7 @@ def replace_conditions(query, conditions_dict):
 def process_query_result_and_highlight_text(query_result):
     """
     Processes the query result to color specific substrings
-    (normal, warning, fatal) in string values.
+    (ok, warning, fatal) in string values.
 
     Parameters:
         query_result (list): The nested list query result.
@@ -147,7 +147,7 @@ def process_query_result_and_highlight_text(query_result):
     """
     # Define colors for each severity level
     colors = {
-        "normal": "\033[92m",  # Green
+        "ok": "\033[92m",  # Green
         "warning": "\033[93m",  # Orange/Yellow
         "fatal": "\033[91m",  # Red
     }
