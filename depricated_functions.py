@@ -111,3 +111,81 @@ def extract_table_name_from_query(query):
 
     # Default return if no match is found
     return "Unknown"
+
+
+def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
+    try:
+        vertica_connection = get_vertica_connection()
+        if not vertica_connection:
+            print("Failed to connect to the Vertica database. Exiting.")
+            return
+
+        with open(csv_file_path, mode='r') as file:
+            csv_reader = csv.DictReader(file, delimiter='~')
+            for row in csv_reader:
+                qid = int(row['qid'])
+                query_name = row['query_name']
+                query = row['query']
+                query_description = row['query_description']
+
+                if is_now and query_name[-5:] == "_past":
+                    continue
+
+                is_past_query_present = False
+                if not is_now:
+                    is_past_query_present = check_if_past_query_present(query_name, csv_file_path)
+                    if is_past_query_present:
+                        query_name = query_name + '_past'
+                
+                if queries_to_execute and query_name not in queries_to_execute:
+                    continue
+                
+                replaced_tables = False
+                d = {}
+                if filters['from_date_time'] is not None and is_past_query_present:
+                    query = replace_tables_in_query(query)
+                    replaced_tables = True
+                if filters['to_date_time'] is not None and is_past_query_present:
+                    if not replaced_tables:
+                        replaced_tables = True
+                        query = replace_tables_in_query(query)
+                if filters['issue_time'] is not None and is_past_query_present:
+                    if not is_now and not replaced_tables:
+                        replaced_tables = True
+                        query = replace_tables_in_query(query)
+                
+                for key, val in filters.items():
+                    if val is not None:
+                        d[key] = val
+
+                query = replace_conditions(query, d)
+
+                query = query.replace("<subcluster_name>", filters['subcluster_name'])
+                
+                if verbose:
+                    print('QUERY: ', f"{query}", end="\n\n")
+                
+                query_result = execute_vertica_query(vertica_connection, query)
+                if query_result == -1:
+                    print(query_name, ": column not found\n")
+                    continue
+                query_result = process_query_result_and_highlight_text(query_result)
+
+                if query_result:
+                    
+                    if query_name[-5:] == "_past":
+                        query_name = query_name[:-5]
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
+                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
+                    print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                else:
+                    pass
+                    #print("No data returned")
+        
+        vertica_connection.close()
+    except Exception as e:
+        print(f"Error while processing the CSV file or executing queries: {e}")
+

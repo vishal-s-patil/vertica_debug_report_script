@@ -137,8 +137,8 @@ def replace_conditions(query, conditions_dict):
     
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
-
-def process_query_result_and_highlight_text(query_result):
+'''
+def process_query_result_and_highlight_text(query_result, column_headers):
     """
     Processes the query result to color specific substrings
     (ok, warning, fatal) in string values.
@@ -149,6 +149,10 @@ def process_query_result_and_highlight_text(query_result):
     Returns:
         list: The processed query result with colored strings.
     """
+
+    index = get index of "status" column_headers 
+    if status does not exists return query_result
+    else do the below only of query_result[index] not for all the columns in query result.
     # Define colors for each severity level
     colors = {
         "ok": "\033[92m",  # Green
@@ -175,6 +179,50 @@ def process_query_result_and_highlight_text(query_result):
         return item  # Return as-is for non-string, non-list items
 
     return process_item(query_result)
+'''
+
+def process_query_result_and_highlight_text(query_result, column_headers):
+    """
+    Processes the query result to color specific substrings
+    (ok, warning, fatal) in the "status" column values.
+
+    Parameters:
+        query_result (list): The nested list query result.
+        column_headers (list): The list of column headers.
+
+    Returns:
+        list: The processed query result with colored strings in the "status" column.
+    """
+    # Get the index of the "status" column
+    try:
+        status_index = column_headers.index("status")
+    except ValueError:
+        # If "status" column doesn't exist, return the query result as is
+        return query_result
+
+    # Define colors for each severity level
+    colors = {
+        "ok": "\033[92m",      # Green
+        "warning": "\033[93m", # Yellow
+        "fatal": "\033[91m",   # Red
+    }
+    reset_color = "\033[0m"  # Reset to default
+
+    def apply_color(text):
+        """Apply color to the string if it contains specific keywords."""
+        for severity, color_code in colors.items():
+            if severity in text.lower():
+                text = text.replace(severity, f"{color_code}{severity.upper()}{reset_color}")
+        return text
+
+    def process_row(row):
+        """Process a single row, applying color to the 'status' column."""
+        if status_index < len(row) and isinstance(row[status_index], str):
+            row[status_index] = apply_color(row[status_index])
+        return row
+
+    # Process each row in the query result
+    return [process_row(row) for row in query_result]
 
 
 def check_if_past_query_present(query_name, csv_file_path):
@@ -190,83 +238,6 @@ def check_if_past_query_present(query_name, csv_file_path):
                 count += 1
         
         return count == 2
-
-
-def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to_execute=None):
-    try:
-        vertica_connection = get_vertica_connection()
-        if not vertica_connection:
-            print("Failed to connect to the Vertica database. Exiting.")
-            return
-
-        with open(csv_file_path, mode='r') as file:
-            csv_reader = csv.DictReader(file, delimiter='~')
-            for row in csv_reader:
-                qid = int(row['qid'])
-                query_name = row['query_name']
-                query = row['query']
-                query_description = row['query_description']
-
-                if is_now and query_name[-5:] == "_past":
-                    continue
-
-                is_past_query_present = False
-                if not is_now:
-                    is_past_query_present = check_if_past_query_present(query_name, csv_file_path)
-                    if is_past_query_present:
-                        query_name = query_name + '_past'
-                
-                if queries_to_execute and query_name not in queries_to_execute:
-                    continue
-                
-                replaced_tables = False
-                d = {}
-                if filters['from_date_time'] is not None and is_past_query_present:
-                    query = replace_tables_in_query(query)
-                    replaced_tables = True
-                if filters['to_date_time'] is not None and is_past_query_present:
-                    if not replaced_tables:
-                        replaced_tables = True
-                        query = replace_tables_in_query(query)
-                if filters['issue_time'] is not None and is_past_query_present:
-                    if not is_now and not replaced_tables:
-                        replaced_tables = True
-                        query = replace_tables_in_query(query)
-                
-                for key, val in filters.items():
-                    if val is not None:
-                        d[key] = val
-
-                query = replace_conditions(query, d)
-
-                query = query.replace("<subcluster_name>", filters['subcluster_name'])
-                
-                if verbose:
-                    print('QUERY: ', f"{query}", end="\n\n")
-                
-                query_result = execute_vertica_query(vertica_connection, query)
-                if query_result == -1:
-                    print(query_name, ": column not found\n")
-                    continue
-                query_result = process_query_result_and_highlight_text(query_result)
-
-                if query_result:
-                    
-                    if query_name[-5:] == "_past":
-                        query_name = query_name[:-5]
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
-                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                    print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-                else:
-                    pass
-                    #print("No data returned")
-        
-        vertica_connection.close()
-    except Exception as e:
-        print(f"Error while processing the CSV file or executing queries: {e}")
 
 
 class MyArgumentParser(argparse.ArgumentParser):
@@ -296,53 +267,12 @@ class MyArgumentParser(argparse.ArgumentParser):
         ))
 
 
-def analyze(query_name, query_result, column_headers):
-    thresholds_file_path = "thresholds.json"
-    with open(thresholds_file_path, "r") as file:
-        json_data = file.read()
-        thresholds = json.loads(json_data)
-        for row in thresholds:
-            if query_name!= row["query_name"]:
-                continue
-            column_to_check = row.get("column", "cnt")
-            column_to_check = row.get("column", "cnt")
-            index = column_headers.index(column_to_check)
-
-            print(f"\n\nQuery Name: {query_name}")
-            print("-" * len(f"Query Name: {query_name}"))
-            print(tabulate(query_result, tablefmt='grid'))
-
-            message_template = row["message_template"]
-            message = message_template.replace("{threshold}", str(row["threshold"]))
-            
-            is_out_of_threshold = False
-            for result in query_result:
-                if result[index] >= row["threshold"]:
-                    is_out_of_threshold = True
-            
-            if is_out_of_threshold:
-                print(query_name, ": ", message, sep="")
-        if "status" in column_headers:
-            index = column_headers.index("status")
-
-            print(f"\n\nQuery Name: {query_name}")
-            print("-" * len(f"Query Name: {query_name}"))
-            print(tabulate(query_result, tablefmt='grid'))
-
-            normal_count = 0
-            for result in query_result:
-                if result[index] == "normal":
-                    normal_count += 1
-            
-            print("normal_count: ", normal_count)
-
-
 def get_error_messages_query():
     return """
     ( select n.subcluster_name, em.event_timestamp, em.user_name, 'memory' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%memory%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'session' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%session%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'resource' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%resource%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'all' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } ORDER BY event_timestamp limit { num_items } );
     """
 
-def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_insight, queries_to_execute=None):
+def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -389,24 +319,27 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
+                
+                column_headers = None
+                processed_query_result = None
+
+                if query_result:
+                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
+                    processed_query_result = process_query_result_and_highlight_text(query_result, )
+
                 if query_result == -1:
                     print(query_name, ": column not found\n")
                     continue
-                processed_query_result = process_query_result_and_highlight_text(query_result)
-
+                
                 if processed_query_result:
-                    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                    if is_only_insight:
-                        res = analyze(query_name, query_result, column_headers)
-                    else:
-                        print(f"\n\nQuery Name: {query_name}")
-                        print("-" * len(f"Query Name: {query_name}"))
-                        print(f"Query Description: {query_description}")
-                        print("-" * len(f"Query Description: {query_description}"))
-                        if verbose:
-                            print('QUERY: ', f"{final_query}")
-                            print("-" * 15)
-                        print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
+                    if verbose:
+                        print('QUERY: ', f"{final_query}")
+                        print("-" * 15)
+                    print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
@@ -505,8 +438,6 @@ if __name__ == "__main__":
             is_now = True
             args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    is_only_insight = args.only_insights
-
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
@@ -550,5 +481,5 @@ if __name__ == "__main__":
         "sort_order": args.sort_order,
     }
 
-    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
+    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, queries_to_execute)
     # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
