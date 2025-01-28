@@ -420,8 +420,8 @@ if __name__ == "__main__":
     parser.add_argument("--user-limit", required=False, 
         help="", default=5)
     
-    parser.add_argument("--type", required=False, 
-        help="", default="active") # session active, inactive and all 
+    # parser.add_argument("--type", required=False, 
+    #     help="", default="active") # session active, inactive and all 
     
     parser.add_argument("--sort-order", required=False, 
         help="", default="desc")
