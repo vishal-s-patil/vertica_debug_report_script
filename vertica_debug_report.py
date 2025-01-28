@@ -490,9 +490,6 @@ if __name__ == "__main__":
     parser.add_argument("--type", required=False, 
         help="", default="active") # session active, inactive and all 
     
-    parser.add_argument("--err-type", required=False, 
-        help="", default=None)
-    
     parser.add_argument("--sort-order", required=False, 
         help="", default="desc")
 
@@ -551,7 +548,6 @@ if __name__ == "__main__":
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
         "sort_order": args.sort_order,
-        "err_type": args.err_type,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
