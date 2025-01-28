@@ -325,7 +325,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
 
                 if query_result:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                    processed_query_result = process_query_result_and_highlight_text(query_result, )
+                    processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
                 if query_result == -1:
                     print(query_name, ": column not found\n")
