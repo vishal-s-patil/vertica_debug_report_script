@@ -538,8 +538,8 @@ if __name__ == "__main__":
         "snapshots": int(args.snapshots),
         "user_limit": int(args.user_limit),
         "issue_level": args.issue_level,
-        "session_type": args.session_type_placeholder,
-        "session_type_2": args.session_type_placeholder_2,
+        "session_type": session_type_placeholder,
+        "session_type_2": session_type_placeholder_2,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
