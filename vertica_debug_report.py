@@ -444,6 +444,7 @@ if __name__ == "__main__":
     type = args.type
     print(type)
     if queries_to_execute is not None:
+        print(queries_to_execute[0])
         queries_to_execute = queries_to_execute[0].split()
     print(queries_to_execute)
 
