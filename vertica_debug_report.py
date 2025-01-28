@@ -282,8 +282,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
         with open(json_file_path) as json_file:
             json_data = json_file.read()
             json_data = json.loads(json_data)
-            print('json_data', json_data)
-            print()
             for row in json_data:
                 qid = row["qid"]
                 query_name = row["query_name"]
@@ -308,8 +306,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     final_query = replace_tables_in_query(final_query)
 
                 d = {}
-                print('filters.items()', filters.items())
-                print()
                 for key, val in filters.items():
                     if val is not None:
                         d[key] = val
@@ -327,10 +323,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                 column_headers = None
                 processed_query_result = None
 
-                print('query_result', query_result)
-                print()
-                if query_result:
-                    print()
+                if query_result and query_result != -1:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
