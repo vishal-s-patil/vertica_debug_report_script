@@ -426,56 +426,59 @@ if __name__ == "__main__":
         if sys.argv[1] == "--help":
             help_flag = True
         
-    parser.add_argument("--subcluster_name", required=False if help_flag else True, 
+    parser.add_argument("--subcluster-name", required=False if help_flag else True, 
         help="Name of the subcluster.")
 
     parser.add_argument("--inputfilepath", required=False if help_flag else True, 
         help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
 
-    parser.add_argument("--queries_to_execute", required=False, nargs="*", default=[], 
+    parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
         help="Space-separated list of query names to execute. If empty, all queries will be executed.")
 
-    parser.add_argument("--from_date_time", required=False, default=None, 
+    parser.add_argument("--from-date-time", required=False, default=None, 
         help="Filter condition for queries with the 'from_date_time' placeholder.")
 
-    parser.add_argument("--to_date_time", required=False, default=None, 
+    parser.add_argument("--to-date-time", required=False, default=None, 
         help="Filter condition for queries with the 'to_date_time' placeholder.")
 
-    parser.add_argument("--pool_name", required=False, default=None, 
+    parser.add_argument("--pool-name", required=False, default=None, 
         help="Filter condition for queries with the 'pool_name' placeholder.")
     
-    parser.add_argument("--user_name", required=False, default=None, 
+    parser.add_argument("--user-name", required=False, default=None, 
         help="Filter condition for queries with the 'user_name' placeholder.")
 
-    parser.add_argument("--table_name", required=False, default=None, 
+    parser.add_argument("--table-name", required=False, default=None, 
         help="Filter condition for queries with the 'table_name' placeholder. Supports LIKE/ILIKE with % at the start, end, or both.")
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
 
-    parser.add_argument("--only_insights", required=False, action="store_true",
+    parser.add_argument("--only-insights", required=False, action="store_true",
         help="")
     
     parser.add_argument("--duration", required=False, default=3,
         help="")
     
-    parser.add_argument("--issue_time", required=False, 
+    parser.add_argument("--issue-time", required=False, 
         help="", default=None)
     
-    parser.add_argument("--num_items", required=False, 
+    parser.add_argument("--num-items", required=False, 
         help="", default=5)
     
-    parser.add_argument("--err_type", required=False, 
+    parser.add_argument("--err-type", required=False, 
         help="", default=None)
     
     parser.add_argument("--granularity", required=False, 
         help="", default='hour')
     
-    parser.add_argument("--order_by", required=False, 
+    parser.add_argument("--order-by", required=False, 
         help="", default=None)
     
     parser.add_argument("--snapshots", required=False, 
-        help="", default=None)
+        help="", default=5)
+    
+    parser.add_argument("--issue-level", required=False, 
+        help="", default=5)
 
     if help_flag:
         parser.print_help()
