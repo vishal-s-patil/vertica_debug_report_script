@@ -443,8 +443,8 @@ if __name__ == "__main__":
     
     type = args.type
     print(type)
-    if args.queries_to_execute is not None:
-        queries_to_execute = args.queries_to_execute[0].split()
+    if queries_to_execute is not None:
+        queries_to_execute = queries_to_execute[0].split()
     print(queries_to_execute)
 
     if type is not None:
