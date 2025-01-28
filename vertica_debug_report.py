@@ -489,6 +489,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--type", required=False, 
         help="", default="active") # session active, inactive and all 
+    
+    parser.add_argument("--sort-order", required=False, 
+        help="", default="desc")
 
     if help_flag:
         parser.print_help()
@@ -508,7 +511,11 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
     session_type = args.type
+    pool_name = args.pool_name
+    user_name = args.user_name
 
+    if pool_name is None and user_name is not None:
+        pool_name = user_name + "_pool"
 
     session_type_placeholder_2 = None
 
@@ -525,8 +532,8 @@ if __name__ == "__main__":
         "subcluster_name": args.subcluster_name,
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
-        "pool_name": args.pool_name,
-        "user_name": args.user_name,
+        "pool_name": pool_name,
+        "user_name": user_name,
         "table_name": args.table_name,
         "issue_time": args.issue_time,
         "user_name": args.user_name,
@@ -540,6 +547,7 @@ if __name__ == "__main__":
         "issue_level": args.issue_level,
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
+        "sort_order": args.sort_order,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
