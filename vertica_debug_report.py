@@ -518,7 +518,7 @@ if __name__ == "__main__":
         "order_by": args.order_by,
         "snapshots": int(args.snapshots),
         "user_limit": int(args.user_limit),
-        "issue_level": int(args.issue_level),
+        "issue_level": args.issue_level,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
