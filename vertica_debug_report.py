@@ -442,6 +442,8 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
 
+    print(type)
+    print(args.queries_to_execute)
     type = args.type
     if type is not None:
         if args.queries_to_execute is not None and len(args.queries_to_execute) > 1:
