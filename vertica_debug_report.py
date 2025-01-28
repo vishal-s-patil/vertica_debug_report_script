@@ -444,8 +444,12 @@ if __name__ == "__main__":
 
 
     type = args.type
-
-    query_name = args.queries_to_execute # will only work if passed only one value as general type added.
+    if type is not None:
+        if args.queries_to_execute is not None and len(args.queries_to_execute) > 1:
+            print(f"Multiple queries not allowed when --type is passed.")
+            exit()
+            
+    query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
 
     print("query_name", query_name)
 
