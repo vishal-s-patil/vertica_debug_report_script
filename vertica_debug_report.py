@@ -517,7 +517,7 @@ if __name__ == "__main__":
     elif session_type == "inactive":
         session_type_placeholder = "is"
     else:
-        session_type_placeholder = "is"
+        session_type_placeholder = "is not"
         session_type_placeholder_2 = "null"
     
     
