@@ -110,7 +110,10 @@ def replace_conditions(query, conditions_dict):
                 value = conditions_dict[placeholder]
                 
                 if isinstance(value, int) or isinstance(value, float) or placeholder=='session_type_2':
-                    new_condition = f"AND {column_name} {operator} {value}"
+                    if placeholder=='session_type_2':
+                        new_condition = f"OR {column_name} {operator} {value}"
+                    else:
+                        new_condition = f"AND {column_name} {operator} {value}"
                 else:
                     if flag == 3:
                         new_condition = f"AND {column_name} {operator} '%{value}%'"
