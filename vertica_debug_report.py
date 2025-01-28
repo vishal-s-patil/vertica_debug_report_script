@@ -380,7 +380,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, is_only_
                     if val is not None:
                         d[key] = val
                 
-                if query_name == "error_messages":
+                if query_name == "error_messages_raw":
                     if filters["err_type"] is None:
                         final_query = get_error_messages_query()
 
