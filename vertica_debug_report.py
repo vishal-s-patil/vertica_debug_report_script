@@ -478,7 +478,7 @@ if __name__ == "__main__":
         help="", default=5)
     
     parser.add_argument("--issue-level", required=False, 
-        help="", default=5)
+        help="", default=None)
     
     parser.add_argument("--user-limit", required=False, 
         help="", default=5)
