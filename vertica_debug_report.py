@@ -328,6 +328,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
                 if query_result == -1:
+                    if verbose:
+                        print('QUERY: ', f"{final_query}")
+                        print("-" * 15)
                     print(query_name, ": column not found\n")
                     continue
                 
