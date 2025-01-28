@@ -479,6 +479,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--issue-level", required=False, 
         help="", default=5)
+    
+    parser.add_argument("--user-limit", required=False, 
+        help="", default=5)
 
     if help_flag:
         parser.print_help()
@@ -514,6 +517,7 @@ if __name__ == "__main__":
         "granularity": args.granularity,
         "order_by": args.order_by,
         "snapshots": int(args.snapshots),
+        "user_limit": int(args.user_limit),
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
