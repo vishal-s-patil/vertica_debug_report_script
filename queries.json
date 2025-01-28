@@ -24,7 +24,7 @@
         "qid": 3,
         "query_name": "error_messages",
         "query_description": "1234",
-        "query": "select n.subcluster_name, date_trunc({granularity}, event_timestamp) as date_trunc, CASE WHEN em.message ILIKE '%memory%' THEN 'memory' WHEN em.message ILIKE '%session%' THEN 'session' WHEN em.message ILIKE '%resource%' THEN 'resource' ELSE 'other' END AS message_category, count(1) as cnt from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 and em.event_timestamp >= ( TIMESTAMP { 'issue_time' } - INTERVAL '3 hour' ) and n.subcluster_name = 'primary_subcluster_1' and em.event_timestamp <= { 'issue_time' } group by event_timestamp, message_category, n.subcluster_name ORDER BY { order_by }, n.subcluster_name limit {num_items};"
+        "query": "select n.subcluster_name, date_trunc({granularity}, event_timestamp) as date_trunc, CASE WHEN em.message ILIKE '%memory%' THEN 'memory' WHEN em.message ILIKE '%session%' THEN 'session' WHEN em.message ILIKE '%resource%' THEN 'resource' ELSE 'other' END AS message_category, count(1) as cnt from error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 and em.event_timestamp >= ( TIMESTAMP { 'issue_time' } - INTERVAL '3 hour' ) and n.subcluster_name = 'primary_subcluster_1' and em.event_timestamp <= { 'issue_time' } group by event_timestamp, message_category, n.subcluster_name ORDER BY { order_by } n.subcluster_name limit {num_items};"
     },
     {
         "qid": 3,
