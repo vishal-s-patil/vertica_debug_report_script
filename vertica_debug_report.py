@@ -538,7 +538,7 @@ if __name__ == "__main__":
         "issue_time": args.issue_time,
         "user_name": args.user_name,
         "duration": float(args.duration),
-        "num_items": args.num_items,
+        "num_items": int(args.num_items),
         "err_type": args.err_type,
         "granularity": args.granularity,
         "order_by": args.order_by,
