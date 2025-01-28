@@ -86,7 +86,11 @@ def replace_conditions(query, conditions_dict):
     for match in matches:
         # condition_parts = re.split(r'([<>!=]=?|[><]=?)', match, 1)
         # condition_parts = re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)
-        condition_parts = [part.strip() for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)]
+        # condition_parts = [part.strip() for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)]
+        condition_parts = [
+            part.strip() 
+            for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE|IS\s+NOT|IS)\b)', match, 1)
+        ]
 
         if len(condition_parts) == 3:
             column_name = condition_parts[0].strip()
@@ -482,6 +486,9 @@ if __name__ == "__main__":
     
     parser.add_argument("--user-limit", required=False, 
         help="", default=5)
+    
+    parser.add_argument("--type", required=False, 
+        help="", default="active") # session active, inactive and all 
 
     if help_flag:
         parser.print_help()
@@ -500,6 +507,18 @@ if __name__ == "__main__":
     # queries_to_execute = ["long_running_queries", "queue_status"]
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
+    session_type = args.type
+
+
+    session_type_placeholder_2 = None
+
+    if session_type == "active":
+        session_type_placeholder = "is not"
+    elif session_type == "inactive":
+        session_type_placeholder = "is"
+    else:
+        session_type_placeholder = "is"
+        session_type_placeholder_2 = "null"
     
     
     filters = { # and replacements
@@ -519,6 +538,8 @@ if __name__ == "__main__":
         "snapshots": int(args.snapshots),
         "user_limit": int(args.user_limit),
         "issue_level": args.issue_level,
+        "session_type": args.session_type_session_type_placeholder,
+        "session_type_2": args.session_type_session_type_placeholder_2,
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, is_only_insight, queries_to_execute)
