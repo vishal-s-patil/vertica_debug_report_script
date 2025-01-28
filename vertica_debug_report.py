@@ -402,7 +402,7 @@ if __name__ == "__main__":
     parser.add_argument("--num-items", required=False, 
         help="", default=5)
     
-    parser.add_argument("type", required=False, 
+    parser.add_argument("--type", required=False, 
         help="", default=None)
     
     parser.add_argument("--granularity", required=False, 
