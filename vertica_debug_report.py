@@ -442,9 +442,11 @@ if __name__ == "__main__":
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
 
+    
+    type = args.type
     print(type)
     print(args.queries_to_execute)
-    type = args.type
+
     if type is not None:
         if args.queries_to_execute is not None and len(args.queries_to_execute) > 1:
             print(f"Multiple queries not allowed when --type is passed.")
