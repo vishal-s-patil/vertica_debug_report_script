@@ -457,13 +457,14 @@ if __name__ == "__main__":
 
     session_type_placeholder_2 = None
 
-    if session_type == "active":
-        session_type_placeholder = "is not"
-    elif session_type == "inactive":
-        session_type_placeholder = "is"
-    else:
-        session_type_placeholder = "is not"
-        session_type_placeholder_2 = "null"
+    if query_name == "sessions":
+        if type == "active":
+            session_type_placeholder = "is not"
+        elif type == "inactive":
+            session_type_placeholder = "is"
+        else:
+            session_type_placeholder = "is not"
+            session_type_placeholder_2 = "null"
     
     
     filters = { # and replacements

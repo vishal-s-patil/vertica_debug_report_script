@@ -8,7 +8,7 @@
     },
     {
         "qid": 2,
-        "query_name": "active_sessions",
+        "query_name": "sessions",
         "query_description": "description",
         "query": "select n.subcluster_name, s.user_name, count(1) as cnt, CASE WHEN COUNT(1) > 100 THEN 'FATAL' WHEN COUNT(1) > 50 THEN 'WARNING' ELSE 'OK' END AS status from sessions as s JOIN nodes AS n ON n.node_name = s.node_name WHERE 1 = 1 { user_name = 'user_name' } and n.subcluster_name = '<subcluster_name>' AND s.statement_id {session_type} NULL {s.statement_id is session_type_2} group by n.subcluster_name, s.user_name ORDER BY cnt desc;",
         "query_past": "WITH ranked_sessions AS ( SELECT user_name, snapshot_time, COUNT(1) AS cnt, CASE WHEN COUNT(1) > 100 THEN 'FATAL' WHEN COUNT(1) > 50 THEN 'WARNING' ELSE 'OK' END AS status, ROW_NUMBER() OVER ( PARTITION BY snapshot_time ORDER BY cnt DESC ) AS row_num FROM netstats.sessions_full WHERE 1=1 {user_name='user_name'} and snapshot_time >= (timestamp {'issue_time'} - INTERVAL '{duration} hours') and snapshot_time <= timestamp {'issue_time'} and statement_id is not null GROUP BY snapshot_time, user_name ), limited_snapshots AS ( SELECT snapshot_time, ROW_NUMBER() OVER ( ORDER BY snapshot_time ) AS snapshot_rank FROM ranked_sessions GROUP BY snapshot_time ORDER BY snapshot_time ) SELECT rs.snapshot_time, rs.user_name, rs.cnt, rs.status FROM ranked_sessions rs JOIN limited_snapshots ls ON rs.snapshot_time = ls.snapshot_time WHERE ls.snapshot_rank <= {snapshots} AND rs.row_num <= {user_limit} ORDER BY rs.snapshot_time, rs.cnt DESC;"
