@@ -447,8 +447,7 @@ if __name__ == "__main__":
 
     query_name = args.queries_to_execute # will only work if passed only one value as general type added.
 
-    print(query_name)
-    exit()
+    print("query_name", query_name)
 
     pool_name = args.pool_name
     user_name = args.user_name
