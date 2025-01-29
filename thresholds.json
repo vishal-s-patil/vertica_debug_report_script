@@ -113,5 +113,8 @@
                 "default_message": "[OK] No Errors Found"
             }
         ]
+    },
+    {
+        "query_name": "resource_pool_status"
     }
 ]
