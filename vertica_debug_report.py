@@ -328,7 +328,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(message)
 
                 if flag:
-                    print(item['default_message'])
+                    if item['default_message'] is not "":
+                        print(item['default_message'])
     pass
 
 
