@@ -239,6 +239,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
                 ok_count, warn_count, fatal_count = 0, 0, 0
                 ok_values, warn_values, fatal_values = [], [], []
+                unique_values = {}
+                total = 0
 
                 if item['unique_column'] == "":
                     for row in query_result:
@@ -247,11 +249,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         elif row[index] > item['threshold']['warn']:
                             warn_count+=1
                         else:
+                            total += row[index]
                             ok_count+=1
                 else:
                     unique_column = item['unique_column']
                     unique_column_index = column_headers.index(unique_column)
-                    unique_values = {}
                     for row in query_result:
                         key = row[unique_column_index]
                         if key not in unique_values:
@@ -291,6 +293,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     message = message.replace('{cnt}', str(ok_count))
+                    if len(ok_values) > 0:
+                        total = sum(unique_values.values()) 
+
+                    message = message.replace('{total}', total)
                     if len(ok_values) > 0:
                         message = message.replace('{users_list}', str(ok_values))
                     print(message)
