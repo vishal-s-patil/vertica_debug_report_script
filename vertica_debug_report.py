@@ -216,7 +216,12 @@ def get_error_messages_query():
     """
 
 
-def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_to_execute=None):
+def analyse(insights_only, with_insights):
+    print(insights_only, with_insights)
+    pass
+
+
+def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -279,14 +284,17 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                     continue
                 
                 if processed_query_result:
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
-                    if verbose:
-                        print('QUERY: ', f"{final_query}")
-                        print("-" * 15)
-                    print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
+                    if insights_only or with_insights:
+                        analyse(insights_only, with_insights)
+                    else:
+                        print(f"\n\nQuery Name: {query_name}")
+                        print("-" * len(f"Query Name: {query_name}"))
+                        print(f"Query Description: {query_description}")
+                        print("-" * len(f"Query Description: {query_description}"))
+                        if verbose:
+                            print('QUERY: ', f"{final_query}")
+                            print("-" * 15)
+                        print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
@@ -365,6 +373,12 @@ if __name__ == "__main__":
     
     parser.add_argument("--user-limit", required=False, 
         help="", default=5)
+
+    parser.add_argument("--insights-only", required=False, action="store_true", 
+        help="", default=5)
+
+    parser.add_argument("--with-insights", required=False, action="store_true", 
+        help="", default=5)
     
     # parser.add_argument("--type", required=False, 
     #     help="", default="active") # session active, inactive and all 
@@ -441,5 +455,7 @@ if __name__ == "__main__":
         "sort_order": args.sort_order,
     }
 
-    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, queries_to_execute)
-    
+    insights_only = args.insights_only
+    with_insights = args.with_insights
+
+    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, insights_only, with_insights, queries_to_execute)
