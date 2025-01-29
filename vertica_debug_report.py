@@ -217,7 +217,6 @@ def get_error_messages_query():
 
 
 def analyse(query_name, query_result, query_description, column_headers, insights_only, with_insights):
-    print('sessions')
     threshold_json_file_path = "thresholds.json"
     
     json_data = None

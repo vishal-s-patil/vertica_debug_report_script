@@ -36,7 +36,7 @@
         ]
     },
     {
-        "query_name": "",
+        "query_name": "sessions",
         "columns": [
             {
                 "columns_name": "cnt",
