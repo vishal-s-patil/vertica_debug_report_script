@@ -375,10 +375,10 @@ if __name__ == "__main__":
         help="", default=5)
 
     parser.add_argument("--insights-only", required=False, action="store_true", 
-        help="", default=5)
+        help="")
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
-        help="", default=5)
+        help="")
     
     # parser.add_argument("--type", required=False, 
     #     help="", default="active") # session active, inactive and all 
