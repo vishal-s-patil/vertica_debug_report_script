@@ -364,6 +364,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print('QUERY: ', f"{final_query}")
                             print("-" * 15)
                         print("No records found")
+                    else:
+                        analyse(query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
                             
         vertica_connection.close()
     except Exception as e:

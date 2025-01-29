@@ -34,5 +34,23 @@
                 }
             }
         ]
+    },
+    {
+        "query_name": "",
+        "columns": [
+            {
+                "columns_name": "cnt",
+                "threshold": {
+                    "ok": 0,
+                    "warn": 50,
+                    "fatal": 100
+                },
+                "message_template": {
+                    "ok": "{N} users having {n} Active Queries / No Active Queries",
+                    "warn": "{N} Users [users_list] having more than {n} Active Sessions",
+                    "fatal": "{N} Users [users_list] having more than {n} Active Sessions"
+                }
+            }
+        ]
     }
 ]
