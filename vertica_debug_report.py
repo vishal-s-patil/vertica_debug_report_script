@@ -232,9 +232,8 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
         if threshold['query_name'] == "delete_vectors_count":
             print(threshold)
             print()
-            print(query_result)
-            print()
-            print(column_headers)
+            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+            
     pass
 
 
