@@ -233,7 +233,23 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
             print(threshold)
             print()
             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+
+            index = column_headers.index("dv_count")
+            if index == -1:
+                print(f"Error: Column 'dv_count' not found in the query result.")
+                exit()
             
+            ok_count, wanr_count, fatal_count = 0, 0, 0
+
+            for row in query_result:
+                if row[index] > threshold['threshold']['fatal']:
+                    fatal_count+=1
+                elif row[index] > threshold['threshold']['warn']:
+                    wanr_count+=1
+                else:
+                    ok_count+=1
+            
+            print(ok_count, wanr_count, fatal_count)
     pass
 
 
