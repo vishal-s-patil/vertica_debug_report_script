@@ -218,7 +218,6 @@ def get_error_messages_query():
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
-    print('coming')
     json_data = None
     with open(threshold_json_file_path) as json_file:
         json_data = json_file.read()
@@ -232,6 +231,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
         if threshold['query_name'] == query_name:
             is_result_printed = False
             for item in threshold['columns']:
+                if len(query_result) == 0:
+                    if item['default_message'] is not "":
+                        print(item['default_message'])
+                        
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
                     print(f"Error: Column '{item['columns_name']}' not found in the query result.")
