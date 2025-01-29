@@ -443,12 +443,11 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     if filters["err_type"] is None:
                         final_query = get_error_messages_query()
 
+                if "end as status" in query.lower():
+                    final_query = replace_thresholds(final_query, query_name)
                 
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
-
-                if "end as status" in query.lower():
-                    final_query = replace_thresholds(final_query, query_name)
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 
