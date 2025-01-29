@@ -302,6 +302,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
+                        print(ok_values)
                         message = message.replace('{users_list}', str(ok_values))
                         message = message.replace('{cnt}', str(len(ok_values)))
                     else:
