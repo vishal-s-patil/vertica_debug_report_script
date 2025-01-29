@@ -240,7 +240,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
-
+            
                 if is_now and "select null" not in query.lower():
                     final_query = query
                 elif not is_now and "select null" not in query_past.lower():
@@ -397,7 +397,6 @@ if __name__ == "__main__":
     
     type = args.type
     if queries_to_execute is not None and len(queries_to_execute) != 0:
-        print(queries_to_execute)
         queries_to_execute = (queries_to_execute[0]).split(',')
 
     if type is not None:
