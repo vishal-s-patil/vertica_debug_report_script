@@ -277,7 +277,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 else:
                                     ok_count+=1
                                     ok_values.add(unique_column_value)
-                                total += row[index]   
+                                    total += row[index]   
 
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
@@ -296,7 +296,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
                 flag = True
                 print('ok_count',ok_count)
-                if (item['threshold']['ok'] != -1 and ok_count > 0) or total > 0:
+                if (item['threshold']['ok'] != -1 and ok_count > 0):
                     flag = False
                     # ok_count += warn_count + fatal_count
                     message = "[OK] "
