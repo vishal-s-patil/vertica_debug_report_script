@@ -396,7 +396,7 @@ if __name__ == "__main__":
     json_file_path = args.inputfilepath
     
     type = args.type
-    if queries_to_execute is not None:
+    if queries_to_execute is not None and len(queries_to_execute) != 0:
         print(queries_to_execute)
         queries_to_execute = (queries_to_execute[0]).split(',')
 
@@ -406,7 +406,7 @@ if __name__ == "__main__":
             exit()
     
     query_name = None
-    if args.queries_to_execute[0] is not None:
+    if args.queries_to_execute[0] is not None and len(queries_to_execute) != 0:
         query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
 
     pool_name = args.pool_name
