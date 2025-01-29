@@ -61,6 +61,6 @@
         "qid": 1,
         "query_name": "catalog_size_in_memory",
         "query_description": "description",
-        "query": "select node_name,memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb, running_query_count from resource_pool_Status where 1=1 and pool_name='metadata' order by memory_size_kb desc, general_memory_borrowed_kb desc;"
+        "query": "select n.subcluster_name, memory_size_kb,general_memory_borrowed_kb,max_memory_size_kb, running_query_count from resource_pool_Status as s join nodes as n on n.node_name=s.node_name where 1=1 and pool_name='metadata' and n.subcluster_name = '<subcluster_name>' order by memory_size_kb desc, general_memory_borrowed_kb desc;"
     }
 ]
