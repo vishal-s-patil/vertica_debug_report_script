@@ -244,8 +244,12 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print('QUERY: ', f"{query}")
                         print("-" * 15)
 
-                    if with_insights and query_result is not None:
-                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    if query_result is None:
+                        print(f'No pools found for given pool name or subclutser.')
+                    else:
+                        if with_insights:
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                        print()
                     
                     return
 
