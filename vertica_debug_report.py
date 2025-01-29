@@ -426,7 +426,7 @@ if __name__ == "__main__":
     if pool_name is None and user_name is not None:
         pool_name = user_name + "_pool"
 
-    session_type_placeholder = None
+    session_type_placeholder = "is not"
     session_type_placeholder_2 = None
     err_type = None
 
