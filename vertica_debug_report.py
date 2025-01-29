@@ -217,8 +217,18 @@ def get_error_messages_query():
 
 
 def analyse(query_name, query_result, insights_only, with_insights):
-    print(query_name, query_result)
-    print()
+    threshold_json_file_path = "thresholds.json"
+    
+    json_data = None
+    with open(threshold_json_file_path) as json_file:
+        json_data = json_file.read()
+        json_data = json.loads(json_data)
+    
+    if json_data is None:
+        print(f"Error reading {threshold_json_file_path}")
+        exit()
+    
+    print(json_data)
     pass
 
 
@@ -286,7 +296,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(query_name, processed_query_result, insights_only, with_insights)
+                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
