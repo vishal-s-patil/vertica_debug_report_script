@@ -295,8 +295,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 flag = True
+                print('ok_count',ok_count)
                 if item['threshold']['ok'] != -1 and ok_count > 0:
-                    print('ok_count',ok_count)
                     flag = False
                     # ok_count += warn_count + fatal_count
                     message = "[OK] "
