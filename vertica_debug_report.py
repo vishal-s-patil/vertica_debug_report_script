@@ -393,9 +393,9 @@ def replace_thresholds(query, query_name):
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
-            query = query.replace('{ok_threshold}', threshold['columns'][0]['threshold']['ok'])
-            query = query.replace('{warn_threshold}', threshold['columns'][0]['threshold']['warn'])
-            query = query.replace('{fatal_threshold}', threshold['columns'][0]['threshold']['fatal'])
+            query = query.replace('{ok_threshold}', str(threshold['columns'][0]['threshold']['ok']))
+            query = query.replace('{warn_threshold}', str(threshold['columns'][0]['threshold']['warn']))
+            query = query.replace('{fatal_threshold}', str(threshold['columns'][0]['threshold']['fatal']))
     
     return query
 
