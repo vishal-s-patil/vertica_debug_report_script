@@ -230,6 +230,7 @@ def analyse(query_name, query_result, query_description, column_headers, insight
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
+            print('sessions')
             is_result_printed = False
             for item in threshold['columns']:
                 index = column_headers.index(item['columns_name'])
