@@ -287,8 +287,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print('QUERY: ', f"{query}")
                             print("-" * 15)
 
-                        # if with_insights:
-                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                        if with_insights:
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 flag = True
                 if item['threshold']['ok'] != -1 and ok_count > 0:
