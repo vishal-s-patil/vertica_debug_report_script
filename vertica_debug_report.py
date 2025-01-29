@@ -405,7 +405,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, filters["duration"], with_insights, filters["duration"])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"])
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
