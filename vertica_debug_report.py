@@ -406,8 +406,8 @@ if __name__ == "__main__":
             exit()
     
     query_name = None
-    if args.queries_to_execute[0] is not None and len(queries_to_execute) != 0:
-        query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
+    if queries_to_execute is not None and len(queries_to_execute) != 0:
+        query_name = queries_to_execute[0] # will only work if passed only one value as general type added.
 
     pool_name = args.pool_name
     user_name = args.user_name
