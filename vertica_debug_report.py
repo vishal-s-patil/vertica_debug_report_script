@@ -249,9 +249,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             ok_count+=1
                 else:
                     unique_column = item['unique_column']
-                    unique_column_index = unique_column.index(unique_column)
+                    unique_column_index = column_headers.index(unique_column)
                     print(unique_column_index)
-                    unique_values = set([row[unique_column_index] for row in query_result])
+                    unique_values = set([{row[unique_column_index]: 0} for row in query_result])
                     print(unique_values)
                     for row in query_result:
                         pass
