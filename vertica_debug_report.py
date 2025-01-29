@@ -260,16 +260,20 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             unique_values[key] = 0  
                         unique_values[key] += 1  
 
+
                     for unique_column_value, unique_column_cnt in unique_values.items():
-                        if unique_column_cnt > item['threshold']['fatal']:
-                            fatal_count+=1
-                            fatal_values.append(unique_column_value)
-                        elif unique_column_cnt > item['threshold']['warn']:
-                            warn_count+=1
-                            warn_values.append(unique_column_value)
-                        else:
-                            ok_count+=1
-                            ok_values.append(unique_column_value)    
+                        for row in query_result:
+                            if row[unique_column_index] == unique_column_value:
+                                if row[index] > item['threshold']['fatal']:
+                                    fatal_count+=1
+                                    fatal_values.append(unique_column_value)
+                                elif row[index] > item['threshold']['warn']:
+                                    warn_count+=1
+                                    warn_values.append(unique_column_value)
+                                else:
+                                    ok_count+=1
+                                    total += row[index]
+                                    ok_values.append(unique_column_value)   
 
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
@@ -293,8 +297,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     message = message.replace('{cnt}', str(ok_count))
-                    if len(ok_values) > 0:
-                        total = sum(unique_values.values()) 
+                    # if len(ok_values) > 0:
+                    total = sum(unique_values.values()) 
 
                     message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
