@@ -284,7 +284,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         # if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
+                flag = True
                 if item['threshold']['ok'] != -1 and ok_count > 0:
+                    flag = False
                     ok_count += warn_count + fatal_count
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
@@ -294,6 +296,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(message)
                     
                 if item['threshold']['warn'] != -1 and warn_count > 0:
+                    flag = False
                     warn_count += fatal_count
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
@@ -303,6 +306,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(message)
 
                 if item['threshold']['fatal'] != -1 and fatal_count > 0:
+                    flag = False
                     message = "[FATAL] "
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
                     message = message.replace('{cnt}', str(fatal_count))
@@ -310,6 +314,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         message = message.replace('{users_list}', str(fatal_values))
                     print(message)
 
+                if flag:
+                    print("[OK]", item['default_message'])
     pass
 
 
