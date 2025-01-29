@@ -48,7 +48,7 @@
         "qid": 0,
         "query_name": "resource_pool_status",
         "query_description": "description",
-        "query": "select n.subcluster_name, memory_size_kb, memory_inuse_kb, general_memory_borrowed_kb, max_memory_size_kb, running_query_count from resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>';",
+        "query": "select n.subcluster_name, memory_size_kb, memory_inuse_kb, general_memory_borrowed_kb, max_memory_size_kb, running_query_count from resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>' order by running_query_count;",
         "query_past": "select null;"
     },
     {
