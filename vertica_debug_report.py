@@ -449,7 +449,6 @@ if __name__ == "__main__":
         "issue_level": args.issue_level,
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
-        "sort_order": args.sort_order,
     }
 
     insights_only = args.insights_only
