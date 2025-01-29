@@ -10,7 +10,7 @@
             {
                 "columns_name": "dv_count",
                 "threshold": {
-                    "ok": 0,
+                    "ok": -1,
                     "warn": 500,
                     "fatal": 700
                 },
@@ -23,7 +23,7 @@
             {
                 "columns_name": "deleted_rows",
                 "threshold": {
-                    "ok": 0,
+                    "ok": -1,
                     "warn": 300000,
                     "fatal": 600000
                 },

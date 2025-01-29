@@ -237,17 +237,17 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(f"Error: Column 'dv_count' not found in the query result.")
                     exit()
                 
-                ok_count, wanr_count, fatal_count = 0, 0, 0
+                ok_count, warn_count, fatal_count = 0, 0, 0
 
                 for row in query_result:
                     if row[index] > item['threshold']['fatal']:
                         fatal_count+=1
                     elif row[index] > item['threshold']['warn']:
-                        wanr_count+=1
+                        warn_count+=1
                     else:
                         ok_count+=1
                     
-                if ok_count>0 or wanr_count>0 or fatal_count>0:
+                if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
                     
@@ -262,21 +262,21 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         # if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
-                if item['threshold']['ok'] != 0 and ok_count > 0:
-                    ok_count += wanr_count + fatal_count
+                if item['threshold']['ok'] != -1 and ok_count > 0:
+                    ok_count += warn_count + fatal_count
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     message = message.replace('{cnt}', str(ok_count))
                     print(message)
                     
-                if item['threshold']['warn'] != 0 and wanr_count > 0:
-                    wanr_count += fatal_count
+                if item['threshold']['warn'] != -1 and warn_count > 0:
+                    warn_count += fatal_count
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
-                    message = message.replace('{cnt}', str(wanr_count))
+                    message = message.replace('{cnt}', str(warn_count))
                     print(message)
 
-                if item['threshold']['fatal'] != 0 and fatal_count > 0:
+                if item['threshold']['fatal'] != -1 and fatal_count > 0:
                     message = "[FATAL] "
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
                     message = message.replace('{cnt}', str(fatal_count))
