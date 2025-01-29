@@ -230,9 +230,12 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
             if query_name == "resource_pool_status":
+                print("resource_pool_status")
                 if pool_name is None:
+                    print(pool_name)
                     return
                 else:
+                    print(pool_name)
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
                     print(f"Query Description: {query_description}")
