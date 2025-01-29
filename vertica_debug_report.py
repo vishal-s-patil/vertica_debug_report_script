@@ -249,7 +249,21 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     else:
                         if with_insights:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-                        print()
+                        total_memory_in_use = 0
+                        total_running_queries = 0
+                        total_memory_borrowed = 0
+                        total_memory_in_use_index += row[column_headers.index('memory_in_use')]
+                        total_running_queries_index += row[column_headers.index('running_queries')]
+                        total_memory_borrowed_index += row[column_headers.index('memory_borrowed')]
+                        for row in query_result:
+                            total_memory_in_use += row[total_memory_in_use_index]
+                            total_running_queries += row[total_running_queries_index]
+                            total_memory_borrowed += row[total_memory_borrowed_index]
+                        
+                        if total_running_queries == 0:
+                            print(f"No running queries found.")
+                        else:
+                            print(f"Having total {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
                     
                     return
 
