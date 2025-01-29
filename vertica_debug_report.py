@@ -353,7 +353,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     flag = False
                     
                     message = "[WARN] "
-                    message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m' + item['threshold']['warn'] + '\033[0m'))
+                    message += item['message_template']['warn'].replace('{val_cnt}', str( item['threshold']['warn'] )) # '\033[93m' + +  '\033[0m'
                     message = message.replace('{duration}', str(duration))
                     if len(warn_values) > 0:
                         message = message.replace('{list}', str(warn_values))
@@ -365,7 +365,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if item['threshold']['fatal'] != -1 and fatal_count > 0:
                     flag = False
                     message = "[FATAL] "
-                    message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m' + item['threshold']['fatal'] + '\033[0m'))
+                    message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal'] )) # '\033[91m' + + '\033[0m'
                     message = message.replace('{duration}', str(duration))
                     if len(fatal_values) > 0:
                         message = message.replace('{list}', str(fatal_values))
