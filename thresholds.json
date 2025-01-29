@@ -95,7 +95,7 @@
         ]
     },
     {
-        "query_name": "hourly_query_count_for_past_3_hours",
+        "query_name": "query_count",
         "columns": [
             {
                 "columns_name": "cnt",
