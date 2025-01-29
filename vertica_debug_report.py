@@ -235,7 +235,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(pool_name)
                     return
                 else:
-                    print(pool_name)
+                    print(pool_name, "else")
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
                     print(f"Query Description: {query_description}")
@@ -417,7 +417,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
-                print('processed_query_result', processed_query_result)
                 if query_result == -1:
                     if verbose:
                         print('QUERY: ', f"{final_query}")
