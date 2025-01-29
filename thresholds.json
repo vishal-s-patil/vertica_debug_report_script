@@ -110,7 +110,7 @@
                     "warn": "> {val_cnt} queries by users {list} in past {duration} hours",
                     "fatal": "> {val_cnt} queries by users {list} in past {duration} hours"
                 },
-                "default_message": "[OK] No Errors Found"
+                "default_message": "[OK] No Errors found"
             }
         ]
     },
@@ -125,15 +125,15 @@
                 "unique_column": "user_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 2000,
-                    "fatal": 15000
+                    "warn": 0,
+                    "fatal": 0
                 },
                 "message_template": {
                     "ok": "total {total} queries by {cnt} users in past {duration} hours",
                     "warn": "> {val_cnt} queries by users {list} in past {duration} hours",
                     "fatal": "> {val_cnt} queries by users {list} in past {duration} hours"
                 },
-                "default_message": "[OK] No Errors Found"
+                "default_message": "[OK] No Long Running Queries found"
             }
         ]
     }
