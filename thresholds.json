@@ -81,12 +81,12 @@
                 "columns_name": "cnt",
                 "unique_column": "message_category",
                 "threshold": {
-                    "ok": -1,
-                    "warn": 50,
-                    "fatal": 100
+                    "ok": 0,
+                    "warn": 1000,
+                    "fatal": 5000
                 },
                 "message_template": {
-                    "ok": "",
+                    "ok": "{cnt} users having total {total} Active Queries in Queue.",
                     "warn": "{cnt} Users {list} having more than {val_cnt} Queries in Queue",
                     "fatal": "{cnt} Users {list} having more than {val_cnt} Queries in Queue"
                 },
