@@ -15,7 +15,7 @@
                     "warn": "{cnt} projections having > {val_cnt} delete vectors",
                     "fatal": "{cnt} projections having > {val_cnt} delete vectors"
                 },
-                "default_message": "No Active Queries"
+                "default_message": ""
             },
             {
                 "columns_name": "deleted_rows",
@@ -30,7 +30,7 @@
                     "warn": "{cnt} projections having > {val_cnt} deleted rows",
                     "fatal": "{cnt} projections having > {val_cnt} deleted rows"
                 },
-                "default_message": "No Active Queries"
+                "default_message": ""
             }
         ]
     },
@@ -50,7 +50,7 @@
                     "warn": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions",
                     "fatal": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions"
                 },
-                "default_message": "No Active Queries"
+                "default_message": "[OK] No Active Queries"
             }
         ]
     }

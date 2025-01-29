@@ -328,7 +328,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     print(message)
 
                 if flag:
-                    print("[OK]", item['default_message'])
+                    print(item['default_message'])
     pass
 
 
