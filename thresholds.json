@@ -1,14 +1,10 @@
 [
     {
-        "query_name": "hourly_query_count_for_past_3_hours",
-        "threshold": 2000,
-        "message_template": "In last 3 hours more than {threshold} query count has beed observed."
-    },
-    {
         "query_name": "delete_vectors_count",
         "columns": [
             {
                 "columns_name": "dv_count",
+                "unique_column": "",
                 "threshold": {
                     "ok": -1,
                     "warn": 500,
@@ -40,6 +36,7 @@
         "columns": [
             {
                 "columns_name": "cnt",
+                "unique_column": "user_name",
                 "threshold": {
                     "ok": 0,
                     "warn": 50,

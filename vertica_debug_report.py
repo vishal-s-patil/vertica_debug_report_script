@@ -239,14 +239,22 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
                 ok_count, warn_count, fatal_count = 0, 0, 0
 
-                for row in query_result:
-                    if row[index] > item['threshold']['fatal']:
-                        fatal_count+=1
-                    elif row[index] > item['threshold']['warn']:
-                        warn_count+=1
-                    else:
-                        ok_count+=1
-                    
+                if item['unique_column'] == "":
+                    for row in query_result:
+                        if row[index] > item['threshold']['fatal']:
+                            fatal_count+=1
+                        elif row[index] > item['threshold']['warn']:
+                            warn_count+=1
+                        else:
+                            ok_count+=1
+                else:
+                    unique_column = item['unique_column']
+                    unique_column_index = unique_column.index(unique_column)
+                    unique_values = list(set([{val[unique_column_index]: 0} for val in query_result]))
+                    print(unique_values)
+                    for row in query_result:
+                        pass
+
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
