@@ -458,4 +458,6 @@ if __name__ == "__main__":
     insights_only = args.insights_only
     with_insights = args.with_insights
 
+    print(insights_only, with_insights)
+
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, insights_only, with_insights, queries_to_execute)
