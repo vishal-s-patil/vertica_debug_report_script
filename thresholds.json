@@ -43,7 +43,7 @@
                     "fatal": 100
                 },
                 "message_template": {
-                    "ok": "{cnt} users having {total} Active Queries.",
+                    "ok": "{cnt} users having total {total} Active Queries.",
                     "warn": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions",
                     "fatal": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions"
                 },
