@@ -253,19 +253,19 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
             if ok_count != 0:
                 message = "[OK] "
                 message += threshold['message_template']['ok'].replace('{val_cnt}', str(threshold['threshold']['ok']))
-                message = message.replace('{cnt}', ok_count)
+                message = message.replace('{cnt}', str(ok_count))
                 print(message)
                 
             if wanr_count != 0:
                 message = "[WARN] "
                 message = threshold['message_template']['warn'].replace('{val_cnt}', str(threshold['threshold']['warn']))
-                message = message.replace('{cnt}', wanr_count)
+                message = message.replace('{cnt}', str(wanr_count))
                 print(message)
 
             if fatal_count != 0:
                 message = "[FATAL] "
                 message = threshold['message_template']['fatal'].replace('{val_cnt}', str(threshold['threshold']['fatal']))
-                message = message.replace('{cnt}', fatal_count)
+                message = message.replace('{cnt}', str(fatal_count))
                 print(message)
 
 
