@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query_name, query_result, column_headers, insights_only, with_insights):
+def analyse(query_name, query_result, column_headers, insights_only, with_insights, column_to_analyse):
     threshold_json_file_path = "thresholds.json"
     
     json_data = None
@@ -230,9 +230,13 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
+            # if with_insights:
             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-
-            index = column_headers.index("dv_count")
+            
+            column = threshold['column_names']
+            if column_to_analyse:
+                column = column_to_analyse
+            index = column_headers.index(column)
             if index == -1:
                 print(f"Error: Column 'dv_count' not found in the query result.")
                 exit()
@@ -334,7 +338,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights)
+                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights, filters["column_to_analyse"])
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -429,6 +433,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
         help="")
+    
+    parser.add_argument("--column-to-analyse", required=False, 
+        help="", default=None)
 
     if help_flag:
         parser.print_help()
@@ -479,7 +486,7 @@ if __name__ == "__main__":
     elif query_name == "error_messages" or query_name == "error_messages_raw":
         err_type = type
     
-    filters = { # and replacements
+    filters = { # and replacements and args
         "subcluster_name": args.subcluster_name,
         "from_date_time": args.from_date_time,
         "to_date_time": args.to_date_time,
@@ -498,6 +505,7 @@ if __name__ == "__main__":
         "issue_level": args.issue_level,
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
+        "column_to_analyse": args.column_to_analyse
     }
 
     insights_only = args.insights_only

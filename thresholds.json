@@ -15,6 +15,7 @@
             "ok": "",
             "warn": "{cnt} projections having > {val_cnt} delete vectors",
             "fatal": "{cnt} projections having > {val_cnt} delete vectors"
-        }
+        },
+        "column_names": "dv_count"
     }
 ]
