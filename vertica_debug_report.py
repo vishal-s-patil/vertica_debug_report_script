@@ -296,7 +296,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
-                    if not (insights_only and with_insights):
+                    if not (insights_only or with_insights):
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
                         if verbose:
