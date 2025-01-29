@@ -300,9 +300,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     # ok_count += warn_count + fatal_count
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
-                    # message = message.replace('{cnt}', str(ok_count))
-                    # if len(ok_values) > 0:
-                    # total = sum(unique_values.values()) 
+                    
+                    message = message.replace('{duration}', str(duration))
 
                     message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
@@ -317,6 +316,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
+                    message = message.replace('{duration}', str(duration))
                     if len(warn_values) > 0:
                         message = message.replace('{list}', str(warn_values))
                         message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
@@ -328,6 +328,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     flag = False
                     message = "[FATAL] "
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
+                    message = message.replace('{duration}', str(duration))
                     if len(fatal_values) > 0:
                         message = message.replace('{list}', str(fatal_values))
                         message = message.replace('{cnt}', str(len(fatal_values)))
