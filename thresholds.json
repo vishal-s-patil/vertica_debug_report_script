@@ -44,8 +44,8 @@
                 },
                 "message_template": {
                     "ok": "{N} users having {n} Active Queries / No Active Queries",
-                    "warn": "{N} Users [users_list] having more than {n} Active Sessions",
-                    "fatal": "{N} Users [users_list] having more than {n} Active Sessions"
+                    "warn": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions",
+                    "fatal": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions"
                 }
             }
         ]

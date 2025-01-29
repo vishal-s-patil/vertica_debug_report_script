@@ -238,6 +238,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     exit()
                 
                 ok_count, warn_count, fatal_count = 0, 0, 0
+                ok_values, warn_values, fatal_values = [], [], []
 
                 if item['unique_column'] == "":
                     for row in query_result:
@@ -254,10 +255,20 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     for row in query_result:
                         key = row[unique_column_index]
                         if key not in unique_values:
-                            unique_values[key] = 0  # Initialize with 0
-                        unique_values[key] += 1  # Increment count
+                            unique_values[key] = 0  
+                        unique_values[key] += 1  
 
-                    print(unique_values)
+                    for unique_column_value, unique_column_cnt in unique_values.items():
+                        if unique_column_cnt > item['threshold']['fatal']:
+                            fatal_count+=1
+                            fatal_values.append(unique_column_value)
+                        elif unique_column_cnt > item['threshold']['warn']:
+                            warn_count+=1
+                            warn_values.append(unique_column_value)
+                        else:
+                            ok_count+=1
+                            ok_values.append(unique_column_value)    
+
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
@@ -278,6 +289,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     message = message.replace('{cnt}', str(ok_count))
+                    if len(ok_values) > 0:
+                        message = message.replace('{users_list}', str(ok_values))
                     print(message)
                     
                 if item['threshold']['warn'] != -1 and warn_count > 0:
@@ -285,12 +298,16 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
                     message = message.replace('{cnt}', str(warn_count))
+                    if len(warn_values) > 0:
+                        message = message.replace('{users_list}', str(warn_values))
                     print(message)
 
                 if item['threshold']['fatal'] != -1 and fatal_count > 0:
                     message = "[FATAL] "
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
                     message = message.replace('{cnt}', str(fatal_count))
+                    if len(fatal_values) > 0:
+                        message = message.replace('{users_list}', str(fatal_values))
                     print(message)
 
     pass
