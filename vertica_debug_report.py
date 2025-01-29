@@ -234,7 +234,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             for item in threshold['columns']:
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
-                    print(f"Error: Column 'dv_count' not found in the query result.")
+                    print(f"Error: Column '{item['columns_name']}' not found in the query result.")
                     exit()
                 
                 ok_count, warn_count, fatal_count = 0, 0, 0
@@ -293,7 +293,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 flag = True
                 if item['threshold']['ok'] != -1 and ok_count > 0:
                     flag = False
-                    ok_count += warn_count + fatal_count
+                    # ok_count += warn_count + fatal_count
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     # message = message.replace('{cnt}', str(ok_count))
@@ -310,7 +310,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                 if item['threshold']['warn'] != -1 and warn_count > 0:
                     flag = False
-                    warn_count += fatal_count
+                    # warn_count += fatal_count
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
                     message = message.replace('{cnt}', str(warn_count))
