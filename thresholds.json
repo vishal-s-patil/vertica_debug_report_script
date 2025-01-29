@@ -14,7 +14,8 @@
                     "ok": "",
                     "warn": "{cnt} projections having > {val_cnt} delete vectors",
                     "fatal": "{cnt} projections having > {val_cnt} delete vectors"
-                }
+                },
+                "default_message": "No Active Queries"
             },
             {
                 "columns_name": "deleted_rows",
@@ -28,7 +29,8 @@
                     "ok": "",
                     "warn": "{cnt} projections having > {val_cnt} deleted rows",
                     "fatal": "{cnt} projections having > {val_cnt} deleted rows"
-                }
+                },
+                "default_message": "No Active Queries"
             }
         ]
     },
