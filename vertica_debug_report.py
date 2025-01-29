@@ -2,7 +2,6 @@ import json
 import os
 from dotenv import load_dotenv
 import vertica_python
-import csv
 from tabulate import tabulate
 import argparse
 from datetime import datetime, timedelta
@@ -10,11 +9,11 @@ import re
 import sys
 from vertica_python import errors
 
-
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
 
 load_dotenv()
+
 
 def get_vertica_connection():
     try:
@@ -75,7 +74,6 @@ def replace_tables_in_query(query):
         print(f"Error while replacing strings in query: {e}")
         return query
     
-
 
 def replace_conditions(query, conditions_dict):
     query = query.lower()
@@ -217,6 +215,7 @@ def get_error_messages_query():
     ( select n.subcluster_name, em.event_timestamp, em.user_name, 'memory' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%memory%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'session' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%session%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'resource' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%resource%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.event_timestamp, em.user_name, 'all' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } ORDER BY event_timestamp limit { num_items } );
     """
 
+
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_to_execute=None):
     try:
         vertica_connection = get_vertica_connection()
@@ -295,8 +294,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, queries_
                         print('QUERY: ', f"{final_query}")
                         print("-" * 15)
                     print("No records found")
-                    
-        
+                            
         vertica_connection.close()
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
@@ -421,7 +419,6 @@ if __name__ == "__main__":
     elif query_name == "error_messages" or query_name == "error_messages_raw":
         err_type = type
     
-    
     filters = { # and replacements
         "subcluster_name": args.subcluster_name,
         "from_date_time": args.from_date_time,
@@ -445,4 +442,4 @@ if __name__ == "__main__":
     }
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, queries_to_execute)
-    # execute_queries_from_csv(csv_path, filters, args.verbose, is_now, queries_to_execute)
+    
