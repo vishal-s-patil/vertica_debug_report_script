@@ -447,7 +447,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
 
                 if "end as status" in query.lower():
-                    final_query = replace_thresholds(final_query)
+                    final_query = replace_thresholds(final_query, query_name)
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 
