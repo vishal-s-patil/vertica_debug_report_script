@@ -379,12 +379,6 @@ if __name__ == "__main__":
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
         help="")
-    
-    # parser.add_argument("--type", required=False, 
-    #     help="", default="active") # session active, inactive and all 
-    
-    parser.add_argument("--sort-order", required=False, 
-        help="", default="desc")
 
     if help_flag:
         parser.print_help()
@@ -409,8 +403,10 @@ if __name__ == "__main__":
         if queries_to_execute is not None and len(queries_to_execute) > 1:
             print(f"Multiple queries not allowed when --type is passed.")
             exit()
-
-    query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
+    
+    query_name = None
+    if args.queries_to_execute[0] is not None:
+        query_name = args.queries_to_execute[0] # will only work if passed only one value as general type added.
 
     pool_name = args.pool_name
     user_name = args.user_name
