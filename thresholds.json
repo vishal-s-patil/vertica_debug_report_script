@@ -102,8 +102,8 @@
                 "unique_column": "user_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 1000,
-                    "fatal": 5000
+                    "warn": 2000,
+                    "fatal": 15000
                 },
                 "message_template": {
                     "ok": "total {total} queries by {cnt} users in past {duration} hours",
