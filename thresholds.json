@@ -6,16 +6,33 @@
     },
     {
         "query_name": "delete_vectors_count",
-        "threshold": {
-            "ok": 0,
-            "warn": 500,
-            "fatal": 700
-        },
-        "message_template": {
-            "ok": "",
-            "warn": "{cnt} projections having > {val_cnt} delete vectors",
-            "fatal": "{cnt} projections having > {val_cnt} delete vectors"
-        },
-        "column_names": "dv_count"
+        "columns": [
+            {
+                "columns_name": "dv_count",
+                "threshold": {
+                    "ok": 0,
+                    "warn": 500,
+                    "fatal": 700
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{cnt} projections having > {val_cnt} delete vectors",
+                    "fatal": "{cnt} projections having > {val_cnt} delete vectors"
+                }
+            },
+            {
+                "columns_name": "deleted_rows",
+                "threshold": {
+                    "ok": 0,
+                    "warn": 300000,
+                    "fatal": 600000
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{cnt} projections having > {val_cnt} deleted rows",
+                    "fatal": "{cnt} projections having > {val_cnt} deleted rows"
+                }
+            }
+        ]
     }
 ]

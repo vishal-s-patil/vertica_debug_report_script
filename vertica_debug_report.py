@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query_name, query_result, column_headers, insights_only, with_insights, column_to_analyse):
+def analyse(query_name, query_result, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
     
     json_data = None
@@ -233,43 +233,41 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
             # if with_insights:
             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
             
-            column = threshold['column_names']
-            if column_to_analyse:
-                column = column_to_analyse
-            index = column_headers.index(column)
-            if index == -1:
-                print(f"Error: Column 'dv_count' not found in the query result.")
-                exit()
-            
-            ok_count, wanr_count, fatal_count = 0, 0, 0
-
-            for row in query_result:
-                if row[index] > threshold['threshold']['fatal']:
-                    fatal_count+=1
-                elif row[index] > threshold['threshold']['warn']:
-                    wanr_count+=1
-                else:
-                    ok_count+=1
-            
-            if threshold['threshold']['ok'] != 0 and ok_count > 0:
-                ok_count += wanr_count + fatal_count
-                message = "[OK] "
-                message += threshold['message_template']['ok'].replace('{val_cnt}', str(threshold['threshold']['ok']))
-                message = message.replace('{cnt}', str(ok_count))
-                print(message)
+            for item in threshold['columns']:
+                index = column_headers.index(item['columns_name'])
+                if index == -1:
+                    print(f"Error: Column 'dv_count' not found in the query result.")
+                    exit()
                 
-            if threshold['threshold']['warn'] != 0 and wanr_count > 0:
-                wanr_count += fatal_count
-                message = "[WARN] "
-                message += threshold['message_template']['warn'].replace('{val_cnt}', str(threshold['threshold']['warn']))
-                message = message.replace('{cnt}', str(wanr_count))
-                print(message)
+                ok_count, wanr_count, fatal_count = 0, 0, 0
 
-            if threshold['threshold']['fatal'] != 0 and fatal_count > 0:
-                message = "[FATAL] "
-                message += threshold['message_template']['fatal'].replace('{val_cnt}', str(threshold['threshold']['fatal']))
-                message = message.replace('{cnt}', str(fatal_count))
-                print(message)
+                for row in query_result:
+                    if row[index] > item['threshold']['fatal']:
+                        fatal_count+=1
+                    elif row[index] > item['threshold']['warn']:
+                        wanr_count+=1
+                    else:
+                        ok_count+=1
+                
+                if item['threshold']['ok'] != 0 and ok_count > 0:
+                    ok_count += wanr_count + fatal_count
+                    message = "[OK] "
+                    message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
+                    message = message.replace('{cnt}', str(ok_count))
+                    print(message)
+                    
+                if item['threshold']['warn'] != 0 and wanr_count > 0:
+                    wanr_count += fatal_count
+                    message = "[WARN] "
+                    message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
+                    message = message.replace('{cnt}', str(wanr_count))
+                    print(message)
+
+                if item['threshold']['fatal'] != 0 and fatal_count > 0:
+                    message = "[FATAL] "
+                    message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
+                    message = message.replace('{cnt}', str(fatal_count))
+                    print(message)
 
     pass
 
@@ -338,7 +336,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights, filters["column_to_analyse"])
+                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -433,9 +431,6 @@ if __name__ == "__main__":
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
         help="")
-    
-    parser.add_argument("--column-to-analyse", required=False, 
-        help="", default=None)
 
     if help_flag:
         parser.print_help()
@@ -505,7 +500,6 @@ if __name__ == "__main__":
         "issue_level": args.issue_level,
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
-        "column_to_analyse": args.column_to_analyse
     }
 
     insights_only = args.insights_only
