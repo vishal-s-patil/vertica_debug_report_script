@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query_name, query_result, insights_only, with_insights):
+def analyse(query_name, query_result, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
     
     json_data = None
