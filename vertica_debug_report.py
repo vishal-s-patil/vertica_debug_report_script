@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query_name, query_result, column_headers, insights_only, with_insights):
+def analyse(query_name, query_result, query_description, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
     
     json_data = None
@@ -248,6 +248,12 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                         wanr_count+=1
                     else:
                         ok_count+=1
+                    
+                if ok_count>0 or wanr_count>0 or fatal_count>0:
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
                 
                 if item['threshold']['ok'] != 0 and ok_count > 0:
                     ok_count += wanr_count + fatal_count
@@ -336,7 +342,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(query_name, processed_query_result, column_headers, insights_only, with_insights)
+                        analyse(query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
