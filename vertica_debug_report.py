@@ -296,6 +296,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
                 flag = True
                 if item['threshold']['ok'] != -1 and ok_count > 0:
+                    print('ok_count',ok_count)
                     flag = False
                     # ok_count += warn_count + fatal_count
                     message = "[OK] "
