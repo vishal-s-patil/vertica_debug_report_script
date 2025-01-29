@@ -233,6 +233,8 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
             print(threshold)
             print()
             print(query_result)
+            print()
+            print(column_headers)
     pass
 
 
