@@ -250,6 +250,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 else:
                     unique_column = item['unique_column']
                     unique_column_index = unique_column.index(unique_column)
+                    print(unique_column_index)
                     unique_values = list(set([{val[unique_column_index]: 0} for val in query_result]))
                     print(unique_values)
                     for row in query_result:
