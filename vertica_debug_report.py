@@ -313,18 +313,22 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     # warn_count += fatal_count
                     message = "[WARN] "
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
-                    message = message.replace('{cnt}', str(warn_count))
                     if len(warn_values) > 0:
                         message = message.replace('{list}', str(warn_values))
+                        message = message.replace('{cnt}', str(len(warn_values)))
+                    else:
+                        message = message.replace('{cnt}', str(warn_count))
                     print(message)
 
                 if item['threshold']['fatal'] != -1 and fatal_count > 0:
                     flag = False
                     message = "[FATAL] "
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
-                    message = message.replace('{cnt}', str(fatal_count))
                     if len(fatal_values) > 0:
                         message = message.replace('{list}', str(fatal_values))
+                        message = message.replace('{cnt}', str(len(fatal_values)))
+                    else:
+                        message = message.replace('{cnt}', str(fatal_count))
                     print(message)
 
                 if flag:
