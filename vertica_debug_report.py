@@ -248,6 +248,7 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                     wanr_count+=1
                 else:
                     ok_count+=1
+                print(row[index])
             
             print(ok_count, wanr_count, fatal_count)
     pass
