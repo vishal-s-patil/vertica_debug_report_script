@@ -255,6 +255,7 @@ def analyse(query_name, query_result, query_description, column_headers, insight
 
                     # if with_insights:
                     if not is_result_printed:
+                        is_result_printed = True
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 if item['threshold']['ok'] != 0 and ok_count > 0:
