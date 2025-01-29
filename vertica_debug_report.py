@@ -230,8 +230,6 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
     
     for threshold in thresholds:
         if threshold['query_name'] == "delete_vectors_count":
-            print(threshold)
-            print()
             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
 
             index = column_headers.index("dv_count")
@@ -248,7 +246,6 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                     wanr_count+=1
                 else:
                     ok_count+=1
-                print(row[index])
             
             if threshold['message_template']['ok'] != 0 and ok_count > 0:
                 message = "[OK] "
@@ -267,9 +264,6 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                 message += threshold['message_template']['fatal'].replace('{val_cnt}', str(threshold['threshold']['fatal']))
                 message = message.replace('{cnt}', str(fatal_count))
                 print(message)
-
-
-            print(ok_count, wanr_count, fatal_count)
 
     pass
 
