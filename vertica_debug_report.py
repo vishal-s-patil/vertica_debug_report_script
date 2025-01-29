@@ -246,6 +246,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    
+                    return
 
             is_result_printed = False
             for item in threshold['columns']:
