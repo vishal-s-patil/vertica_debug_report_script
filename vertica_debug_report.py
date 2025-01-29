@@ -250,7 +250,12 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                     ok_count+=1
                 print(row[index])
             
+            if ok_count != 0:
+                message = threshold['message_template'].replace('{val_cnt}', threshold['threshold']['ok'])
+                message = threshold['message_template'].replace('{cnt}', ok_count)
             print(ok_count, wanr_count, fatal_count)
+            print()
+            print(message)
     pass
 
 
