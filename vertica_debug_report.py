@@ -216,8 +216,9 @@ def get_error_messages_query():
     """
 
 
-def analyse(insights_only, with_insights):
-    print(insights_only, with_insights)
+def analyse(query_name, query_result, insights_only, with_insights):
+    print(query_name, query_result)
+    print()
     pass
 
 
