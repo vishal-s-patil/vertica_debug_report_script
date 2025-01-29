@@ -298,7 +298,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                     message = message.replace('{cnt}', str(ok_count))
                     # if len(ok_values) > 0:
-                    total = sum(unique_values.values()) 
+                    # total = sum(unique_values.values()) 
 
                     message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
