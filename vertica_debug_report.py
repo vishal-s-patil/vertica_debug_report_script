@@ -250,11 +250,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 else:
                     unique_column = item['unique_column']
                     unique_column_index = column_headers.index(unique_column)
-                    print(unique_column_index)
-                    unique_values = set([{row[unique_column_index]: 0} for row in query_result])
-                    print(unique_values)
+                    unique_values = {}
                     for row in query_result:
-                        pass
+                        unique_values[row[unique_column_index]] += 1
+                    print(unique_values)
 
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
