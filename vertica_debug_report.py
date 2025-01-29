@@ -231,11 +231,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
         if threshold['query_name'] == query_name:
             is_result_printed = False
             for item in threshold['columns']:
-                if len(query_result) == 0:
+                if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
                         return
-                    
+                
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
                     print(f"Error: Column '{item['columns_name']}' not found in the query result.")
