@@ -81,7 +81,7 @@
                 "columns_name": "cnt",
                 "unique_column": "message_category",
                 "threshold": {
-                    "ok": 0,
+                    "ok": -1,
                     "warn": 1000,
                     "fatal": 5000
                 },
