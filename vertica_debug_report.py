@@ -250,7 +250,7 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
                     ok_count+=1
                 print(row[index])
             
-            if threshold['message_template']['ok'] != 0:
+            if threshold['message_template']['ok'] != 0 and ok_count > 0:
                 message = "[OK] "
                 message += threshold['message_template']['ok'].replace('{val_cnt}', str(threshold['threshold']['ok']))
                 message = message.replace('{cnt}', str(ok_count))
