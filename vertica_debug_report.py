@@ -218,7 +218,7 @@ def get_error_messages_query():
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
-    
+    print('coming')
     json_data = None
     with open(threshold_json_file_path) as json_file:
         json_data = json_file.read()
@@ -302,7 +302,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
-                        message = message.replace('{users_list}', str(ok_values))
+                        message = message.replace('{list}', str(ok_values))
                         message = message.replace('{cnt}', str(len(ok_values)))
                     else:
                         message = message.replace('{cnt}', str(ok_count))
@@ -315,7 +315,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message += item['message_template']['warn'].replace('{val_cnt}', str(item['threshold']['warn']))
                     message = message.replace('{cnt}', str(warn_count))
                     if len(warn_values) > 0:
-                        message = message.replace('{users_list}', str(warn_values))
+                        message = message.replace('{list}', str(warn_values))
                     print(message)
 
                 if item['threshold']['fatal'] != -1 and fatal_count > 0:
@@ -324,7 +324,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     message += item['message_template']['fatal'].replace('{val_cnt}', str(item['threshold']['fatal']))
                     message = message.replace('{cnt}', str(fatal_count))
                     if len(fatal_values) > 0:
-                        message = message.replace('{users_list}', str(fatal_values))
+                        message = message.replace('{list}', str(fatal_values))
                     print(message)
 
                 if flag:

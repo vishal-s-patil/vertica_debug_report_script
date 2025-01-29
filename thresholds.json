@@ -47,8 +47,8 @@
                 },
                 "message_template": {
                     "ok": "{cnt} users having total {total} Active Queries.",
-                    "warn": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions",
-                    "fatal": "{cnt} Users {users_list} having more than {val_cnt} Active Sessions"
+                    "warn": "{cnt} Users {list} having more than {val_cnt} Active Sessions",
+                    "fatal": "{cnt} Users {list} having more than {val_cnt} Active Sessions"
                 },
                 "default_message": "[OK] No Active Queries"
             }
@@ -67,10 +67,30 @@
                 },
                 "message_template": {
                     "ok": "{cnt} users having total {total} Active Queries in Queue.",
-                    "warn": "{cnt} Users {users_list} having more than {val_cnt} Queries in Queue",
-                    "fatal": "{cnt} Users {users_list} having more than {val_cnt} Queries in Queue"
+                    "warn": "{cnt} Users {list} having more than {val_cnt} Queries in Queue",
+                    "fatal": "{cnt} Users {list} having more than {val_cnt} Queries in Queue"
                 },
                 "default_message": "[OK] No Queries in Queue"
+            }
+        ]
+    },
+    {
+        "query_name": "error_messages",
+        "columns": [
+            {
+                "columns_name": "cnt",
+                "unique_column": "message_category",
+                "threshold": {
+                    "ok": -1,
+                    "warn": 50,
+                    "fatal": 100
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{cnt} Users {list} having more than {val_cnt} Queries in Queue",
+                    "fatal": "{cnt} Users {list} having more than {val_cnt} Queries in Queue"
+                },
+                "default_message": "[OK] No Errors Found"
             }
         ]
     }
