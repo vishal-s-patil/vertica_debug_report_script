@@ -230,6 +230,7 @@ def analyse(query_name, query_result, query_description, column_headers, insight
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
+            is_result_printed = False
             for item in threshold['columns']:
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
@@ -253,7 +254,8 @@ def analyse(query_name, query_result, query_description, column_headers, insight
                     print("-" * len(f"Query Description: {query_description}"))
 
                     # if with_insights:
-                    print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    if not is_result_printed:
+                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 if item['threshold']['ok'] != 0 and ok_count > 0:
                     ok_count += wanr_count + fatal_count
