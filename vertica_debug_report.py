@@ -234,7 +234,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
-                        
+                        return
+                    
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
                     print(f"Error: Column '{item['columns_name']}' not found in the query result.")
