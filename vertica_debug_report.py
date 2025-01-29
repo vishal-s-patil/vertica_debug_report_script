@@ -296,7 +296,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if len(ok_values) > 0:
                         total = sum(unique_values.values()) 
 
-                    message = message.replace('{total}', total)
+                    message = message.replace('{total}', str(total))
                     if len(ok_values) > 0:
                         message = message.replace('{users_list}', str(ok_values))
                     print(message)
