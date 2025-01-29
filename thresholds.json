@@ -7,9 +7,9 @@
     {
         "query_name": "delete_vectors_count",
         "threshold": {
-            "ok": 85000,
-            "warn": 85000,
-            "fatal": 20
+            "ok": 0,
+            "warn": 0,
+            "fatal": 850000
         },
         "message_template": {
             "ok": "",
