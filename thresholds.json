@@ -18,6 +18,7 @@
             },
             {
                 "columns_name": "deleted_rows",
+                "unique_column": "",
                 "threshold": {
                     "ok": -1,
                     "warn": 300000,
