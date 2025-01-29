@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query_name, query_result, query_description, column_headers, insights_only, with_insights):
+def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights):
     threshold_json_file_path = "thresholds.json"
     
     json_data = None
@@ -255,6 +255,9 @@ def analyse(query_name, query_result, query_description, column_headers, insight
                         print("-" * len(f"Query Name: {query_name}"))
                         print(f"Query Description: {query_description}")
                         print("-" * len(f"Query Description: {query_description}"))
+                        if verbose:
+                            print('QUERY: ', f"{query}")
+                            print("-" * 15)
 
                         # if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
@@ -346,7 +349,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -365,7 +368,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print("No records found")
                     else:
-                        analyse(query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights)
                             
         vertica_connection.close()
     except Exception as e:
