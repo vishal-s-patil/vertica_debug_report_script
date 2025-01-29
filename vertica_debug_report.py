@@ -231,6 +231,8 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
     for threshold in thresholds:
         if threshold['query_name'] == "delete_vectors_count":
             print(threshold)
+            print()
+            print(query_result)
     pass
 
 
