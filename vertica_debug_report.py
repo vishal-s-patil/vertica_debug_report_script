@@ -161,7 +161,7 @@ def process_query_result_and_highlight_text(query_result, column_headers):
     # Define colors for each severity level
     colors = {
         "ok": "\033[92m",      # Green
-        "warning": "\033[93m", # Yellow
+        "warn": "\033[93m", # Yellow
         "fatal": "\033[91m",   # Red
     }
     reset_color = "\033[0m"  # Reset to default
