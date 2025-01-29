@@ -4,4 +4,6 @@
       this func fails.
     ->fix: find a intelligent way to replace only necessary table names
 
-2. 
+2. replace_thresholds
+    -> Does not work if queries has more than one case when conditons
+    -> it can have more than one case when conditons in same column but multiple columns are not supported.

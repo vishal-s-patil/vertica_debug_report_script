@@ -377,7 +377,27 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
-    pass
+
+
+
+def replace_thresholds(query, query_name):
+    threshold_json_file_path = "thresholds.json"
+    json_data = None
+    with open(threshold_json_file_path) as json_file:
+        json_data = json_file.read()
+        thresholds = json.loads(json_data)
+    
+    if thresholds is None:
+        print(f"Error reading {threshold_json_file_path}")
+        exit()
+    
+    for threshold in thresholds:
+        if thresholds['query_name'] == query_name:
+            query = query.replace('{ok_threshold}', threshold['columns'][0]['threshold']['ok'])
+            query = query.replace('{warn_threshold}', threshold['columns'][0]['threshold']['warn'])
+            query = query.replace('{fatal_threshold}', threshold['columns'][0]['threshold']['fatal'])
+    
+    return query
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
@@ -425,6 +445,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
+
+                if "end as status" in query.lower():
+                    final_query = replace_thresholds(final_query)
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
                 
