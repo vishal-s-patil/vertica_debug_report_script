@@ -140,49 +140,6 @@ def replace_conditions(query, conditions_dict):
     
     return re.sub(r'\{[^}]*\}', '', query).strip()
 
-'''
-def process_query_result_and_highlight_text(query_result, column_headers):
-    """
-    Processes the query result to color specific substrings
-    (ok, warning, fatal) in string values.
-
-    Parameters:
-        query_result (list): The nested list query result.
-
-    Returns:
-        list: The processed query result with colored strings.
-    """
-
-    index = get index of "status" column_headers 
-    if status does not exists return query_result
-    else do the below only of query_result[index] not for all the columns in query result.
-    # Define colors for each severity level
-    colors = {
-        "ok": "\033[92m",  # Green
-        "warning": "\033[93m",  # Orange/Yellow
-        "fatal": "\033[91m",  # Red
-    }
-    reset_color = "\033[0m"  # Reset to default
-
-
-
-    def apply_color(text):
-        """Apply color to the string if it contains specific keywords."""
-        for severity, color_code in colors.items():
-            if severity in text.lower():
-                text = text.replace(severity, f"{color_code}{severity.upper()}{reset_color}")
-        return text
-
-    def process_item(item):
-        """Recursively process each item in the query result."""
-        if isinstance(item, list):
-            return [process_item(sub_item) for sub_item in item]
-        elif isinstance(item, str):
-            return apply_color(item)
-        return item  # Return as-is for non-string, non-list items
-
-    return process_item(query_result)
-'''
 
 def process_query_result_and_highlight_text(query_result, column_headers):
     """
@@ -226,21 +183,6 @@ def process_query_result_and_highlight_text(query_result, column_headers):
 
     # Process each row in the query result
     return [process_row(row) for row in query_result]
-
-
-def check_if_past_query_present(query_name, csv_file_path):
-    with open(csv_file_path, mode='r') as file:
-        csv_reader = csv.DictReader(file, delimiter='~')
-        count = 0
-        for row in csv_reader:
-            query_name_new = row['query_name']
-            if query_name_new[-5:] == "_past":
-                query_name_new = query_name_new[:-5]
-
-            if query_name_new == query_name:
-                count += 1
-        
-        return count == 2
 
 
 class MyArgumentParser(argparse.ArgumentParser):

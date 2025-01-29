@@ -189,3 +189,17 @@ def execute_queries_from_csv(csv_file_path, filters, verbose, is_now, queries_to
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
 
+
+def check_if_past_query_present(query_name, csv_file_path):
+    with open(csv_file_path, mode='r') as file:
+        csv_reader = csv.DictReader(file, delimiter='~')
+        count = 0
+        for row in csv_reader:
+            query_name_new = row['query_name']
+            if query_name_new[-5:] == "_past":
+                query_name_new = query_name_new[:-5]
+
+            if query_name_new == query_name:
+                count += 1
+        
+        return count == 2
