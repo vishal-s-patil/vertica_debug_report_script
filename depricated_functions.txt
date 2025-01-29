@@ -203,3 +203,10 @@ def check_if_past_query_present(query_name, csv_file_path):
                 count += 1
         
         return count == 2
+
+{
+    "qid": 1,
+    "query_name": "deleted_row_count",
+    "query_description": "description",
+    "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by created_time, schema_name,projection_name,n.subcluster_name order by deleted_rows desc limit {num_items};"
+},

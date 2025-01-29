@@ -222,13 +222,15 @@ def analyse(query_name, query_result, column_headers, insights_only, with_insigh
     json_data = None
     with open(threshold_json_file_path) as json_file:
         json_data = json_file.read()
-        json_data = json.loads(json_data)
+        thresholds = json.loads(json_data)
     
-    if json_data is None:
+    if thresholds is None:
         print(f"Error reading {threshold_json_file_path}")
         exit()
     
-    print(json_data)
+    for threshold in thresholds:
+        if threshold['query_name'] == "delete_vectors_count":
+            print(threshold)
     pass
 
 
