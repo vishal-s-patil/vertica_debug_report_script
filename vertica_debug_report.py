@@ -296,7 +296,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     ok_count += warn_count + fatal_count
                     message = "[OK] "
                     message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
-                    message = message.replace('{cnt}', str(ok_count))
+                    # message = message.replace('{cnt}', str(ok_count))
                     # if len(ok_values) > 0:
                     # total = sum(unique_values.values()) 
 
