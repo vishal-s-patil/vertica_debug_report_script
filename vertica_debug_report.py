@@ -238,7 +238,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     exit()
                 
                 ok_count, warn_count, fatal_count = 0, 0, 0
-                ok_values, warn_values, fatal_values = [], [], []
+                ok_values, warn_values, fatal_values = set(), set(), set()
                 unique_values = {}
                 total = 0
 
