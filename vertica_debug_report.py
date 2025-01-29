@@ -266,14 +266,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             if row[unique_column_index] == unique_column_value:
                                 if row[index] > item['threshold']['fatal']:
                                     fatal_count+=1
-                                    fatal_values.insert(unique_column_value)
+                                    fatal_values.add(unique_column_value)
                                 elif row[index] > item['threshold']['warn']:
                                     warn_count+=1
-                                    warn_values.insert(unique_column_value)
+                                    warn_values.add(unique_column_value)
                                 else:
                                     ok_count+=1
                                     total += row[index]
-                                    ok_values.insert(unique_column_value)   
+                                    ok_values.add(unique_column_value)   
 
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
