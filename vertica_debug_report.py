@@ -252,9 +252,12 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     unique_column_index = column_headers.index(unique_column)
                     unique_values = {}
                     for row in query_result:
-                        unique_values[row[unique_column_index]] += 1
-                    print(unique_values)
+                        key = row[unique_column_index]
+                        if key not in unique_values:
+                            unique_values[key] = 0  # Initialize with 0
+                        unique_values[key] += 1  # Increment count
 
+                    print(unique_values)
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
