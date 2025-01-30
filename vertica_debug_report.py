@@ -485,6 +485,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                         final_query = query_past
                 else:
                     continue
+            
+                if query_name == "performance_buckets" and filters['user_name'] is None:
+                    continue
 
                 if query_past == "":
                     final_query = replace_tables_in_query(final_query)
