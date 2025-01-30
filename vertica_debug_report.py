@@ -281,6 +281,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     if (query_result[0][0]).lower() == "warn":
                         r = (str('\033[93m') + str(query_result[0][0]) + str('\033[0m'))
+                        print(r)
                         print(f"[WARN]  {r} queries are running for more than 5 mins.")
                     else:
                         r = (str('\033[91m') + str(query_result[0][0]) + str('\033[0m'))
