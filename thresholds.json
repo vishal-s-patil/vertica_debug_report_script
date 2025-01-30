@@ -122,14 +122,14 @@
         "columns": [
             {
                 "columns_name": "cnt",
-                "unique_column": "user_name",
+                "unique_column": "",
                 "threshold": {
                     "ok": 0,
                     "warn": 0,
                     "fatal": 0
                 },
                 "message_template": {
-                    "ok": "total {total} queries by {cnt} users in past {duration} hours",
+                    "ok": "",
                     "warn": "> {val_cnt} queries by users {list} in past {duration} hours",
                     "fatal": "> {val_cnt} queries by users {list} in past {duration} hours"
                 },
