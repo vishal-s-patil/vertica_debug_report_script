@@ -268,7 +268,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     return
             elif query_name == "long_running_queries":
                 if query_result is None or len(query_result) == 0:
-                    print("[OK] No long running queries.")
+                    print("[OKK] No long running queries.")
                 elif len(query_result) == 1:
                     status_counts = {}
                     for _, status, cnt in query_result:
