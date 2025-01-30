@@ -281,14 +281,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-                    for i, item in enumerate(query_result):
-                        if "WARN" in item[0]:
-                            r = (str('\033[93m') + str(item[1]) + str('\033[0m'))
-                            t = (str('\033[93m') + "5 mins" + str('\033[0m'))
+                    for i, item2 in enumerate(query_result):
+                        if "WARN" in item2[0]:
+                            r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
+                            t = (str('\033[93m') + str(threshold['columns'][0]["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
-                            r = (str('\033[91m') + str(item[1]) + str('\033[0m'))
-                            t = (str('\033[91m') + "10 mins" + str('\033[0m'))
+                            r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
+                            t = (str('\033[91m') + str(threshold['columns'][0]["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t}.")
                 else:
                     print(f"\n\nQuery Name: {query_name}")
@@ -301,14 +301,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-                    for i, item in enumerate(query_result):
-                        if "WARN" in item[0]:
-                            r = (str('\033[93m') + str(item[1]) + str('\033[0m'))
-                            t = (str('\033[93m') + "5 mins" + str('\033[0m'))
+                    for i, item2 in enumerate(query_result):
+                        if "WARN" in item2[0]:
+                            r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
+                            t = (str('\033[93m') + str(threshold['columns'][0]["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
-                            r = (str('\033[91m') + str(item[1]) + str('\033[0m'))
-                            t = (str('\033[91m') + "10 mins" + str('\033[0m'))
+                            r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
+                            t = (str('\033[91m') + str(threshold['columns'][0]["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t}.")
                 return
 
