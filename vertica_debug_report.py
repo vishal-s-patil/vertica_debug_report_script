@@ -269,11 +269,31 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if query_result is None or len(query_result) == 0:
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
+                    if verbose:
+                        print('QUERY: ', f"{query}")
+                        print("-" * 15)
+
+                    if with_insights:
+                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     if (query_result[0][0]).lower() == "warn":
                         print(f"[WARN] {query_result[0][0]} queries are running for more than 5 mins.")
                     else:
                         print(f"[FATAL] {query_result[0][0]} queries are running for more than 10 mins.")
                 else:
+                    print(f"\n\nQuery Name: {query_name}")
+                    print("-" * len(f"Query Name: {query_name}"))
+                    print(f"Query Description: {query_description}")
+                    print("-" * len(f"Query Description: {query_description}"))
+                    if verbose:
+                        print('QUERY: ', f"{query}")
+                        print("-" * 15)
+
+                    if with_insights:
+                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for i, item in enumerate(query_result):
                         if (item[0]).lower() == "warn":
                             print(f"[WARN] {item[1]} queries are running for more than 5 mins.")
