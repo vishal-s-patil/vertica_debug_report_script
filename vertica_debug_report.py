@@ -337,6 +337,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         flag = False
                         # ok_count += warn_count + fatal_count
                         message = "[OK] "
+                        
                         message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
                         
                         message = message.replace('{duration}', str(duration))
@@ -354,7 +355,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         flag = False
                         
                         message = "[WARN] "
-                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
+                        if query_name == "long_running_queries":
+                            query_result = sorted(query_result, key=lambda x: x[0])
+                            message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( query_result[1][1] ) + str('\033[0m')) #  + +  
+                        else:
+                            message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
                         message = message.replace('{duration}', str(duration))
                         if len(warn_values) > 0:
                             message = message.replace('{list}', str(warn_values))
@@ -367,7 +372,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if item['threshold']['fatal'] != -1 and fatal_count > 0:
                         flag = False
                         message = "[FATAL] "
-                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
+                        if query_name == "long_running_queries":
+                            query_result = sorted(query_result, key=lambda x: x[0])
+                            message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( query_result[0][1] ) + str('\033[0m')) #  + +  
+                        else:
+                            message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
                         message = message.replace('{duration}', str(duration))
                         if len(fatal_values) > 0:
                             message = message.replace('{list}', str(fatal_values))

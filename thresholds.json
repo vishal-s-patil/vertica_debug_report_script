@@ -130,8 +130,8 @@
                 },
                 "message_template": {
                     "ok": "",
-                    "warn": "> {val_cnt} queries by users {list} in past {duration} hours",
-                    "fatal": "> {val_cnt} queries by users {list} in past {duration} hours"
+                    "warn": "{val_cnt} queries by users {list} in past {duration} hours",
+                    "fatal": "{val_cnt} queries by users {list} in past {duration} hours"
                 },
                 "default_message": "[OK] No Long Running Queries found"
             }
