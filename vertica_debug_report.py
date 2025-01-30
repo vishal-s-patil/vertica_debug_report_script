@@ -294,6 +294,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                 else:
+                    status_counts = {}
+                    for _, status, cnt in query_result:
+                        status_counts[status] = status_counts.get(status, 0) + cnt
+                    print(status_counts.items())
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
                     print(f"Query Description: {query_description}")
