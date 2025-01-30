@@ -125,6 +125,26 @@
                 "unique_column": "",
                 "threshold": {
                     "ok": 0,
+                    "warn": 0,
+                    "fatal": 0
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{val_cnt} queries by users {list} in past {duration} hours",
+                    "fatal": "{val_cnt} queries by users {list} in past {duration} hours"
+                },
+                "default_message": "[OK] No Long Running Queries found"
+            }
+        ]
+    },
+    {
+        "query_name": "long_running_queries_raw",
+        "columns": [
+            {
+                "columns_name": "cnt",
+                "unique_column": "",
+                "threshold": {
+                    "ok": 0,
                     "warn": 5,
                     "fatal": 10
                 },
