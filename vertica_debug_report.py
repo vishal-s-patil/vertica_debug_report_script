@@ -297,13 +297,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for i, item in enumerate(query_result):
-                        print('item', item[0])
                         if "WARN" in item[0]:
                             r = (str('\033[93m') + str(item[1]) + str('\033[0m'))
-                            print(f"[WARN] {r} queries are running for more than 5 mins.")
+                            t = (str('\033[93m') + "5 mins" + str('\033[0m'))
+                            print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
                             r = (str('\033[91m') + str(item[1]) + str('\033[0m'))
-                            print(f"[FATAL] {r} queries are running for more than 10 mins.")
+                            t = (str('\033[93m') + "10 mins" + str('\033[0m'))
+                            print(f"[FATAL] {r} queries are running for more than {t}.")
                 return
 
             is_result_printed = False
