@@ -284,11 +284,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     for i, item2 in enumerate(query_result):
                         if "WARN" in item2[0]:
                             r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
-                            t = (str('\033[93m') + str(threshold['columns'][0]["warn"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
                             r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
-                            t = (str('\033[91m') + str(threshold['columns'][0]["fatal"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t}.")
                 else:
                     print(f"\n\nQuery Name: {query_name}")
@@ -304,11 +304,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     for i, item2 in enumerate(query_result):
                         if "WARN" in item2[0]:
                             r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
-                            t = (str('\033[93m') + str(threshold['columns'][0]["warn"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
                             r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
-                            t = (str('\033[91m') + str(threshold['columns'][0]["fatal"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t}.")
                 return
 
