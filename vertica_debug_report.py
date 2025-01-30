@@ -281,7 +281,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     if (query_result[0][0]).lower() == "warn":
                         r = (str('\033[93m') + str(query_result[0][0]) + str('\033[0m'))
-                        print(r)
                         print(f"[WARN]  {r} queries are running for more than 5 mins.")
                     else:
                         r = (str('\033[91m') + str(query_result[0][0]) + str('\033[0m'))
@@ -299,9 +298,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for i, item in enumerate(query_result):
                         if (item[0]).lower() == "warn":
-                            print(f"[WARN] {item[1]} queries are running for more than 5 mins.")
+                            r = (str('\033[93m') + str(item[1]) + str('\033[0m'))
+                            print(f"[WARN] {r} queries are running for more than 5 mins.")
                         else:
-                            print(f"[FATAL] {item[1]} queries are running for more than 10 mins.")
+                            r = (str('\033[91m') + str(item[1]) + str('\033[0m'))
+                            print(f"[FATAL] {r} queries are running for more than 10 mins.")
                 return
 
             is_result_printed = False
