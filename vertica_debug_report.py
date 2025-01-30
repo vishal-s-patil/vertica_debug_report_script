@@ -60,7 +60,8 @@ def replace_tables_in_query(query):
         ("from sessions", "from netstats.sessions_full"),
         ("from resource_queues", "from netstats.resource_queues_full"),
         ("from error_messages", "from netstats.error_messages"),
-        ("from resource_pool_status", "from netstats.resource_pool_status")
+        ("from resource_pool_status", "from netstats.resource_pool_status"),
+        ("from query_profiles", "from netstats.query_profiles")
     ]
 
     query = query.lower()
