@@ -4,7 +4,7 @@
         "query_name": "long_running_queries",
         "query_description": "Long Running Queries",
         "query": "SELECT n.subcluster_name, s.statement_start, s.user_name, CASE WHEN (CURRENT_TIMESTAMP - s.statement_start) > INTERVAL '10 minutes' THEN 'FATAL' WHEN (CURRENT_TIMESTAMP - s.statement_start) > INTERVAL '5 minutes' THEN 'WARN' ELSE 'OK' END AS status FROM sessions as s join nodes as n on n.node_name = s.node_name WHERE 1=1 {status='issue_level'} {user_name='user_name'} and s.statement_id IS NOT NULL and n.subcluster_name = '<subcluster_name>' ORDER BY s.statement_start;",
-        "query_past": "select null; todo: need to form or adjusted"
+        "query_past": "select s.snapshot_time, n.subcluster_name, s.statement_start, s.user_name, CASE WHEN (snapshot_time - s.statement_start) > INTERVAL '10 minutes' THEN 'FATAL' WHEN (snapshot_time - s.statement_start) > INTERVAL '5 minutes' THEN 'WARN' ELSE 'OK' END AS status FROM netstats.sessions_full as s join nodes as n on n.node_name = s.node_name where 1=1 and s.statement_id IS NOT NULL and n.subcluster_name = 'secondary_subcluster_1' and snapshot_time >= ({issue_time} - INTERVAL '{duration} hours') and snapshot_time <= {issue_time} ORDER BY s.statement_start limit {num_items};"
     },
     {
         "qid": 2,

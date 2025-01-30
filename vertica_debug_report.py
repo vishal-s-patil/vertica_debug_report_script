@@ -379,7 +379,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(item['default_message'])
 
 
-
 def replace_thresholds(query, query_name):
     threshold_json_file_path = "thresholds.json"
     json_data = None
