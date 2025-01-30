@@ -236,10 +236,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if pool_name is None:
                     return
                 else:
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
+                    # print(f"\n\nQuery Name: {query_name}")
+                    # print("-" * len(f"Query Name: {query_name}"))
+                    # print(f"Query Description: {query_description}")
+                    # print("-" * len(f"Query Description: {query_description}"))
                     if verbose:
                         print('QUERY: ', f"{query}")
                         print("-" * 15)
@@ -276,10 +276,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                     status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
                     print(status_counts.items())
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
+                    # print(f"\n\nQuery Name: {query_name}")
+                    # print("-" * len(f"Query Name: {query_name}"))
+                    # print(f"Query Description: {query_description}")
+                    # print("-" * len(f"Query Description: {query_description}"))
                     if verbose:
                         print('QUERY: ', f"{query}")
                         print("-" * 15)
@@ -302,10 +302,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                     status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
                     print(status_counts.items())
-                    print(f"\n\nQuery Name: {query_name}")
-                    print("-" * len(f"Query Name: {query_name}"))
-                    print(f"Query Description: {query_description}")
-                    print("-" * len(f"Query Description: {query_description}"))
+                    # print(f"\n\nQuery Name: {query_name}")
+                    # print("-" * len(f"Query Name: {query_name}"))
+                    # print(f"Query Description: {query_description}")
+                    # print("-" * len(f"Query Description: {query_description}"))
                     if verbose:
                         print('QUERY: ', f"{query}")
                         print("-" * 15)
@@ -377,10 +377,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if not is_result_printed:
                         is_result_printed = True
                     
-                        print(f"\n\nQuery Name: {query_name}")
-                        print("-" * len(f"Query Name: {query_name}"))
-                        print(f"Query Description: {query_description}")
-                        print("-" * len(f"Query Description: {query_description}"))
+                        # print(f"\n\nQuery Name: {query_name}")
+                        # print("-" * len(f"Query Name: {query_name}"))
+                        # print(f"Query Description: {query_description}")
+                        # print("-" * len(f"Query Description: {query_description}"))
                         if verbose:
                             print('QUERY: ', f"{query}")
                             print("-" * 15)
