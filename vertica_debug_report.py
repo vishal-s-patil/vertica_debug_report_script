@@ -312,7 +312,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
-                    for i, item2 in enumerate(query_result):
+                    for i, item2 in enumerate(status_counts):
                         if "WARN" in item2[0]:
                             r = (str('\033[93m') + str(status_counts["WARN"]) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
