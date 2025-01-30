@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import vertica_python
 from tabulate import tabulate
 import argparse
-from datetime import datetime, timedelta
+from datetime import datetime
 import re
 import sys
 from vertica_python import errors
@@ -216,7 +216,7 @@ def get_error_messages_query():
     """
 
 
-def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name):
+def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level):
     threshold_json_file_path = "thresholds.json"
     json_data = None
     with open(threshold_json_file_path) as json_file:
@@ -333,46 +333,49 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 flag = True
-                if (item['threshold']['ok'] != -1 and ok_count > 0):
-                    flag = False
-                    # ok_count += warn_count + fatal_count
-                    message = "[OK] "
-                    message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
-                    
-                    message = message.replace('{duration}', str(duration))
+                if issue_level is None or issue_level == "ok":
+                    if (item['threshold']['ok'] != -1 and ok_count > 0):
+                        flag = False
+                        # ok_count += warn_count + fatal_count
+                        message = "[OK] "
+                        message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
+                        
+                        message = message.replace('{duration}', str(duration))
 
-                    message = message.replace('{total}', str(total))
-                    if len(ok_values) > 0:
-                        message = message.replace('{list}', str(ok_values))
-                        message = message.replace('{cnt}', str(len(ok_values)))
-                    else:
-                        message = message.replace('{cnt}', str(ok_count))
-                    print(message)
-                    
-                if item['threshold']['warn'] != -1 and warn_count > 0:
-                    flag = False
-                    
-                    message = "[WARN] "
-                    message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
-                    message = message.replace('{duration}', str(duration))
-                    if len(warn_values) > 0:
-                        message = message.replace('{list}', str(warn_values))
-                        message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
-                    else:
-                        message = message.replace('{cnt}', str(warn_count))
-                    print(message)
+                        message = message.replace('{total}', str(total))
+                        if len(ok_values) > 0:
+                            message = message.replace('{list}', str(ok_values))
+                            message = message.replace('{cnt}', str(len(ok_values)))
+                        else:
+                            message = message.replace('{cnt}', str(ok_count))
+                        print(message)
 
-                if item['threshold']['fatal'] != -1 and fatal_count > 0:
-                    flag = False
-                    message = "[FATAL] "
-                    message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
-                    message = message.replace('{duration}', str(duration))
-                    if len(fatal_values) > 0:
-                        message = message.replace('{list}', str(fatal_values))
-                        message = message.replace('{cnt}', str(len(fatal_values)))
-                    else:
-                        message = message.replace('{cnt}', str(fatal_count))
-                    print(message)
+                if issue_level is None or issue_level == "ok" or issue_level == "warn":
+                    if item['threshold']['warn'] != -1 and warn_count > 0:
+                        flag = False
+                        
+                        message = "[WARN] "
+                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
+                        message = message.replace('{duration}', str(duration))
+                        if len(warn_values) > 0:
+                            message = message.replace('{list}', str(warn_values))
+                            message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
+                        else:
+                            message = message.replace('{cnt}', str(warn_count))
+                        print(message)
+
+                if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
+                    if item['threshold']['fatal'] != -1 and fatal_count > 0:
+                        flag = False
+                        message = "[FATAL] "
+                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
+                        message = message.replace('{duration}', str(duration))
+                        if len(fatal_values) > 0:
+                            message = message.replace('{list}', str(fatal_values))
+                            message = message.replace('{cnt}', str(len(fatal_values)))
+                        else:
+                            message = message.replace('{cnt}', str(fatal_count))
+                        print(message)
 
                 if flag:
                     if item['default_message'] is not "":
@@ -466,7 +469,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"])
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -485,7 +488,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print("No records found")
                     else:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"])
                             
         vertica_connection.close()
     except Exception as e:
