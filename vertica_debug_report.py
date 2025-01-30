@@ -604,41 +604,41 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
 
-    parser.add_argument("--only-insights", required=False, action="store_true",
-        help="")
+    # parser.add_argument("--only-insights", required=False, action="store_true",
+    #     help="")
     
     parser.add_argument("--duration", required=False, default=3,
-        help="")
+        help="Number of hours to look past from issue time.")
     
     parser.add_argument("--issue-time", required=False, 
-        help="", default=None)
+        help="Get the result at a particular time duration.", default=None)
     
     parser.add_argument("--num-items", required=False, 
-        help="", default=5)
+        help="Number of rows display.", default=5)
     
     parser.add_argument("--type", required=False, 
         help="", default=None)
     
     parser.add_argument("--granularity", required=False, 
-        help="", default='hour')
+        help="Truncate datetime by [hour|min|day]", default='hour')
     
     parser.add_argument("--order-by", required=False, 
-        help="", default=None)
+        help="To order by the result with specified order by columns.", default=None)
     
     parser.add_argument("--snapshots", required=False, 
-        help="", default=5)
+        help="Number of snapshots to display", default=5)
     
     parser.add_argument("--issue-level", required=False, 
-        help="", default=None)
+        help="To see result of a particular issue level [ok|warn|fatal]", default=None)
     
     parser.add_argument("--user-limit", required=False, 
-        help="", default=5)
+        help="Number of user to display", default=5)
 
     parser.add_argument("--insights-only", required=False, action="store_true", 
-        help="")
+        help="To see the insights without result table.")
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
-        help="")
+        help="To see the insights along with the result table.")
 
     if help_flag:
         parser.print_help()
