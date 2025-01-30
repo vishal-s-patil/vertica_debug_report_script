@@ -279,7 +279,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"[WARN] {item[1]} queries are running for more than 5 mins.")
                         else:
                             print(f"[FATAL] {item[1]} queries are running for more than 10 mins.")
-
+                return
 
             is_result_printed = False
             for item in threshold['columns']:
