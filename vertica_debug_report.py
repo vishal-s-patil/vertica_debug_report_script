@@ -270,6 +270,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if query_result is None or len(query_result) == 0:
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
+                    status_counts = {}
+                    for _, status, cnt in query_result:
+                        status_counts[status] = status_counts.get(status, 0) + cnt
+                    print(status_counts.items())
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
                     print(f"Query Description: {query_description}")
@@ -282,13 +286,13 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for i, item2 in enumerate(query_result):
                         if "WARN" in item2[0]:
-                            r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
+                            r = (str('\033[93m') + str(status_counts["WARN"]) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
-                            print(f"[WARN] {r} queries are running for more than {t}.")
+                            print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         else:
-                            r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
+                            r = (str('\033[91m') + str(status_counts["FATAL"]) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
-                            print(f"[FATAL] {r} queries are running for more than {t}.")
+                            print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                 else:
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
@@ -302,13 +306,13 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for i, item2 in enumerate(query_result):
                         if "WARN" in item2[0]:
-                            r = (str('\033[93m') + str(item2[1]) + str('\033[0m'))
+                            r = (str('\033[93m') + str(status_counts["WARN"]) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
-                            print(f"[WARN] {r} queries are running for more than {t}.")
+                            print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         else:
-                            r = (str('\033[91m') + str(item2[1]) + str('\033[0m'))
+                            r = (str('\033[91m') + str(status_counts["FATAL"]) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
-                            print(f"[FATAL] {r} queries are running for more than {t}.")
+                            print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                 return
 
             is_result_printed = False
