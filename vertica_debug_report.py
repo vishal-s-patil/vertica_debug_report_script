@@ -233,10 +233,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 return
             if query_name == "resource_pool_status":
                 if pool_name is None:
-                    print(pool_name)
                     return
                 else:
-                    print(pool_name, "else")
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
                     print(f"Query Description: {query_description}")
@@ -441,7 +439,6 @@ def replace_thresholds(query, query_name):
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
-            print(str(threshold['columns'][0]['threshold']['warn']))
             query = query.replace("{ok_threshold}", str(threshold['columns'][0]['threshold']['ok']))
             query = query.replace("{warn_threshold}", str(threshold['columns'][0]['threshold']['warn']))
             query = query.replace("{fatal_threshold}", str(threshold['columns'][0]['threshold']['fatal']))
