@@ -280,9 +280,11 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if with_insights:
                         print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     if (query_result[0][0]).lower() == "warn":
-                        print(f"[WARN]  {(str('\033[93m') + str(query_result[0][0]) + str('\033[0m'))} queries are running for more than 5 mins.")
+                        r = (str('\033[93m') + str(query_result[0][0]) + str('\033[0m'))
+                        print(f"[WARN]  {r} queries are running for more than 5 mins.")
                     else:
-                        print(f"[FATAL] {str('\033[91m') + str(query_result[0][0]) + str('\033[0m')} queries are running for more than 10 mins.")
+                        r = (str('\033[91m') + str(query_result[0][0]) + str('\033[0m'))
+                        print(f"[FATAL] {r} queries are running for more than 10 mins.")
                 else:
                     print(f"\n\nQuery Name: {query_name}")
                     print("-" * len(f"Query Name: {query_name}"))
