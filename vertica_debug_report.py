@@ -301,7 +301,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         status_counts[status] = status_counts.get(status, 0) + cnt
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                     status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
-                    print(status_counts.items())
+                    
                     # print(f"\n\nQuery Name: {query_name}")
                     # print("-" * len(f"Query Name: {query_name}"))
                     # print(f"Query Description: {query_description}")
