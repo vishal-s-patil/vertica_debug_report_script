@@ -457,7 +457,6 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
-    print("execute_queries_from_json")
     try:
         vertica_connection = get_vertica_connection()
         if not vertica_connection:
@@ -509,6 +508,13 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
+
+                if query_result == -1:
+                    if verbose:
+                        print('QUERY: ', f"{final_query}")
+                        print("-" * 15)
+                    print(query_name, ": column not found\n")
+                    continue
                 
                 column_headers = None
                 processed_query_result = None
@@ -520,12 +526,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"): # query_name == "long_running_queries" or 
                     query_result = format_relativedelta(query_result, column_headers)
 
-                if query_result == -1:
-                    if verbose:
-                        print('QUERY: ', f"{final_query}")
-                        print("-" * 15)
-                    print(query_name, ": column not found\n")
-                    continue
                 
                 if processed_query_result:
                     if insights_only or with_insights:
