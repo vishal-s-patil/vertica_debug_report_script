@@ -303,7 +303,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"[WARN] {r} queries are running for more than {t}.")
                         else:
                             r = (str('\033[91m') + str(item[1]) + str('\033[0m'))
-                            t = (str('\033[93m') + "10 mins" + str('\033[0m'))
+                            t = (str('\033[91m') + "10 mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t}.")
                 return
 
