@@ -233,6 +233,7 @@ def get_ips_and_nodes(subcluster_name):
     
     return query_result[0], query_result[1]
 
+is_header_printed = False
 
 def print_header(args):
     ips, nodes = get_ips_and_nodes(args["subcluster_name"])
@@ -274,7 +275,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 "issue_time": issue_time,
                 "duration": duration,
             }
-            print_header(args)
+            if not is_header_printed:
+                is_header_printed = True
+                print_header(args)
+                
             if query_name == "long_running_queries_raw":
                 return
             if query_name == "resource_pool_status":
