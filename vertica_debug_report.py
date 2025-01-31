@@ -806,6 +806,9 @@ if __name__ == "__main__":
         "projection_name": args.projection_name,
     }
 
+    if filters['projection_name'] is None and filters['table_name'] is not None:
+        filters['projection_name'] = filters['table_name'] + '_%'
+
     insights_only = args.insights_only
     with_insights = args.with_insights
 
