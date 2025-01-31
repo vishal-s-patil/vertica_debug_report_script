@@ -62,7 +62,7 @@
         "qid": 10,
         "query_name": "delete_vectors",
         "query_description": "Delete Vectors, Deleted Row Count",
-        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {schema_name=schema_name} {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from storage_containers) group by created_time, schema_name,projection_name,n.subcluster_name order by {order_by} dv_count desc limit {num_items};"
+        "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {schema_name=schema_name} {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from storage_containers) group by created_time, schema_name,projection_name,n.subcluster_name order by {order_by} dv_count desc limit {num_items};"
     },
     {
         "qid": 11,
