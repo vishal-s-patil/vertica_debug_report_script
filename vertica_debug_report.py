@@ -243,13 +243,14 @@ def print_header(args):
         "Pool": args["pool_name"],
         "Nodes": nodes,
         "IPs": ips,
-        "Issue Duration":  "Now" if args['is_now'] else  "From" + get_past_datetime(args["issue_time"], args['duration']) + "To args" + str(args["issue_time"])
+        "Issue Duration": "Now" if args['is_now'] else "From " + get_past_datetime(args["issue_time"], args['duration']) + " To " + str(args["issue_time"])
     }
 
-    processed_data = [{k: v if v is not None else '' for k, v in d.items()}]
+    # Convert dict to list of lists, excluding None values
+    table_data = [[k, v] for k, v in d.items() if v is not None]
 
-    print(tabulate(processed_data, tablefmt='grid'))
-    print("-" * 30)
+    # Print the table without headers
+    print(tabulate(table_data, tablefmt="plain"))
 
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time):
