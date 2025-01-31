@@ -275,6 +275,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 "issue_time": issue_time,
                 "duration": duration,
             }
+            global is_header_printed
             if not is_header_printed:
                 is_header_printed = True
                 print_header(args)
