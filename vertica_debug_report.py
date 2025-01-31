@@ -259,6 +259,12 @@ def print_header(args):
     print(tabulate(table_data, tablefmt="grid"))
 
 
+def replace_row_num_limit(query, new_limit):
+    pattern = r"rs\.row_num\s*<=\s*\d+\s"
+    replacement = f"rs.row_num <= {new_limit} "
+    return re.sub(pattern, replacement, query)
+
+
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
     json_data = None
@@ -273,7 +279,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
     for threshold in thresholds:
         if with_insights:
             query_result_show = execute_vertica_query(vertica_connection, query)
-            filters['user_limit'] = 1000
+            query = replace_row_num_limit(query, 1000)
             query_result = execute_vertica_query(vertica_connection, query)
             print('query_result', len(query_result))
             print('query_result_show', len(query_result_show))
