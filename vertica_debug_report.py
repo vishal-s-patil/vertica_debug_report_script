@@ -809,6 +809,10 @@ if __name__ == "__main__":
     if filters['projection_name'] is None and filters['table_name'] is not None:
         filters['projection_name'] = filters['table_name'] + '_%'
 
+    if filters['projection_name'] is not None and filters['schema_name'] is None:
+        print("please provide schema name aswell.")
+        exit()
+
     insights_only = args.insights_only
     with_insights = args.with_insights
 
