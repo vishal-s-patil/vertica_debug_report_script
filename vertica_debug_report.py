@@ -231,7 +231,11 @@ def get_ips_and_nodes(subcluster_name):
         print(f"Error getting nodes and ips for subcluster {subcluster_name}")
         exit()
     
-    return query_result[0], query_result[1]
+    ips, nodes = [], []
+    for row in query_result:
+        ips.append(row[0])
+        nodes.append(row[1])
+    return ips, nodes
 
 is_header_printed = False
 
