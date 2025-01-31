@@ -1,6 +1,6 @@
 [
     {
-        "query_name": "delete_vectors_count",
+        "query_name": "delete_vectors",
         "columns": [
             {
                 "columns_name": "dv_count",
