@@ -284,16 +284,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             query_result_show = execute_vertica_query(vertica_connection, query)
             query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
 
-            print('before', query)
-                
             replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
             replaced_query = replace_row_num_limit(replaced_query, 1000)
 
-            print('after', replaced_query)
-
             query_result = execute_vertica_query(vertica_connection, replaced_query)
-            
-            query_result_show = query_result
            
             if query_result == -1:
                 print(query_name, ": column not found\n")
