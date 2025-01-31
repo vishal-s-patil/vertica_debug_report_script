@@ -248,7 +248,7 @@ def print_header(args):
 
     processed_data = [{k: v if v is not None else '' for k, v in d.items()}]
 
-    print(tabulate(processed_data, headers=list(d.keys()), tablefmt='grid'))
+    print(tabulate(processed_data, tablefmt='grid'))
     print("-" * 30)
 
 
