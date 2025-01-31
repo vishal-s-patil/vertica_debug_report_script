@@ -62,8 +62,8 @@
                 "unique_column": "pool_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 50,
-                    "fatal": 100
+                    "warn": 30,
+                    "fatal": 50
                 },
                 "message_template": {
                     "ok": "{cnt} users having total {total} Active Queries in Queue.",
