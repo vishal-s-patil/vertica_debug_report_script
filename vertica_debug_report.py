@@ -768,6 +768,7 @@ if __name__ == "__main__":
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
         "schema_name": args.schema_name,
+        "projection_name": args.projection_name,
     }
 
     insights_only = args.insights_only
