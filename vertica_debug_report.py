@@ -248,7 +248,7 @@ def print_header(args):
         "Pool": args["pool_name"],
         "Nodes": nodes,
         "IPs": ips,
-        "Issue Duration": "Now" if args['is_now'] else "From " + get_past_datetime(args["issue_time"], args['duration']) + " To " + str(args["issue_time"])
+        "Issue Duration": f"For past {args['duration']} hours from now." if args['is_now'] else "From " + get_past_datetime(args["issue_time"], args['duration']) + " To " + str(args["issue_time"])
     }
 
     # Convert dict to list of lists, excluding None values
