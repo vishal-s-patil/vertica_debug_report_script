@@ -250,7 +250,7 @@ def print_header(args):
     table_data = [[k, v] for k, v in d.items() if v is not None]
 
     # Print the table without headers
-    print(tabulate(table_data, tablefmt="plain"))
+    print(tabulate(table_data, tablefmt="grid"))
 
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time):
