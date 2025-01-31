@@ -282,22 +282,19 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
         if with_insights:
             
             query_result_show = execute_vertica_query(vertica_connection, query)
-            # if if_printref < 2:
-            #     if_printref+=1
-            #     print('show_query', query)
+            query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
+            
             print('before', query)
                 
-            query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
-            query = replace_row_num_limit(query, 1000)
+            replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
+            replaced_query = replace_row_num_limit(query, 1000)
 
-            print('after', query)
+            print('after', replaced_query)
 
-            query_result = execute_vertica_query(vertica_connection, query)
-            query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
+            query_result = execute_vertica_query(vertica_connection, replaced_query)
+            
             query_result_show = query_result
-            # if if_printref < 2:
-                # if_printref+=1
-                # print('norm_query', len(query))
+           
             if query_result == -1:
                 print(query_name, ": column not found\n")
                 return
