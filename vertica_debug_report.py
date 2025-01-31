@@ -321,7 +321,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print('QUERY: ', f"{query}")
                         print("-" * 15)
 
-                    if query_result is None:
+                    if query_result is None and issue_level == 'ok':
                         print(f'[OK] No pools found for given pool name or subclutser.')
                     else:
                         if with_insights:
@@ -340,14 +340,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             total_running_queries += row[total_running_queries_index]
                             total_memory_borrowed += row[total_memory_borrowed_index]
                         
-                        if total_running_queries == 0:
+                        if total_running_queries == 0 and issue_level == 'ok':
                             print(f"[OK] No running queries found.")
-                        else:
+                        elif issue_level == 'ok':
                             print(f"[OK] Having total {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
                     
                     return
             elif query_name == "long_running_queries":
-                if query_result is None or len(query_result) == 0:
+                if (query_result is None or len(query_result) == 0) and issue_level == 'ok':
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
                     status_counts = {}
