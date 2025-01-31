@@ -22,7 +22,7 @@
                 "unique_column": "",
                 "threshold": {
                     "ok": -1,
-                    "warn": 300000,
+                    "warn": 140000,
                     "fatal": 600000
                 },
                 "message_template": {
