@@ -285,6 +285,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             # if if_printref < 2:
             #     if_printref+=1
             #     print('show_query', query)
+            print(query)
                 
             query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
             query = replace_row_num_limit(query, 1000)
