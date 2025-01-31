@@ -259,7 +259,7 @@ def print_header(args):
     print(tabulate(table_data, tablefmt="grid"))
 
 
-def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time):
+def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
     json_data = None
     with open(threshold_json_file_path) as json_file:
@@ -269,8 +269,18 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
     if thresholds is None:
         print(f"Error reading {threshold_json_file_path}")
         exit()
-    
+    query_result_show = None
     for threshold in thresholds:
+        if with_insights:
+            query_result_show = execute_vertica_query(query, vertica_connection)
+            filters['user_limit'] = 1000
+            query_result = execute_vertica_query(query, vertica_connection)
+            query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
+
+            if query_result == -1:
+                print(query_name, ": column not found\n")
+                return
+            
         if threshold['query_name'] == query_name:
             args = {
                 "subcluster_name": subcluster_name,
@@ -303,7 +313,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(f'[OK] No pools found for given pool name or subclutser.')
                     else:
                         if with_insights:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                            if query_result_show is not None:
+                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                            else:
+                                print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                         total_memory_in_use = 0
                         total_running_queries = 0
                         total_memory_borrowed = 0
@@ -340,7 +353,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("-" * 15)
 
                     if with_insights:
-                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                        if query_result_show is not None:
+                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                        else:
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for key, val in status_counts.items():
                         if key == "WARN":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
@@ -366,7 +382,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("-" * 15)
 
                     if with_insights:
-                        print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                        if query_result_show is not None:
+                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                        else:
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for key, val in status_counts.items():
                         if key == "WARN":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
@@ -413,7 +432,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             unique_values[key] = 0  
                         unique_values[key] += 1  
 
-
                     for row in query_result:
                         for unique_column_value, unique_column_cnt in unique_values.items():
                             if row[unique_column_index] == unique_column_value:
@@ -441,7 +459,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print("-" * 15)
 
                         if with_insights:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                            if query_result_show is not None:
+                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                            else:
+                                print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                 
                 flag = True
                 if issue_level is None or issue_level == "ok":
@@ -591,13 +612,13 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
-                if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"): # query_name == "long_running_queries" or 
+                if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"):
                     query_result = format_relativedelta(query_result, column_headers)
 
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -616,7 +637,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print("No records found")
                     else:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
                             
         vertica_connection.close()
     except Exception as e:
