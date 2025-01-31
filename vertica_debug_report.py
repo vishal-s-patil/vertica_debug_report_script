@@ -280,6 +280,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
         if with_insights:
             query_result_show = execute_vertica_query(vertica_connection, query)
             query = replace_row_num_limit(query, 1000)
+            print('replaced query', query)
             query_result = execute_vertica_query(vertica_connection, query)
             print('query_result', len(query_result))
             print('query_result_show', len(query_result_show))
