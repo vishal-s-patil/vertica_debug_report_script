@@ -62,7 +62,7 @@
                 "unique_column": "pool_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 30,
+                    "warn": 6,
                     "fatal": 50
                 },
                 "message_template": {
