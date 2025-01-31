@@ -3,7 +3,7 @@
         "query_name": "delete_vectors",
         "columns": [
             {
-                "columns_name": "dv_count",
+                "columns_name": "delete_vector_count",
                 "unique_column": "",
                 "threshold": {
                     "ok": -1,
@@ -18,7 +18,7 @@
                 "default_message": ""
             },
             {
-                "columns_name": "deleted_rows",
+                "columns_name": "deleted_row_count",
                 "unique_column": "",
                 "threshold": {
                     "ok": -1,
