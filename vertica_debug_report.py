@@ -277,20 +277,24 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
         exit()
     query_result_show = None
 
-    if_printref = False
+    if_printref = 0
     for threshold in thresholds:
         if with_insights:
             
             query_result_show = execute_vertica_query(vertica_connection, query)
-            
+            if if_printref < 2:
+                if_printref+=1
+                print('show_query', len(query_result_show))
+                print('norm_query', len(query_result))
+                
             query_result_show = re.sub(r"LIMIT\s+\d+;", "", query, flags=re.IGNORECASE)
             query = replace_row_num_limit(query, 1000)
-            
+
             query_result = execute_vertica_query(vertica_connection, query)
             query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
             query_result_show = query_result
-            if not if_printref:
-                if_printref = True
+            if if_printref < 2:
+                if_printref+=1
                 print('show_query', len(query_result_show))
                 print('norm_query', len(query_result))
             if query_result == -1:
