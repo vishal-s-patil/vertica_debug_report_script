@@ -287,7 +287,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             #     print('show_query', query)
             print('before', query)
                 
-            # query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
+            query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
             query = replace_row_num_limit(query, 1000)
 
             print('after', query)
