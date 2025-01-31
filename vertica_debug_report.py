@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import vertica_python
 from tabulate import tabulate
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
 import re
 import sys
 from vertica_python import errors
@@ -217,7 +217,42 @@ def get_error_messages_query():
     """
 
 
-def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level):
+def get_past_datetime(issue_time, duration):
+    return str(issue_time - timedelta(hours=duration))
+    pass
+
+
+def get_ips_and_nodes(subcluster_name):
+    query = f"select node_address, node_name from nodes where subcluster_name='{subcluster_name}';"
+    connection = get_vertica_connection()
+    query_result = execute_vertica_query(connection, query)
+
+    if query_result is None or len(query_result) == 0:
+        print(f"Error getting nodes and ips for subcluster {subcluster_name}")
+        exit()
+    
+    return query_result[0], query_result[1]
+
+
+def print_header(args):
+    ips, nodes = get_ips_and_nodes(args["subcluster_name"])
+
+    d = {
+        "Subcluster": args["subcluster_name"],
+        "User": args["user_name"],
+        "Pool": args["pool_name"],
+        "Nodes": nodes,
+        "IPs": ips,
+        "Issue Duration":  "Now" if args['is_now'] else  "From" + get_past_datetime(args["issue_time"], args['duration']) + "To args" + str(args["issue_time"])
+    }
+
+    processed_data = [{k: v if v is not None else '' for k, v in d.items()}]
+
+    print(tabulate(processed_data, headers=list(d.keys()), tablefmt='grid'))
+    print("-" * 30)
+
+
+def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time):
     threshold_json_file_path = "thresholds.json"
     json_data = None
     with open(threshold_json_file_path) as json_file:
@@ -230,6 +265,15 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
+            args = {
+                "subcluster_name": subcluster_name,
+                "user_name": user_name,
+                "pool_name": pool_name,
+                "is_now": is_now,
+                "issue_time": issue_time,
+                "duration": duration,
+            }
+            print_header(args)
             if query_name == "long_running_queries_raw":
                 return
             if query_name == "resource_pool_status":
@@ -542,7 +586,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'])
                     else:
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
@@ -561,7 +605,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print("No records found")
                     else:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"])
+                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'])
                             
         vertica_connection.close()
     except Exception as e:
