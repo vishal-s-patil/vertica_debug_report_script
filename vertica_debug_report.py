@@ -693,6 +693,9 @@ if __name__ == "__main__":
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
         help="To see the insights along with the result table.")
+    
+    parser.add_argument("--schema-name", required=False, default=None, 
+        help="")
 
     if help_flag:
         parser.print_help()
@@ -762,6 +765,7 @@ if __name__ == "__main__":
         "issue_level": args.issue_level,
         "session_type": session_type_placeholder,
         "session_type_2": session_type_placeholder_2,
+        "schema_name": args.schema_name,
     }
 
     insights_only = args.insights_only
