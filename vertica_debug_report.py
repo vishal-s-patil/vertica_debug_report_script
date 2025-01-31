@@ -219,7 +219,6 @@ def get_error_messages_query():
 
 def get_past_datetime(issue_time, duration):
     return str(issue_time - timedelta(hours=duration))
-    pass
 
 
 def get_ips_and_nodes(subcluster_name):
