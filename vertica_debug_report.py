@@ -275,6 +275,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             query_result_show = execute_vertica_query(vertica_connection, query)
             filters['user_limit'] = 1000
             query_result = execute_vertica_query(vertica_connection, query)
+            print('query_result', len(query_result))
+            print('query_result_show', len(query_result_show))
             query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
 
             if query_result == -1:
