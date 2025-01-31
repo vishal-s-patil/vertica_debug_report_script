@@ -281,7 +281,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             query_result_show = execute_vertica_query(vertica_connection, query)
             query = replace_row_num_limit(query, 1000)
             if query_name == 'queue_status':
-                print('replaced query', query)
+                pass
+                # print('replaced query', query)
             query_result = execute_vertica_query(vertica_connection, query)
             print('query_result', len(query_result))
             
