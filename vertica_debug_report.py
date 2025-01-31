@@ -315,9 +315,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             total_memory_borrowed += row[total_memory_borrowed_index]
                         
                         if total_running_queries == 0:
-                            print(f"No running queries found.")
+                            print(f"[OK] No running queries found.")
                         else:
-                            print(f"Having total {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
+                            print(f"[OK] Having total {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
                     
                     return
             elif query_name == "long_running_queries":
