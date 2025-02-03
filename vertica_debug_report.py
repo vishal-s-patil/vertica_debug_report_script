@@ -266,7 +266,6 @@ def replace_row_num_limit(query, new_limit):
 
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
-    print('entered...')
     threshold_json_file_path = "thresholds.json"
     json_data = None
     with open(threshold_json_file_path) as json_file:
@@ -347,6 +346,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     return
             elif query_name == "long_running_queries":
+                print('entered...')
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
