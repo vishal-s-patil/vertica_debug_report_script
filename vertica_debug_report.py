@@ -371,7 +371,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     
-                    if "warn" not in status_counts and "fatal" not in status_counts:
+                    if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
 
                     for key, val in status_counts.items():
@@ -404,9 +404,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     
-                    if "warn" not in status_counts and "fatal" not in status_counts:
+                    if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
-                        
+
                     for key, val in status_counts.items():
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
