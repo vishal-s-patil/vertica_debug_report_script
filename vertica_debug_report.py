@@ -352,10 +352,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 elif len(query_result) == 1:
                     status_counts = {}
                     for _, status, cnt in query_result:
+                        print('status_counts.get(status, 0) ', status_counts.get(status, 0) )
                         status_counts[status] = status_counts.get(status, 0) + cnt
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                     status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
-                    print('passed.')
                     
                     # print(f"\n\nQuery Name: {query_name}")
                     # print("-" * len(f"Query Name: {query_name}"))
