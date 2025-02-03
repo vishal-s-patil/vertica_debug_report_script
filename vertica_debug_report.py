@@ -370,7 +370,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for key, val in status_counts.items():
-                        if key == "WARN":
+                        if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
