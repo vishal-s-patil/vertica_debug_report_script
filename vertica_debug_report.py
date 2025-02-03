@@ -311,7 +311,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 return
             if query_name == "resource_pool_status":
                 if pool_name is None:
-                    print('Please provide pool name to insights.')
+                    print('resource_pool_status: Please provide pool name to get insights.')
                     return
                 else:
                     # print(f"\n\nQuery Name: {query_name}")
