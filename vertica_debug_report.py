@@ -292,7 +292,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             if query_result == -1:
                 print(query_name, ": column not found\n")
                 return
-            
+        print('entered...')    
         if threshold['query_name'] == query_name:
             args = {
                 "subcluster_name": subcluster_name,
@@ -308,7 +308,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
             if query_name == "long_running_queries_raw":
                 return
-            print('entered...')
             if query_name == "resource_pool_status":
                 if pool_name is None:
                     return
