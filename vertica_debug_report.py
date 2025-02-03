@@ -350,8 +350,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
-                    print('elif...')
                     status_counts = {}
+                    print(query_result)
                     for _, status, cnt in query_result:
                         status_counts[status] = status_counts.get(status, 0) + cnt
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
@@ -380,7 +380,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                 else:
-                    print('else')
                     status_counts = {}
                     for _, status, cnt in query_result:
                         status_counts[status] = status_counts.get(status, 0) + cnt
