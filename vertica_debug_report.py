@@ -347,7 +347,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     return
             elif query_name == "long_running_queries":
-                print('len(query_result) == 1', len(query_result) == 1)
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
@@ -400,6 +399,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
                     for key, val in status_counts.items():
+                        print('status_counts.items()',status_counts.items())
                         if key == "WARN":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
