@@ -279,7 +279,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
     # if_printref = 0
     for threshold in thresholds:
-        if with_insights:
+        if with_insights or insights_only:
             
             query_result_show = execute_vertica_query(vertica_connection, query)
             query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
@@ -412,7 +412,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             is_result_printed = False
             for item in threshold['columns']:
                 if query_result == None or len(query_result) == 0:
-                    print('entred')
                     if item['default_message'] is not "":
                         print(item['default_message'])
                         return
