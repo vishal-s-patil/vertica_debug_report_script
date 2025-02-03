@@ -279,6 +279,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
     # if_printref = 0
     for threshold in thresholds:
+        print('entered...')
         if with_insights or insights_only:
             
             query_result_show = execute_vertica_query(vertica_connection, query)
@@ -292,7 +293,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             if query_result == -1:
                 print(query_name, ": column not found\n")
                 return
-        print('entered...')    
+            
         if threshold['query_name'] == query_name:
             args = {
                 "subcluster_name": subcluster_name,
