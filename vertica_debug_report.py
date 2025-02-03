@@ -308,6 +308,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
             if query_name == "long_running_queries_raw":
                 return
+            print('entered...')
             if query_name == "resource_pool_status":
                 if pool_name is None:
                     return
@@ -346,7 +347,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     return
             elif query_name == "long_running_queries":
-                print('entered...')
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
