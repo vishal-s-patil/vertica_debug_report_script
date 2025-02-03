@@ -145,7 +145,7 @@
                 "unique_column": "",
                 "threshold": {
                     "ok": 0,
-                    "warn": 2,
+                    "warn": 0,
                     "fatal": 10
                 },
                 "message_template": {
