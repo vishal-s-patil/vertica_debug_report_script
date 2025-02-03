@@ -611,7 +611,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 query_result = execute_vertica_query(vertica_connection, final_query)
-                print('query_result', query_result)
                 if query_result == -1:
                     if verbose:
                         print('QUERY: ', f"{final_query}")
@@ -627,11 +626,11 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
 
                 if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"):
                     query_result = format_relativedelta(query_result, column_headers)
-                print('column_headers', column_headers)
 
                 processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
-
                 
+                print('processed_query_result', processed_query_result)
+
                 if processed_query_result:
                     if insights_only or with_insights:
                         analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
