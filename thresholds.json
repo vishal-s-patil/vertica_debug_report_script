@@ -23,7 +23,7 @@
                 "threshold": {
                     "ok": -1,
                     "warn": 140000,
-                    "fatal": 600000
+                    "fatal": 60000
                 },
                 "message_template": {
                     "ok": "",
