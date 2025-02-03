@@ -115,7 +115,24 @@
         ]
     },
     {
-        "query_name": "resource_pool_status"
+        "query_name": "resource_pool_status",
+        "columns": [
+            {
+                "columns_name": "running_query_count",
+                "unique_column": "",
+                "threshold": {
+                    "ok": 0,
+                    "warn": 5,
+                    "fatal": 10
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{val_cnt} queries by users {list} in past {duration} hours",
+                    "fatal": "{val_cnt} queries by users {list} in past {duration} hours"
+                },
+                "default_message": "[OK] No Running Queries found for given pool and subcluster"
+            }
+        ]
     },
     {
         "query_name": "long_running_queries",
