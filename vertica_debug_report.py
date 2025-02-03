@@ -621,9 +621,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 column_headers = None
                 processed_query_result = None
 
+                print('query_result', query_result)
                 if query_result and query_result != -1:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
-                    print('column_headers_main', column_headers)
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
 
                 if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"):
