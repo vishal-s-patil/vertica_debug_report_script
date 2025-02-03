@@ -326,6 +326,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(f'[OK] No running queries found for given pool name or subclutser.')
                     else:
                         if with_insights:
+                            print(f"\n\nQuery Name: {query_name}")
+                            print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                             else:
@@ -367,6 +369,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("-" * 15)
 
                     if with_insights:
+                        print(f"\n\nQuery Name: {query_name}")
+                        print("-" * len(f"Query Name: {query_name}"))
                         if query_result_show is not None:
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                         else:
@@ -400,6 +404,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("-" * 15)
 
                     if with_insights:
+                        print(f"\n\nQuery Name: {query_name}")
+                        print("-" * len(f"Query Name: {query_name}"))
                         if query_result_show is not None:
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                         else:
@@ -482,6 +488,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print("-" * 15)
 
                         if with_insights:
+                            print(f"\n\nQuery Name: {query_name}")
+                            print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                             else:
