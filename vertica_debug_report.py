@@ -623,9 +623,10 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if query_result and query_result != -1:
                     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
 
-                print('column_headers', column_headers)
                 if query_result and len(query_result) > 0 and (query_name == "long_running_queries_raw"):
                     query_result = format_relativedelta(query_result, column_headers)
+
+                print('column_headers', column_headers)
 
                 if query_result and len(query_result) > 0:
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
