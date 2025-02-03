@@ -829,5 +829,8 @@ if __name__ == "__main__":
     if (insights_only or with_insights) and query_name=="long_running_queries_raw":
         print("Use long_running_queries instead of long_running_queries_raw for insights.")
         exit()
+    
+    if filters['order_by'] is not None:
+        filters['order_by'] = filters['order_by'] + ','
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, insights_only, with_insights, queries_to_execute)
