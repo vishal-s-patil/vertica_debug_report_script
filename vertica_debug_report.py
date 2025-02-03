@@ -329,9 +329,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
-                                print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                                print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         total_memory_in_use = 0
                         total_running_queries = 0
                         total_memory_borrowed = 0
@@ -372,9 +372,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
                         if query_result_show is not None:
-                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -407,9 +407,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
                         if query_result_show is not None:
-                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -491,9 +491,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
+                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
-                                print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                                print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 
                 flag = True
                 if issue_level is None or issue_level == "ok":
@@ -663,7 +663,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                         if verbose:
                             print('QUERY: ', f"{final_query}")
                             print("-" * 15)
-                        print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
+                        print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 else:
                     if not (insights_only or with_insights):
                         print(f"\n\nQuery Name: {query_name}")
