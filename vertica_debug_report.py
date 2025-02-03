@@ -412,6 +412,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             is_result_printed = False
             for item in threshold['columns']:
                 if query_result == None or len(query_result) == 0:
+                    print('entred')
                     if item['default_message'] is not "":
                         print(item['default_message'])
                         return
