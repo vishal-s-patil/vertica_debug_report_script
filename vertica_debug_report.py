@@ -375,7 +375,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                        else:
+                        elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
@@ -404,7 +404,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                        else:
+                        elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
