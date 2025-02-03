@@ -305,7 +305,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             global is_header_printed
             if not is_header_printed:
                 is_header_printed = True
-                print_header(args)
                 
             if query_name == "long_running_queries_raw":
                 return
@@ -347,6 +346,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     return
             elif query_name == "long_running_queries":
+                print('query_result', query_result)
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                     print("[OK] No long running queries.")
                 elif len(query_result) == 1:
@@ -642,7 +642,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid'))
                 else:
-                    print('else')
                     if not (insights_only or with_insights):
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
