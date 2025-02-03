@@ -370,6 +370,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    
+                    if "warn" not in status_counts and "fatal" not in status_counts:
+                        print("[OK] No long running queries.")
+
                     for key, val in status_counts.items():
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
@@ -399,6 +403,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid'))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid'))
+                    
+                    if "warn" not in status_counts and "fatal" not in status_counts:
+                        print("[OK] No long running queries.")
+                        
                     for key, val in status_counts.items():
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
