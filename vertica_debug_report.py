@@ -353,7 +353,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     status_counts = {}
                     for _, status, cnt in query_result:
                         x = status_counts.get(status, 0)
-                        print('status_counts.get(status, 0) ', x )
+                        print('status_counts.get(status, 0) ', type(status_counts.get) )
                         status_counts[status] = status_counts.get(status, 0) + cnt
                     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                     status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
