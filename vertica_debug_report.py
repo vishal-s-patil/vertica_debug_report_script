@@ -599,7 +599,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     continue
             
                 if query_name == "performance_buckets" and filters['user_name'] is None:
-                    print('Please provide a user name to use performance_buckets')
+                    if "performance_buckets" in queries_to_execute:
+                        print('Please provide a user name to use performance_buckets')
                     continue
 
                 if query_past == "":
