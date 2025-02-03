@@ -829,6 +829,10 @@ if __name__ == "__main__":
     if (insights_only or with_insights) and query_name=="long_running_queries_raw":
         print("Use long_running_queries instead of long_running_queries_raw for insights.")
         exit()
+
+    if (insights_only or with_insights) and query_name=="error_messages_raw":
+        print("Use error_messages instead of error_messages_raw for insights.")
+        exit()
     
     if filters['order_by'] is not None:
         filters['order_by'] = filters['order_by'] + ','
