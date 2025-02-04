@@ -82,8 +82,8 @@
                 "unique_column": "message_category",
                 "threshold": {
                     "ok": -1,
-                    "warn": 1000,
-                    "fatal": 5000
+                    "warn": 1,
+                    "fatal": 2
                 },
                 "message_template": {
                     "ok": "{cnt} users having total {total} Active Queries in Queue.",
