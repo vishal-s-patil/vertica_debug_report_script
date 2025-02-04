@@ -1,59 +1,16 @@
 import json
-import os
 from dotenv import load_dotenv
-import vertica_python
 from tabulate import tabulate
 import argparse
 from datetime import datetime, timedelta
 import re
 import sys
-from vertica_python import errors
+from vertica import get_vertica_connection, execute_vertica_query
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
 
 load_dotenv()
-
-
-def get_vertica_connection():
-    try:
-        vertica_connection_string = os.getenv("VERTICA_CONNECTION_STRING")
-        if not vertica_connection_string:
-            raise ValueError("VERTICA_CONNECTION_STRING is not set in the .env file.")
-        
-        conn_info = {}
-        for part in vertica_connection_string.split(";"):
-            key, value = part.split("=")
-            conn_info[key.strip()] = value.strip()
-
-        conn_info.setdefault("tlsmode", "disable")
-        connection = vertica_python.connect(**conn_info)
-        return connection
-
-    except Exception as e:
-        print(f"Error while connecting to Vertica: {e}")
-        return None
-
-
-def execute_vertica_query(vertica_connection, query):
-    try:
-        with vertica_connection.cursor() as cursor:
-            cursor.execute(query)
-            result = cursor.fetchall()
-            return result
-    except errors.MissingColumn as e:
-        #print(f"Error: Column not present in the query. Details: {e}")
-        return -1
-    except errors.QueryError as e:
-        if "does not exist" in str(e):
-            #print(f"Error: Column or table does not exist. Details: {e}")
-            return -1
-        else:
-            print(f"Error executing query: {e}")
-    except Exception as e:
-        print(f"Error executing query: {e}")
-        return None
-
 
 def replace_tables_in_query(query):
     replacements = [
@@ -549,7 +506,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             message = message.replace('{cnt}', str(fatal_count))
                         print(message)
                 if with_insights:
-                    print()        
+                        print()        
 
                 if flag:
                     if item['default_message'] is not "":
