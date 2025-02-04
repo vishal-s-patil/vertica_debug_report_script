@@ -332,6 +332,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                            print()
                         total_memory_in_use = 0
                         total_running_queries = 0
                         total_memory_borrowed = 0
@@ -375,6 +376,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                        print()
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -410,6 +412,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                        print()
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -494,6 +497,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                            print()
                 
                 flag = True
                 if issue_level is None or issue_level == "ok":
