@@ -210,3 +210,13 @@ def check_if_past_query_present(query_name, csv_file_path):
     "query_description": "description",
     "query": "select created_time, schema_name, projection_name, sum(total_row_cnt) row_count, sum(deleted_row_cnt) deleted_rows, sum(delete_vector_cnt) dv_count, n.subcluster_name from netstats.storage_containers as sc JOIN nodes AS n ON n.node_name = sc.node_name where 1=1 {projection_name ILIKE 'table_name'} and created_time=(select max(created_time) from netstats.storage_containers) group by created_time, schema_name,projection_name,n.subcluster_name order by deleted_rows desc limit {num_items};"
 },
+
+
+
+{
+    "qid": 9,
+    "query_name": "resource_pool_status",
+    "query_description": "Status of the Resource Pool",
+    "query": "select n.subcluster_name, memory_size_kb, memory_inuse_kb, general_memory_borrowed_kb, max_memory_size_kb, running_query_count from resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>' order by {order_by} running_query_count desc limit {num_items};",
+    "query_past": "select date_trunc, n.node_name, n.subcluster_name, pool_name, sum(memory_size_kb) as memory_size_kb, sum(memory_inuse_kb) as memory_inuse_kb, sum(general_memory_borrowed_kb) as general_memory_borrowed_kb, sum(max_memory_size_kb) as max_memory_size_kb, avg(running_query_count) as running_query_count from netstats.resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>' and date_trunc >= (timestamp {'issue_time'} - interval '{duration} hours') and date_trunc < timestamp {'issue_time'} group by date_trunc, n.node_name, n.subcluster_name, pool_name order by {order_by} running_query_count desc limit { num_items };"
+},

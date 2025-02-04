@@ -52,13 +52,6 @@
         "query": "WITH ranked_queries AS ( SELECT n.subcluster_name, DATE_TRUNC({granularity}, qp.query_start::timestamp) AS date_trunc, qp.user_name, COUNT(1) AS cnt, AVG(qp.query_duration_us)/(1000*1000) AS avg_query_duration_sec, MIN(qp.query_duration_us)/(1000*1000) AS min_query_duration_sec, MAX(qp.query_duration_us)/(1000*1000) AS max_query_duration_sec, AVG(qp.processed_row_count) AS avg_processed_row_count, ROW_NUMBER() OVER ( PARTITION BY DATE_TRUNC({granularity}, qp.query_start::timestamp) ORDER BY COUNT(1) DESC ) AS rank_in_hour FROM netstats.query_profiles AS qp JOIN nodes AS n ON n.node_name = qp.node_name WHERE 1=1 {user_name='user_name'} and query_start>=(timestamp {'issue_time'} - interval '{duration} hour') and query_start<= {'issue_time'} and n.subcluster_name = '<subcluster_name>' and qp.query_start >= DATE_TRUNC({granularity}, query_start) - INTERVAL '{duration} hour' GROUP BY n.subcluster_name, date_trunc, qp.user_name ) SELECT subcluster_name, date_trunc, user_name, cnt, avg_query_duration_sec, min_query_duration_sec, max_query_duration_sec, avg_processed_row_count FROM ranked_queries WHERE rank_in_hour <= {user_limit} ORDER BY {order_by} date_trunc DESC, cnt DESC;"
     },
     {
-        "qid": 9,
-        "query_name": "resource_pool_status",
-        "query_description": "Status of the Resource Pool",
-        "query": "select n.subcluster_name, memory_size_kb, memory_inuse_kb, general_memory_borrowed_kb, max_memory_size_kb, running_query_count from resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>' order by {order_by} running_query_count desc limit {num_items};",
-        "query_past": "select date_trunc, n.node_name, n.subcluster_name, pool_name, sum(memory_size_kb) as memory_size_kb, sum(memory_inuse_kb) as memory_inuse_kb, sum(general_memory_borrowed_kb) as general_memory_borrowed_kb, sum(max_memory_size_kb) as max_memory_size_kb, avg(running_query_count) as running_query_count from netstats.resource_pool_status as rps join nodes as n on n.node_name = rps.node_name where 1 = 1 { pool_name = 'pool_name' } and n.subcluster_name = '<subcluster_name>' and date_trunc >= (timestamp {'issue_time'} - interval '{duration} hours') and date_trunc < timestamp {'issue_time'} group by date_trunc, n.node_name, n.subcluster_name, pool_name order by {order_by} running_query_count desc limit { num_items };"
-    },
-    {
         "qid": 10,
         "query_name": "delete_vectors",
         "query_description": "Delete Vectors, Deleted Row Count",
