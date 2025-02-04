@@ -332,7 +332,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                            print()
+                            
                         total_memory_in_use = 0
                         total_running_queries = 0
                         total_memory_borrowed = 0
@@ -348,6 +348,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"[OK] No running queries found.")
                         elif issue_level == 'ok':
                             print(f"[OK] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
+                        if with_insights:
+                            print()
                     
                     return
             elif query_name == "long_running_queries":
@@ -376,7 +378,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                        print()
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -390,6 +391,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                    if with_insights:
+                        print()
                 else:
                     status_counts = {}
                     for _, status, cnt in query_result:
@@ -412,7 +415,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         else:
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                        print()
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
                         print("[OK] No long running queries.")
@@ -426,6 +428,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                    if with_insights:
+                        print()
                 return
 
             is_result_printed = False
@@ -497,7 +501,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                            print()
                 
                 flag = True
                 if issue_level is None or issue_level == "ok":
@@ -517,6 +520,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
+                        if with_insights:
+                            print()
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
                     if item['threshold']['warn'] != -1 and warn_count > 0:
@@ -531,6 +536,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(warn_count))
                         print(message)
+                        if with_insights:
+                            print()
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
                     if item['threshold']['fatal'] != -1 and fatal_count > 0:
@@ -544,6 +551,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(fatal_count))
                         print(message)
+                        if with_insights:
+                            print()
 
                 if flag:
                     if item['default_message'] is not "":
