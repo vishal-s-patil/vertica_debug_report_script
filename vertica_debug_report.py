@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime, timedelta
 import re
 import sys
-from vertica import get_vertica_connection, execute_vertica_query
+from vertica import vertica
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
@@ -182,8 +182,8 @@ def get_past_datetime(issue_time, duration):
 
 def get_ips_and_nodes(subcluster_name):
     query = f"select node_address, node_name from nodes where subcluster_name='{subcluster_name}';"
-    connection = get_vertica_connection()
-    query_result = execute_vertica_query(connection, query)
+    connection = vertica.get_vertica_connection()
+    query_result = vertica.execute_vertica_query(connection, query)
 
     if query_result is None or len(query_result) == 0:
         print(f"Error getting nodes and ips for subcluster {subcluster_name}")
@@ -238,14 +238,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
     for threshold in thresholds:
         if with_insights or insights_only:
             
-            query_result_show = execute_vertica_query(vertica_connection, query)
+            query_result_show = vertica.execute_vertica_query(vertica_connection, query)
             if column_headers is not None:
                 query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
 
             replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
             replaced_query = replace_row_num_limit(replaced_query, 1000)
 
-            query_result = execute_vertica_query(vertica_connection, replaced_query)
+            query_result = vertica.execute_vertica_query(vertica_connection, replaced_query)
            
             if query_result == -1:
                 print(query_name, ": column not found\n")
@@ -545,7 +545,7 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
     try:
-        vertica_connection = get_vertica_connection()
+        vertica_connection = vertica.get_vertica_connection()
         if not vertica_connection:
             print("Failed to connect to the Vertica database. Exiting.")
             return
@@ -599,7 +599,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
-                query_result = execute_vertica_query(vertica_connection, final_query)
+                query_result = vertica.execute_vertica_query(vertica_connection, final_query)
                 if query_result == -1:
                     if verbose:
                         print('QUERY: ', f"{final_query}")
