@@ -42,7 +42,7 @@
                 "unique_column": "user_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 50,
+                    "warn": 60,
                     "fatal": 100
                 },
                 "message_template": {
