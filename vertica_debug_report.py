@@ -520,8 +520,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
-                        if with_insights:
-                            print()
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
                     if item['threshold']['warn'] != -1 and warn_count > 0:
@@ -536,8 +534,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(warn_count))
                         print(message)
-                        if with_insights:
-                            print()
+                        
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
                     if item['threshold']['fatal'] != -1 and fatal_count > 0:
@@ -551,8 +548,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(fatal_count))
                         print(message)
-                        if with_insights:
-                            print()
+                if with_insights:
+                    print()        
 
                 if flag:
                     if item['default_message'] is not "":
