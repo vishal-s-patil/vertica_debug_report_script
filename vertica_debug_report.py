@@ -224,9 +224,8 @@ def replace_row_num_limit(query, new_limit):
 
 def colour_values(query_result, columns, headers):
     for column in columns:
-        print('column name', column['columns_name'])
-        # if column['columns_name'] == "deleted_row_cnt":
-        #     continue
+        if column['columns_name'] == 'deleted_row_cnt':
+            continue
         try:
             column_name = column['columns_name']
             index = headers.index(column_name)
