@@ -566,12 +566,37 @@ def replace_thresholds(query, query_name):
     return query
 
 
+# def format_relativedelta(query_result, column_headers, column_name="running_time"):
+#     index = column_headers.index(column_name)
+#     for row in query_result:
+#         delta = row[index]
+#         print(delta)
+#         row[index] = f"{delta.minutes:02}:{delta.seconds:02}.{delta.microseconds:06}"
+    
+#     return query_result
+
+
 def format_relativedelta(query_result, column_headers, column_name="running_time"):
     index = column_headers.index(column_name)
+    
     for row in query_result:
         delta = row[index]
-        print(delta)
-        row[index] = f"{delta.minutes:02}:{delta.seconds:02}.{delta.microseconds:06}"
+        print(delta)  # Debugging print statement
+
+        # Construct the formatted time string based on available components
+        formatted_parts = []
+        
+        if delta.days:
+            formatted_parts.append(f"{delta.days}d")
+        if delta.hours:
+            formatted_parts.append(f"{delta.hours}h")
+        if delta.minutes:
+            formatted_parts.append(f"{delta.minutes}m")
+        if delta.seconds or delta.microseconds:
+            formatted_parts.append(f"{delta.seconds}.{delta.microseconds:06}s")
+
+        # Join the parts together
+        row[index] = "".join(formatted_parts)
     
     return query_result
 
