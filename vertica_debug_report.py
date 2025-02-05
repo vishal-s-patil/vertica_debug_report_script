@@ -531,7 +531,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 query_result = colour_values(query_result, threshold['columns'], column_headers)
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 
-                print('reached...')
                 flag = True
                 is_upper_level_statsus_printed = False
 
@@ -548,7 +547,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(fatal_count))
                         print(message)
-
+                print('reached...')
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
                     if item['threshold']['warn'] != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
