@@ -468,8 +468,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         query_result_show = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
                     else:
                         query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                if item['columns_name'] == "deleted_row_cnt":
-                    print('reached...')
                 
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
@@ -477,6 +475,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         return
                     else:
                         return
+                if item['columns_name'] == "deleted_row_cnt":
+                    print('reached...')
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
                     print(f"Error: Column '{item['columns_name']}' not found in the query result.")
