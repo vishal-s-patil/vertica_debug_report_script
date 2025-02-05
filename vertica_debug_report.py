@@ -252,6 +252,11 @@ def colour_values(query_result, columns, headers):
     return query_result
 
 
+def handle_deleted_row_count():
+    print('handle_deleted_row_count')
+    pass
+
+
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
     json_data = None
@@ -423,6 +428,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
             is_result_printed = False
             for item in threshold['columns']:
+                if item == "deleted_row_cnt":
+                    handle_deleted_row_count()
+                    return
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
