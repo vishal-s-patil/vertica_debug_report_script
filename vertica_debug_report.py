@@ -465,11 +465,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
                     if query_result_show:
-                        query_result_show = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                        print(query_result_show)
+                        query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
                     else:
                         query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                        print(query_result)
 
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
