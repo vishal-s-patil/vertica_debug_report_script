@@ -283,6 +283,7 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
             print(f'Error in func:colour_values_deleted_row_count while coloring the values', e)
             exit()
     
+    print(query_result)
     return query_result
 
 
