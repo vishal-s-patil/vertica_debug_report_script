@@ -547,7 +547,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(fatal_count))
                         print(message)
-                print('reached...')
+
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
                     if item['threshold']['warn'] != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
@@ -581,7 +581,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
-                    
+                
+                print('reached...')    
                 if with_insights:
                         print()        
 
