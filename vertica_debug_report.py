@@ -259,7 +259,8 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
     column_to_compare_index = column_headers.index(column_to_compare)
 
     for row in query_result:
-        # if row[column_to_colour_index] > row[column_to_compare_index]*item['warn']:
+        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+        row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
         print(row[column_to_colour_index], row[column_to_compare_index], item['threshold']['warn'])
 
 
@@ -274,8 +275,6 @@ def handle_deleted_row_count(query_result, query_result_show, item, with_insight
             query_result = colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
         
-
-    print('handle_deleted_row_count')
     pass
 
 
