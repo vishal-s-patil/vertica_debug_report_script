@@ -226,9 +226,11 @@ def colour_values(query_result, columns, headers):
     for column in columns:
         try:
             column_name = column['columns_name']
+            print('column_name', column_name)
             index = headers.index(column_name)
             if index == -1:
                 print(f'column {column_name} not found')
+                return
             
             warn_threshold = column['threshold']['warn']
             fatal_threshold = column['threshold']['fatal']
@@ -483,10 +485,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                # query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
+                                query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
-                                # query_result = colour_values(query_result, threshold['query_name']['columns'], column_headers)
+                                query_result = colour_values(query_result, threshold['query_name']['columns'], column_headers)
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 
                 flag = True
