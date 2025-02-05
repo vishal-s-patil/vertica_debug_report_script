@@ -262,9 +262,9 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
         ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
         row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
         
-        if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.1:
+        if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.99:
             row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
-        elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.05:
+        elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.99:
             row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
         else:
             row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
@@ -456,7 +456,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if item['columns_name'] == "deleted_row_cnt":
                     query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
                     continue
-                
+
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
