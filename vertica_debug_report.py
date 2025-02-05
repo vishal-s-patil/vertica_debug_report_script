@@ -663,6 +663,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if processed_query_result:
                     for threshold in thresholds:
+                        print('reached')
                         processed_query_result = colour_values(processed_query_result, threshold['columns'], column_headers)
 
                 if processed_query_result:
