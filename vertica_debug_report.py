@@ -592,7 +592,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(message)
                  
                 if with_insights:
-                        print()        
+                    print()        
 
                 if flag:
                     if item['default_message'] is not "":
