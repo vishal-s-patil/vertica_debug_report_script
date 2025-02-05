@@ -276,14 +276,11 @@ def handle_deleted_row_count(query_result, query_result_show, item, with_insight
     if with_insights:
         if query_result_show:
             # query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
-            query_result_show = colour_values_deleted_row_count(query_result_show, item, with_insights, threshold, column_headers)
-            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+            return colour_values_deleted_row_count(query_result_show, item, with_insights, threshold, column_headers)
         else:
             # query_result = colour_values(query_result, threshold['columns'], column_headers)
-            query_result = colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
-            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-    
-    return
+            return colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
+
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
@@ -457,8 +454,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             is_result_printed = False
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
-                    handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                    return
+                    query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
+                    
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
