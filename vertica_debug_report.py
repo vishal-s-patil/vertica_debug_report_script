@@ -428,7 +428,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
             is_result_printed = False
             for item in threshold['columns']:
-                if item == "deleted_row_cnt":
+                if item['columns_name'] == "deleted_row_cnt":
                     handle_deleted_row_count()
                     return
                 if query_result == None or len(query_result) == 0:
