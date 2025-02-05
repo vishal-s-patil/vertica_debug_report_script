@@ -499,7 +499,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         column_to_compare_index = column_headers.index("total_row_cnt")
                         if item['unique_column'] == "":
                             for row in query_result:
-                                print(row[index])
                                 if row[index] > int(row[column_to_compare_index])*(fatal_threshold/100):
                                     fatal_count+=1
                                 elif row[index] > int(row[column_to_compare_index])*(warn_threshold/100):
