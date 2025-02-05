@@ -588,8 +588,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
-    
-    print('reached...')
+        print('reached...')
 
 
 def replace_thresholds(query, query_name):
