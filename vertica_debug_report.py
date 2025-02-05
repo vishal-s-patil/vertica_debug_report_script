@@ -108,9 +108,9 @@ def process_query_result_and_highlight_text(query_result, column_headers):
 
     # Define colors for each severity level
     colors = {
-        "ok": "\033[92m",      # Green
+        "ok": "\033[92m",      # Green 
         "warn": "\033[93m", # Yellow 
-        "fatal": "\033[91m",   # Red
+        "fatal": "\033[91m",   # Red 
     }
     reset_color = "\033[0m"  # Reset to default
 
@@ -355,7 +355,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("-" * 15)
 
                     if query_result is None and (issue_level == 'ok' or issue_level is None):
-                        print(f'[OK] No running queries found for given pool name or subclutser.')
+                        print(f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.')
                     else:
                         if with_insights:
                             print(f"\n\nQuery Name: {query_name}")
@@ -378,16 +378,16 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             total_memory_borrowed += row[total_memory_borrowed_index]
                         
                         if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
-                            print(f"[OK] No running queries found.")
+                            print(f"[\033[92mOK\033[0m] No running queries found.")
                         elif issue_level == 'ok':
-                            print(f"[OK] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
+                            print(f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
                         if with_insights:
                             print()
                     
                     return
             elif query_name == "long_running_queries":
                 if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
-                    print("[OK] No long running queries.")
+                    print("[\033[92mOK\033[0m] No long running queries.")
                 elif len(query_result) == 1:
                     status_counts = {}
                     for _, status, cnt in query_result:
@@ -413,7 +413,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                        print("[OK] No long running queries.")
+                        print("[\033[92mOK\033[0m] No long running queries.")
 
                     for key, val in status_counts.items():
                         _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
@@ -424,7 +424,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                            print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                     if with_insights:
                         print()
                 else:
@@ -451,7 +451,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                     
                     if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                        print("[OK] No long running queries.")
+                        print("[\033[92mOK\033[0m] No long running queries.")
 
                     for key, val in status_counts.items():
                         _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
@@ -462,7 +462,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                            print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                     if with_insights:
                         print()
                 return
@@ -569,7 +569,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if fatal_threshold != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = True
-                        message = "[FATAL] "
+                        message = "[\033[91mFATAL\033[0m] "
                         message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(fatal_threshold ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
                         message = message.replace('{duration}', str(duration))
                         if len(fatal_values) > 0:
@@ -599,7 +599,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         flag = False
                         is_upper_level_statsus_printed = True
                         # ok_count += warn_count + fatal_count
-                        message = "[OK] "
+                        message = "[\033[92mOK\033[0m] "
                         
                         message += item['message_template']['ok'].replace('{val_cnt}', str(ok_threshold))
                         
