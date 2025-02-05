@@ -260,7 +260,7 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
 
     for row in query_result:
         # if row[column_to_colour_index] > row[column_to_compare_index]*item['warn']:
-        print(row[column_to_colour_index], row[column_to_compare_index], item['warn'])
+        print(row[column_to_colour_index], row[column_to_compare_index], item['threshold']['warn'])
 
 
 def handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers):
