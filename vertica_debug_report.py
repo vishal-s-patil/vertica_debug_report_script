@@ -224,8 +224,8 @@ def replace_row_num_limit(query, new_limit):
 
 def colour_values(query_result, columns, headers):
     for column in columns:
-        # if column['columns_name'] == 'deleted_row_cnt':
-        #     continue
+        if column['columns_name'] == 'deleted_row_cnt':
+            continue
         try:
             column_name = column['columns_name']
             index = headers.index(column_name)
@@ -531,6 +531,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 query_result = colour_values(query_result, threshold['columns'], column_headers)
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 
+                print('reached...')
                 flag = True
                 is_upper_level_statsus_printed = False
 
