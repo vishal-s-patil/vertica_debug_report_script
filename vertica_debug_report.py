@@ -517,8 +517,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                     ok_count+=1
                                     ok_values.add(unique_column_value)
                                     total += row[index]   
-                if item['columns_name'] == "deleted_row_cnt":
-                    print(query_result_show)
+                
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
@@ -532,6 +531,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print("-" * 15)
 
                         if with_insights:
+                            if item['columns_name'] == "deleted_row_cnt":
+                                print(query_result_show)
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
