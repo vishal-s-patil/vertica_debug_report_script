@@ -7,7 +7,7 @@
                 "unique_column": "",
                 "threshold": {
                     "ok": -1,
-                    "warn_percent": 5,
+                    "warn_percent": 1,
                     "fatal_percent": 10
                 },
                 "message_template": {
