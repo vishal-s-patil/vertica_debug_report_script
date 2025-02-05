@@ -660,16 +660,15 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if thresholds is None:
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
-                
-                if processed_query_result:
-                    for threshold in thresholds:
-                        if query_name == threshold['query_name']:
-                            processed_query_result = colour_values(processed_query_result, threshold['columns'], column_headers)
 
                 if processed_query_result:
                     if insights_only or with_insights:
                         analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
                     else:
+                        for threshold in thresholds:
+                            if query_name == threshold['query_name']:
+                                processed_query_result = colour_values(processed_query_result, threshold['columns'], column_headers)
+
                         print(f"\n\nQuery Name: {query_name}")
                         print("-" * len(f"Query Name: {query_name}"))
                         # print(f"Query Description: {query_description}")
