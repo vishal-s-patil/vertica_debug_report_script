@@ -269,9 +269,9 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
             ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
             row[column_to_colour_index] = int(ansi_escape.sub('', str(row[column_to_colour_index])))
 
-            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.1:
+            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*(item['threshold']['fatal']/100):
                 row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
-            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.005:
+            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*(item['threshold']['fatal']/100):
                 row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
             else:
                 row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
@@ -592,7 +592,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(message)
                  
                 if with_insights:
-                    print()        
+                    print()
 
                 if flag:
                     if item['default_message'] is not "":
