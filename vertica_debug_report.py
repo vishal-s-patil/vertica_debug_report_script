@@ -248,7 +248,7 @@ def colour_values(query_result, columns, headers):
             print(f'Error in func:colour_values while coloring the values', e)
             return
 
-        return query_result
+    return query_result
 
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
