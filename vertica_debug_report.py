@@ -517,7 +517,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                     ok_count+=1
                                     ok_values.add(unique_column_value)
                                     total += row[index]   
-
+                if item['columns_name'] == "deleted_row_cnt":
+                    print(query_result_show)
                 if ok_count>0 or warn_count>0 or fatal_count>0:
                     if not is_result_printed:
                         is_result_printed = True
@@ -534,8 +535,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                if item['columns_name'] == "deleted_row_cnt":
-                                    print(query_result_show)
                                 query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
