@@ -261,7 +261,15 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
     for row in query_result:
         ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
         row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
-        print(row[column_to_colour_index], row[column_to_compare_index], item['threshold']['warn'])
+        
+        if row[column_to_colour_index] > row[column_to_compare_index]*0.1:
+            row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
+        elif row[column_to_colour_index] > row[column_to_compare_index]*0.05:
+            row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
+        else:
+            row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
+
+    return query_result
 
 
 def handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers):
@@ -274,9 +282,8 @@ def handle_deleted_row_count(query_result, query_result_show, item, with_insight
             # query_result = colour_values(query_result, threshold['columns'], column_headers)
             query_result = colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
             print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-        
-    pass
-
+    
+    return
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
