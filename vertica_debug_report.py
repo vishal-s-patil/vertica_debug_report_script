@@ -239,7 +239,6 @@ def colour_values(query_result, columns, headers):
 
         try:
             for row in query_result:
-                print('row[index]', row[index])
                 if row[index] > fatal_threshold:
                     row[index] = str('\033[91m') + str(row[index]) + str('\033[0m')
                 elif row[index] > int(warn_threshold):
