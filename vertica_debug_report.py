@@ -224,6 +224,8 @@ def replace_row_num_limit(query, new_limit):
 
 def colour_values(query_result, columns, headers):
     for column in columns:
+        if column['columns_name'] == "deleted_row_cnt":
+            return query_result
         try:
             column_name = column['columns_name']
             index = headers.index(column_name)
@@ -240,9 +242,9 @@ def colour_values(query_result, columns, headers):
         try:
             for row in query_result:
                 if row[index] > fatal_threshold:
-                    row[index] = str('\033[92m') + str(row[index]) + str('\033[0m')
+                    row[index] = str('\033[91m') + str(row[index]) + str('\033[0m')
                 elif row[index] > int(warn_threshold):
-                    row[index] = str('\033[92m') + str(row[index]) + str('\033[0m')
+                    row[index] = str('\033[93m') + str(row[index]) + str('\033[0m')
                 else:
                     row[index] = str('\033[92m') + str(row[index]) + str('\033[0m')
         except Exception as e:
