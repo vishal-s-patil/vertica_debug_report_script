@@ -254,23 +254,30 @@ def colour_values(query_result, columns, headers):
     return query_result
 
 def colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers):    
-    column_to_colour = "deleted_row_cnt"
-    column_to_compare = "total_row_cnt"
+    try:
+        column_to_colour = "deleted_row_cnt"
+        column_to_compare = "total_row_cnt"
 
-    column_to_colour_index = column_headers.index(column_to_colour)
-    column_to_compare_index = column_headers.index(column_to_compare)
-
+        column_to_colour_index = column_headers.index(column_to_colour)
+        column_to_compare_index = column_headers.index(column_to_compare)
+    except Exception as e:
+        print(f'Error in func:colour_values_deleted_row_count while getting column indices.', e)
+        exit()
+    
     for row in query_result:
-        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
-        row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
+        try:
+            ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+            row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
+            
+            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.99:
+                row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
+            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.99:
+                row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
+            else:
+                row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
+        except Exception as e:
+            print(f'Error in func:colour_values_deleted_row_count while coloring the values', e)
         
-        if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.99:
-            row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
-        elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.99:
-            row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
-        else:
-            row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
-
     return query_result
 
 
@@ -461,7 +468,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     else:
                         query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
 
-                    print('reached...')
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
