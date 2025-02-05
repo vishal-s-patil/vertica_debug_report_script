@@ -461,6 +461,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     else:
                         query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
 
+                    print('reached...')
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
                         print(item['default_message'])
@@ -588,7 +589,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
-                print('reached...', item['columns_name'])
 
 
 def replace_thresholds(query, query_name):
