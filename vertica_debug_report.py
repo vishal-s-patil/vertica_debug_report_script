@@ -293,6 +293,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             global is_header_printed
             if not is_header_printed:
                 is_header_printed = True
+                print_header(args)
                 
             if query_name == "long_running_queries_raw":
                 return
