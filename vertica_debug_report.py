@@ -517,9 +517,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                     ok_count+=1
                                     ok_values.add(unique_column_value)
                                     total += row[index]   
-                if item['columns_name'] == "deleted_row_cnt":
-                    print('reached...')
+                
                 if ok_count>0 or warn_count>0 or fatal_count>0:
+                    if item['columns_name'] == "deleted_row_cnt":
+                        print('reached...')
                     if not is_result_printed:
                         is_result_printed = True
                     
