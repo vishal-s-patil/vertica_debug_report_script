@@ -224,8 +224,8 @@ def replace_row_num_limit(query, new_limit):
 
 def colour_values(query_result, columns, headers):
     for column in columns:
-        if column['columns_name'] == 'deleted_row_cnt':
-            continue
+        # if column['columns_name'] == 'deleted_row_cnt':
+        #     continue
         try:
             column_name = column['columns_name']
             index = headers.index(column_name)
@@ -250,12 +250,6 @@ def colour_values(query_result, columns, headers):
         except Exception as e:
             print(f'Error in func:colour_values while coloring the values', e)
             return
-
-    print()
-    print()
-    print(tabulate(query_result, headers=headers, tablefmt='grid', floatfmt=".2f"))
-    print()
-    print()
 
     return query_result
 
