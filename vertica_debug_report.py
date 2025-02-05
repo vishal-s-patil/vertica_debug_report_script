@@ -224,20 +224,28 @@ def replace_row_num_limit(query, new_limit):
 
 def colour_values(query_result, columns, headers):
     for column in columns:
-        column_name = column['columns_name']
-        index = headers.index(column_name)
-        if index == -1:
-            print(f'column {column_name} not found')
-        
-        warn_threshold = column['threshold']['warn']
-        fatal_threshold = column['threshold']['fatal']
+        try:
+            column_name = column['columns_name']
+            index = headers.index(column_name)
+            if index == -1:
+                print(f'column {column_name} not found')
+            
+            warn_threshold = column['threshold']['warn']
+            fatal_threshold = column['threshold']['fatal']
+        except Exception as e:
+            print(f'Error in func:colour_values while getting threshold information.', e)
+            return
 
-        for row in query_result:
-            if row['index'] > warn_threshold:
-                row['index'] = str('\033[93m') + str(row['index']) + str('\033[0m')
-            if row['index'] > fatal_threshold:
-                row['index'] = str('\033[91m') + str(row['index']) + str('\033[0m')
-        
+        try:
+            for row in query_result:
+                if row['index'] > warn_threshold:
+                    row['index'] = str('\033[93m') + str(row['index']) + str('\033[0m')
+                if row['index'] > fatal_threshold:
+                    row['index'] = str('\033[91m') + str(row['index']) + str('\033[0m')
+        except Exception as e:
+            print(f'Error in func:colour_values while coloring the values', e)
+            return
+
         return query_result
 
 
