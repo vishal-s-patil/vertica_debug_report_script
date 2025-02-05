@@ -591,12 +591,13 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
                  
-                # if with_insights:
-                #     print()
-
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
+                        
+            if with_insights:
+                print()
+
 
 
 def replace_thresholds(query, query_name):
