@@ -8,7 +8,7 @@
                 "threshold": {
                     "ok": -1,
                     "warn_percent": 1,
-                    "fatal_percent": 10
+                    "fatal_percent": 1
                 },
                 "message_template": {
                     "ok": "",
