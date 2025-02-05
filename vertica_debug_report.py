@@ -475,8 +475,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         return
                     else:
                         return
-                if item['columns_name'] == "deleted_row_cnt":
-                    print('reached...')
+                
                 index = column_headers.index(item['columns_name'])
                 if index == -1:
                     print(f"Error: Column '{item['columns_name']}' not found in the query result.")
@@ -486,6 +485,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 ok_values, warn_values, fatal_values = set(), set(), set()
                 unique_values = {}
                 total = 0
+
+                if item['columns_name'] == "deleted_row_cnt":
+                    print('reached...')
 
                 if item['unique_column'] == "":
                     for row in query_result:
