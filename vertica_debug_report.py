@@ -239,10 +239,10 @@ def colour_values(query_result, columns, headers):
 
         try:
             for row in query_result:
-                if row['index'] > warn_threshold:
-                    row['index'] = str('\033[93m') + str(row['index']) + str('\033[0m')
-                if row['index'] > fatal_threshold:
-                    row['index'] = str('\033[91m') + str(row['index']) + str('\033[0m')
+                if row[index] > warn_threshold:
+                    row[index] = str('\033[93m') + str(row[index]) + str('\033[0m')
+                if row[index] > fatal_threshold:
+                    row[index] = str('\033[91m') + str(row[index]) + str('\033[0m')
         except Exception as e:
             print(f'Error in func:colour_values while coloring the values', e)
             return
