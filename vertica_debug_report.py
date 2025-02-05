@@ -261,7 +261,7 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
     for row in query_result:
         ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
         row[column_to_colour_index] = ansi_escape.sub('', row[column_to_colour_index])
-        
+        print(row[column_to_colour_index])
         if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*0.99:
             row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
         elif int(row[column_to_colour_index]) > row[column_to_compare_index]*0.99:
