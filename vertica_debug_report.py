@@ -570,6 +570,7 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
     index = column_headers.index(column_name)
     for row in query_result:
         delta = row[index]
+        print(delts)
         row[index] = f"{delta.minutes:02}:{delta.seconds:02}.{delta.microseconds:06}"
     
     return query_result
