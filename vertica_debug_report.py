@@ -454,8 +454,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             is_result_printed = False
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
-                    query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                    continue
+                    if query_result_show:
+                        query_result_show = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
+                    else:
+                        query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
 
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
@@ -521,7 +523,6 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                print(item['columns_name'])
                                 query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
