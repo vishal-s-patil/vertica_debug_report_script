@@ -531,7 +531,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print("-" * 15)
 
                         if with_insights:
-                            print('reached')
+                            print(query_result_show)
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
