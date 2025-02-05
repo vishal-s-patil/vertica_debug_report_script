@@ -3,21 +3,6 @@
         "query_name": "delete_vectors",
         "columns": [
             {
-                "columns_name": "delete_vector_cnt",
-                "unique_column": "",
-                "threshold": {
-                    "ok": -1,
-                    "warn": 500,
-                    "fatal": 700
-                },
-                "message_template": {
-                    "ok": "",
-                    "warn": "{cnt} projections having > {val_cnt} delete vectors",
-                    "fatal": "{cnt} projections having > {val_cnt} delete vectors"
-                },
-                "default_message": "[OK] No outliers in delete vector count"
-            },
-            {
                 "columns_name": "deleted_row_cnt",
                 "unique_column": "",
                 "threshold": {
@@ -31,6 +16,21 @@
                     "fatal": "{cnt} projections having > {val_cnt} deleted rows"
                 },
                 "default_message": "[OK] No outliers in deleted row count"
+            },
+            {
+                "columns_name": "delete_vector_cnt",
+                "unique_column": "",
+                "threshold": {
+                    "ok": -1,
+                    "warn": 500,
+                    "fatal": 700
+                },
+                "message_template": {
+                    "ok": "",
+                    "warn": "{cnt} projections having > {val_cnt} delete vectors",
+                    "fatal": "{cnt} projections having > {val_cnt} delete vectors"
+                },
+                "default_message": "[OK] No outliers in delete vector count"
             }
         ]
     },
