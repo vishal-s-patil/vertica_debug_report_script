@@ -452,7 +452,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if with_insights:
                         print()
                 return
-            print('reached...')  
+              
             is_result_printed = False
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
@@ -588,6 +588,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
+                print('reached...', item['columns_name'])
 
 
 def replace_thresholds(query, query_name):
