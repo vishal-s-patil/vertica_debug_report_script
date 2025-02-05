@@ -255,8 +255,8 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
     column_to_colour = "deleted_row_cnt"
     column_to_compare = "total_row_cnt"
 
-    column_to_colour_index = column_headers.index('column_to_colour')
-    column_to_compare_index = column_headers.index('column_to_compare')
+    column_to_colour_index = column_headers.index(column_to_colour)
+    column_to_compare_index = column_headers.index(column_to_compare)
 
     for row in query_result:
         # if row[column_to_colour_index] > row[column_to_compare_index]*item['warn']:
