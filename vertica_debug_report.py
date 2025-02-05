@@ -494,9 +494,41 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                 
                 flag = True
-                if issue_level is None or issue_level == "ok":
-                    if (item['threshold']['ok'] != -1 and ok_count > 0):
+                is_upper_level_statsus_printed = False
+
+                if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
+                    if item['threshold']['fatal'] != -1 and fatal_count > 0:
                         flag = False
+                        is_upper_level_statsus_printed = True
+                        message = "[FATAL] "
+                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
+                        message = message.replace('{duration}', str(duration))
+                        if len(fatal_values) > 0:
+                            message = message.replace('{list}', str(fatal_values))
+                            message = message.replace('{cnt}', str(len(fatal_values)))
+                        else:
+                            message = message.replace('{cnt}', str(fatal_count))
+                        print(message)
+
+                if issue_level is None or issue_level == "ok" or issue_level == "warn":
+                    if item['threshold']['warn'] != -1 and warn_count > 0:
+                        flag = False
+                        is_upper_level_statsus_printed = False
+                        
+                        message = "[WARN] "
+                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
+                        message = message.replace('{duration}', str(duration))
+                        if len(warn_values) > 0:
+                            message = message.replace('{list}', str(warn_values))
+                            message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
+                        else:
+                            message = message.replace('{cnt}', str(warn_count))
+                        print(message)
+
+                if issue_level is None or issue_level == "ok":
+                    if (item['threshold']['ok'] != -1 and ok_count > 0) and not is_upper_level_statsus_printed:
+                        flag = False
+                        is_upper_level_statsus_printed = True
                         # ok_count += warn_count + fatal_count
                         message = "[OK] "
                         
@@ -511,34 +543,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
-
-                if issue_level is None or issue_level == "ok" or issue_level == "warn":
-                    if item['threshold']['warn'] != -1 and warn_count > 0:
-                        flag = False
-                        
-                        message = "[WARN] "
-                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
-                        message = message.replace('{duration}', str(duration))
-                        if len(warn_values) > 0:
-                            message = message.replace('{list}', str(warn_values))
-                            message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
-                        else:
-                            message = message.replace('{cnt}', str(warn_count))
-                        print(message)
-                        
-
-                if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
-                    if item['threshold']['fatal'] != -1 and fatal_count > 0:
-                        flag = False
-                        message = "[FATAL] "
-                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
-                        message = message.replace('{duration}', str(duration))
-                        if len(fatal_values) > 0:
-                            message = message.replace('{list}', str(fatal_values))
-                            message = message.replace('{cnt}', str(len(fatal_values)))
-                        else:
-                            message = message.replace('{cnt}', str(fatal_count))
-                        print(message)
+                    
                 if with_insights:
                         print()        
 
