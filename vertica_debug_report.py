@@ -99,17 +99,6 @@ def replace_conditions(query, conditions_dict):
 
 
 def process_query_result_and_highlight_text(query_result, column_headers):
-    """
-    Processes the query result to color specific substrings
-    (ok, warning, fatal) in the "status" column values.
-
-    Parameters:
-        query_result (list): The nested list query result.
-        column_headers (list): The list of column headers.
-
-    Returns:
-        list: The processed query result with colored strings in the "status" column.
-    """
     # Get the index of the "status" column
     try:
         status_index = column_headers.index("status")
@@ -232,9 +221,9 @@ def colour_values(query_result, columns, headers):
             if index == -1:
                 print(f'column {column_name} not found')
                 return
-            
-            warn_threshold = column['threshold']['warn']
-            fatal_threshold = column['threshold']['fatal']
+
+            _, warn_threshold, fatal_threshold = get_thresholds(column['threshold'])
+
         except Exception as e:
             print(f'Error in func:colour_values while getting threshold information.', e)
             return
@@ -269,9 +258,11 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
             ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
             row[column_to_colour_index] = int(ansi_escape.sub('', str(row[column_to_colour_index])))
 
-            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*(item['threshold']['fatal']/100):
+            _, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
+
+            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*(fatal_threshold/100):
                 row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
-            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*(item['threshold']['warn']/100):
+            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*(warn_threshold/100):
                 row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
             else:
                 row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
@@ -291,6 +282,19 @@ def handle_deleted_row_count(query_result, query_result_show, item, with_insight
             # query_result = colour_values(query_result, threshold['columns'], column_headers)
             return colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
 
+
+def get_thresholds(thresholds):
+    ok_threshold, warn_threshold, fatal_threshold = None, None, None
+
+    for key, val in thresholds.items():
+        if 'warn' in key:
+            warn_threshold = val
+        elif 'fatal' in key:
+            fatal_threshold = val
+        else:
+            ok_threshold = val
+    
+    return ok_threshold, warn_threshold, fatal_threshold
 
 def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
@@ -412,13 +416,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("[OK] No long running queries.")
 
                     for key, val in status_counts.items():
+                        _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
-                            t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
-                            t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                     if with_insights:
                         print()
@@ -449,13 +454,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print("[OK] No long running queries.")
 
                     for key, val in status_counts.items():
+                        _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
-                            t = (str('\033[93m') + str(threshold['columns'][0]['threshold']["warn"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
                             print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
-                            t = (str('\033[91m') + str(threshold['columns'][0]['threshold']["fatal"]) + " mins" + str('\033[0m'))
+                            t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
                             print(f"[FATAL] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                     if with_insights:
                         print()
@@ -486,11 +492,13 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 unique_values = {}
                 total = 0
 
+                _, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
+
                 if item['unique_column'] == "":
                     for row in query_result:
-                        if row[index] > item['threshold']['fatal']:
+                        if row[index] > fatal_threshold:
                             fatal_count+=1
-                        elif row[index] > item['threshold']['warn']:
+                        elif row[index] > warn_threshold:
                             warn_count+=1
                         else:
                             total += row[index]
@@ -507,10 +515,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     for row in query_result:
                         for unique_column_value, unique_column_cnt in unique_values.items():
                             if row[unique_column_index] == unique_column_value:
-                                if row[index] > item['threshold']['fatal']:
+                                if row[index] > fatal_threshold:
                                     fatal_count+=1
                                     fatal_values.add(unique_column_value)
-                                elif row[index] > item['threshold']['warn']:
+                                elif row[index] > warn_threshold:
                                     warn_count+=1
                                     warn_values.add(unique_column_value)
                                 else:
@@ -543,12 +551,14 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 flag = True
                 is_upper_level_statsus_printed = False
 
+                ok_threshold, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
+
                 if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
-                    if item['threshold']['fatal'] != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
+                    if fatal_threshold != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = True
                         message = "[FATAL] "
-                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(item['threshold']['fatal'] ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
+                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(fatal_threshold ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
                         message = message.replace('{duration}', str(duration))
                         if len(fatal_values) > 0:
                             message = message.replace('{list}', str(fatal_values))
@@ -558,12 +568,12 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(message)
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
-                    if item['threshold']['warn'] != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
+                    if warn_threshold != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = False
 
                         message = "[WARN] "
-                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
+                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( warn_threshold ) + str('\033[0m')) #  + +  
                         message = message.replace('{duration}', str(duration))
                         if len(warn_values) > 0:
                             message = message.replace('{list}', str(warn_values))
@@ -573,13 +583,13 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(message)
 
                 if issue_level is None or issue_level == "ok":
-                    if (item['threshold']['ok'] != -1 and ok_count > 0) and not is_upper_level_statsus_printed:
+                    if (ok_threshold != -1 and ok_count > 0) and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = True
                         # ok_count += warn_count + fatal_count
                         message = "[OK] "
                         
-                        message += item['message_template']['ok'].replace('{val_cnt}', str(item['threshold']['ok']))
+                        message += item['message_template']['ok'].replace('{val_cnt}', str(ok_threshold))
                         
                         message = message.replace('{duration}', str(duration))
 
@@ -594,7 +604,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
-                        
+
             if with_insights:
                 print()
 
@@ -613,9 +623,11 @@ def replace_thresholds(query, query_name):
     
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
-            query = query.replace("{ok_threshold}", str(threshold['columns'][0]['threshold']['ok']))
-            query = query.replace("{warn_threshold}", str(threshold['columns'][0]['threshold']['warn']))
-            query = query.replace("{fatal_threshold}", str(threshold['columns'][0]['threshold']['fatal']))
+            ok_threshold, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
+
+            query = query.replace("{ok_threshold}", str(ok_threshold))
+            query = query.replace("{warn_threshold}", str(warn_threshold))
+            query = query.replace("{fatal_threshold}", str(fatal_threshold))
     
     return query
 

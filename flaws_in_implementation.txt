@@ -10,3 +10,6 @@
 
 3. Duration and issue_time:
     -> When issue_time is not passed script queries from live tables and not from backup table, so even if duration is passed as 10 hours it shows result for whateven is present in the live table.
+
+4. dv_count:
+    -> LATER: order of the columns in threshold.json matterns and deleted row count has a custom logic, if any colum has custom logic should come first, else if_printed vatiable will be falsen and they will not get affected, as of now only first colum can have custom logics, change this
