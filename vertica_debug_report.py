@@ -109,7 +109,7 @@ def process_query_result_and_highlight_text(query_result, column_headers):
     # Define colors for each severity level
     colors = {
         "ok": "\033[92m",      # Green
-        "warn": "\033[93m", # Yellow
+        "warn": "\033[93m", # Yellow 
         "fatal": "\033[91m",   # Red
     }
     reset_color = "\033[0m"  # Reset to default
@@ -420,7 +420,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                            print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
@@ -458,7 +458,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         if key == "warn":
                             r = (str('\033[93m') + str(val) + str('\033[0m'))
                             t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                            print(f"[WARN] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
                         elif key == "fatal":
                             r = (str('\033[91m') + str(val) + str('\033[0m'))
                             t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
@@ -584,7 +584,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         flag = False
                         is_upper_level_statsus_printed = False
 
-                        message = "[WARN] "
+                        message = "[\033[93mWARN\033[0m] "
                         message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( warn_threshold ) + str('\033[0m')) #  + +  
                         message = message.replace('{duration}', str(duration))
                         if len(warn_values) > 0:
