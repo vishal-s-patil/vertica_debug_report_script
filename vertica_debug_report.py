@@ -223,10 +223,10 @@ def replace_row_num_limit(query, new_limit):
 
 
 def colour_values(query_result, columns, headers):
+    print('reached')
     for column in columns:
         try:
             column_name = column['columns_name']
-            print('column_name', column_name)
             index = headers.index(column_name)
             if index == -1:
                 print(f'column {column_name} not found')
