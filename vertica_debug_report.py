@@ -588,6 +588,8 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 if flag:
                     if item['default_message'] is not "":
                         print(item['default_message'])
+    
+    print('reached...')
 
 
 def replace_thresholds(query, query_name):
@@ -734,7 +736,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if processed_query_result:
                     if insights_only or with_insights:
                         analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
-                        print('reached...')
                     else:
                         for threshold in thresholds:
                             if query_name == threshold['query_name'] and "_raw" not in query_name:
