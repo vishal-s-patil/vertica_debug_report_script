@@ -497,7 +497,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 is_upper_level_statsus_printed = False
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
-                    if item['threshold']['fatal'] != -1 and fatal_count > 0:
+                    if item['threshold']['fatal'] != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = True
                         message = "[FATAL] "
@@ -511,10 +511,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         print(message)
 
                 if issue_level is None or issue_level == "ok" or issue_level == "warn":
-                    if item['threshold']['warn'] != -1 and warn_count > 0:
+                    if item['threshold']['warn'] != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
                         flag = False
                         is_upper_level_statsus_printed = False
-                        
+
                         message = "[WARN] "
                         message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( item['threshold']['warn'] ) + str('\033[0m')) #  + +  
                         message = message.replace('{duration}', str(duration))
