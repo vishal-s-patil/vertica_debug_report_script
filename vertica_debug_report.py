@@ -251,8 +251,30 @@ def colour_values(query_result, columns, headers):
 
     return query_result
 
+def colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers):    
+    column_to_colour = "deleted_row_cnt"
+    column_to_compare = "total_row_cnt"
 
-def handle_deleted_row_count():
+    column_to_colour_index = column_headers.index('column_to_colour')
+    column_to_compare_index = column_headers.index('column_to_compare')
+
+    for row in query_result:
+        # if row[column_to_colour_index] > row[column_to_compare_index]*item['warn']:
+        print(row[column_to_colour_index], row[column_to_compare_index], item['warn'])
+
+
+def handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers):
+    if with_insights:
+        if query_result_show:
+            # query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
+            query_result_show = colour_values_deleted_row_count(query_result_show, item, with_insights, threshold, column_headers)
+            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+        else:
+            # query_result = colour_values(query_result, threshold['columns'], column_headers)
+            query_result = colour_values_deleted_row_count(query_result, item, with_insights, threshold, column_headers)
+            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+        
+
     print('handle_deleted_row_count')
     pass
 
@@ -429,7 +451,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             is_result_printed = False
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
-                    handle_deleted_row_count()
+                    handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
                     return
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
