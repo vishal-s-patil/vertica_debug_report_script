@@ -581,8 +581,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         else:
                             message = message.replace('{cnt}', str(ok_count))
                         print(message)
-                
-                print('reached...')    
+                 
                 if with_insights:
                         print()        
 
@@ -748,6 +747,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print('QUERY: ', f"{final_query}")
                             print("-" * 15)
                         print(tabulate(processed_query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                        print('reached...')
                 else:
                     if not (insights_only or with_insights):
                         print(f"\n\nQuery Name: {query_name}")
