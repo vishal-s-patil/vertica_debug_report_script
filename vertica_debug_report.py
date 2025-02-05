@@ -277,7 +277,7 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
                 row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
         except Exception as e:
             print(f'Error in func:colour_values_deleted_row_count while coloring the values', e)
-        
+            exit()
     return query_result
 
 
