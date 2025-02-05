@@ -312,7 +312,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
             if query_result == -1:
                 print(query_name, ": column not found\n")
                 return
-        print('reached...')    
+          
         if threshold['query_name'] == query_name:
             args = {
                 "subcluster_name": subcluster_name,
@@ -452,7 +452,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     if with_insights:
                         print()
                 return
-
+            print('reached...')  
             is_result_printed = False
             for item in threshold['columns']:
                 if item['columns_name'] == "deleted_row_cnt":
