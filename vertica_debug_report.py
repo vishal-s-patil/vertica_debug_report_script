@@ -650,6 +650,20 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
 
                 if query_result and len(query_result) > 0:
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
+                
+                threshold_json_file_path = "thresholds.json"
+                json_data = None
+                with open(threshold_json_file_path) as json_file:
+                    json_data = json_file.read()
+                    thresholds = json.loads(json_data)
+                
+                if thresholds is None:
+                    print(f"Error reading {threshold_json_file_path}")
+                    exit()
+                
+                if processed_query_result:
+                    for threshold in thresholds:
+                        processed_query_result = colour_values(processed_query_result, threshold['columns'], column_headers)
 
                 if processed_query_result:
                     if insights_only or with_insights:
