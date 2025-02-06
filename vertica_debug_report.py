@@ -958,6 +958,8 @@ if __name__ == "__main__":
         "session_type_2": session_type_placeholder_2,
         "schema_name": args.schema_name,
         "projection_name": args.projection_name,
+        "txn_id": args.txn_id,
+        "statement_id": args.statement_id,
     }
 
     if filters['projection_name'] is None and filters['table_name'] is not None:
