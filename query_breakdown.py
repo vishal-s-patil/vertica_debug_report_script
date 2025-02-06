@@ -87,6 +87,8 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
             "groupby_replacements": "1, 2, 3"
         }
 
+        print('d', d)
+        print()
         q = replace_conditions(body, d)
         print()
         print()
