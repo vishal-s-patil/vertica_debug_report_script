@@ -13,9 +13,9 @@ def replace_conditions(query, conditions_dict):
         condition_parts = [
             part.strip() 
             # for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE|IS\s+NOT|IS)\b)', match, 1)
-            for part in re.split(r'(?i)([<>!=]=?|[><]=?|\b(?:ILIKE|LIKE|IS\s+NOT|IS)\b)', match, 1)
+            for part in re.split(r'([<>!=]=?|[><]=?|\b(?:ILIKE|LIKE|IS\s+NOT|IS)\b)', match, 1)
         ]
-
+        #(?i)
         if len(condition_parts) == 3:
             column_name = condition_parts[0].strip()
             operator = condition_parts[1].strip()
