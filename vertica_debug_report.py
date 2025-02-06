@@ -23,7 +23,6 @@ def replace_tables_in_query(query):
     ]
 
     query = query.lower()
-    print('reached')
     
     try:
         for old, new in replacements:
@@ -32,6 +31,7 @@ def replace_tables_in_query(query):
         return query
     except Exception as e:
         print(f"Error while replacing strings in query: {e}")
+        print('reached', query)
         return query
     
 
