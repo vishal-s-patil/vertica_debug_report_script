@@ -857,7 +857,7 @@ if __name__ == "__main__":
     parser.add_argument("--statement-id", required=False, default=None, 
         help="")
     
-    parser.add_argument("--client-breakdown", required=False, default=False, 
+    parser.add_argument("--client-breakdown", required=False, action="store_true", 
         help="")
     
     parser.add_argument("--query-pattern", required=False, default=None, 
