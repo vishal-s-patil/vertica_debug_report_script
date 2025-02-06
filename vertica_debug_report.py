@@ -14,7 +14,7 @@ with open("config.json", "r") as config_file:
 
 load_dotenv()
 
-def replace_tables_in_query(query):
+def replace_tables_in_query(query, force=False):
     replacements = [
         ("from sessions", "from netstats.sessions_full"),
         ("from resource_queues", "from netstats.resource_queues_full"),
@@ -28,7 +28,7 @@ def replace_tables_in_query(query):
     
     try:
         for old, new in replacements:
-            if "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
+            if force or "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
                 query = query.replace(old, new)
         return query
     except Exception as e:
@@ -747,12 +747,11 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
         print(f"Error while processing the CSV file or executing queries: {e}")
     
 def execute_query_breakdown(args, is_now, verbose):
-    print(args.num_items)
     query_breakdown_chars = int(args.query_breakdown_chars) if args.query_breakdown_chars is not None else args.query_breakdown_chars
     q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, query_breakdown_chars, args.case_sensitive, int(args.num_items), float(args.duration_hours), args.issue_time)
     
     if not is_now:
-        replace_tables_in_query(q)
+        replace_tables_in_query(q, True)
 
     vertica_connection = vertica.get_vertica_connection()
     q_res = vertica.execute_vertica_query(vertica_connection, q)
