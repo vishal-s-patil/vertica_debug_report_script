@@ -702,7 +702,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if (queries_to_execute is None or len(queries_to_execute) == 0) and query_name == 'get_query':
                     continue
 
-                if "get_query" in queries_to_execute and (filters['txn_id'] is None or filters['statement_id']):
+                if "get_query" in queries_to_execute and (filters['txn_id'] is None or filters['statement_id'] is None):
                     print(f"Please provide txn_id and statement_id.")
                     continue
                     
@@ -961,8 +961,6 @@ if __name__ == "__main__":
         "txn_id": args.txn_id,
         "statement_id": args.statement_id,
     }
-
-    print(filters['txn_id'], filters['statement_id'], queries_to_execute)
 
     if filters['projection_name'] is None and filters['table_name'] is not None:
         filters['projection_name'] = filters['table_name'] + '_%'
