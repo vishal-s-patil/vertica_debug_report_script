@@ -7,7 +7,7 @@ import re
 import sys
 from vertica import vertica
 from modules.helpers import replace_conditions
-from .query_breakdown import query_breakdown
+from query_breakdown import query_breakdown
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
