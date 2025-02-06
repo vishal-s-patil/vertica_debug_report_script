@@ -747,6 +747,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
         print(f"Error while processing the CSV file or executing queries: {e}")
     
 def execute_query_breakdown(args, is_now, verbose):
+    print(args.num_items)
     q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, args.query_breakdown_chars, args.case_sensitive, args.num_items, args.duration_hours, args.issue_time)
     
     if not is_now:
@@ -867,9 +868,6 @@ if __name__ == "__main__":
     
     parser.add_argument("--case-sensitive", required=False, default=False, 
         help="")
-
-
-    # granularity='hour' # default None
 
     if help_flag:
         parser.print_help()
