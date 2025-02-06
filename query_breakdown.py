@@ -1,4 +1,3 @@
-from datetime import datetime
 from modules.helpers import replace_conditions
 
 # client_breakdown=True # default false
@@ -90,3 +89,6 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
 
         q = replace_conditions(body, d)
         return q
+
+if __name__ == "__main__":
+    pass
