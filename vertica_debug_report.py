@@ -622,6 +622,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
             if with_insights:
                 print()
+    print()
 
 
 
