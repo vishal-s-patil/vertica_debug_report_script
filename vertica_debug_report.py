@@ -883,7 +883,7 @@ if __name__ == "__main__":
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
-        execute_query_breakdown(args)
+        execute_query_breakdown(args, is_now)
         exit()
 
     if args.granularity is None:
