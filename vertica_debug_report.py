@@ -230,9 +230,9 @@ def colour_values(query_result, columns, headers):
 
         try:
             for row in query_result:
-                if row[index] > fatal_threshold:
+                if row[index] >= fatal_threshold:
                     row[index] = str('\033[91m') + str(row[index]) + str('\033[0m')
-                elif row[index] > int(warn_threshold):
+                elif row[index] >= int(warn_threshold):
                     row[index] = str('\033[93m') + str(row[index]) + str('\033[0m')
                 else:
                     row[index] = str('\033[92m') + str(row[index]) + str('\033[0m')
@@ -260,9 +260,9 @@ def colour_values_deleted_row_count(query_result, item, with_insights, threshold
 
             _, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
 
-            if int(row[column_to_colour_index]) > int(row[column_to_compare_index])*(fatal_threshold/100):
+            if int(row[column_to_colour_index]) >= int(row[column_to_compare_index])*(fatal_threshold/100):
                 row[column_to_colour_index] = str('\033[91m') + str(row[column_to_colour_index]) + str('\033[0m')
-            elif int(row[column_to_colour_index]) > row[column_to_compare_index]*(warn_threshold/100):
+            elif int(row[column_to_colour_index]) >= row[column_to_compare_index]*(warn_threshold/100):
                 row[column_to_colour_index] = str('\033[93m') + str(row[column_to_colour_index]) + str('\033[0m')
             else:
                 row[column_to_colour_index] = str('\033[92m') + str(row[column_to_colour_index]) + str('\033[0m')
@@ -499,18 +499,18 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                         column_to_compare_index = column_headers.index("total_row_cnt")
                         if item['unique_column'] == "":
                             for row in query_result:
-                                if row[index] > int(row[column_to_compare_index])*(fatal_threshold/100):
+                                if row[index] >= int(row[column_to_compare_index])*(fatal_threshold/100):
                                     fatal_count+=1
-                                elif row[index] > int(row[column_to_compare_index])*(warn_threshold/100):
+                                elif row[index] >= int(row[column_to_compare_index])*(warn_threshold/100):
                                     warn_count+=1
                                 else:
                                     total += row[index]
                                     ok_count+=1
                     else:
                         for row in query_result:
-                            if row[index] > fatal_threshold:
+                            if row[index] >= fatal_threshold:
                                 fatal_count+=1
-                            elif row[index] > warn_threshold:
+                            elif row[index] >= warn_threshold:
                                 warn_count+=1
                             else:
                                 total += row[index]
@@ -527,10 +527,10 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     for row in query_result:
                         for unique_column_value, unique_column_cnt in unique_values.items():
                             if row[unique_column_index] == unique_column_value:
-                                if row[index] > fatal_threshold:
+                                if row[index] >= fatal_threshold:
                                     fatal_count+=1
                                     fatal_values.add(unique_column_value)
-                                elif row[index] > warn_threshold:
+                                elif row[index] >= warn_threshold:
                                     warn_count+=1
                                     warn_values.add(unique_column_value)
                                 else:
