@@ -1,0 +1,33 @@
+plain
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json;
+
+issue-time
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00";
+
+insights only 
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --insights-only --issue-time="2025-02-04 16:00:00"
+
+with-insights
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --with-insights --issue-time="2025-02-04 16:00:00"
+
+specific query
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --with-insights --issue-time="2025-02-04 16:00:00" --queries-to-execute=error_messages
+
+duration
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --with-insights --issue-time="2025-02-04 16:00:00" --queries-to-execute=error_messages --duration=10
+
+raw/detailed result
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00" --queries-to-execute=error_messages_raw --duration=10
+
+type
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00" --queries-to-execute=error_messages_raw --duration=10 --type=memory
+
+snapshot_time
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00" --with-insights --queries-to-execute=queue_status --snapshots=10;
+
+
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00" --with-insights --queries-to-execute=queue_status --snapshots=10 --num-items=10;
+
+python3 vertica_debug_report.py --subcluster-name=secondary_subcluster_1 --inputfilepath=queries.json --issue-time="2025-02-04 16:00:00" --with-insights --queries-to-execute=queue_status --snapshots=10 --num-items=10 --order-by="snapshot_time desc";
+
+

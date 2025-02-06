@@ -836,7 +836,7 @@ if __name__ == "__main__":
     # parser.add_argument("--only-insights", required=False, action="store_true",
     #     help="")
     
-    parser.add_argument("--duration", required=False, default=3,
+    parser.add_argument("--duration-hours", required=False, default=3,
         help="Number of hours to look past from issue time.")
     
     parser.add_argument("--issue-time", required=False, 
@@ -933,7 +933,7 @@ if __name__ == "__main__":
         "table_name": args.table_name,
         "issue_time": args.issue_time,
         "user_name": args.user_name,
-        "duration": float(args.duration),
+        "duration": float(args.duration_hours),
         "num_items": int(args.num_items),
         "err_type": err_type,
         "granularity": args.granularity,
