@@ -750,6 +750,8 @@ def execute_query_breakdown(args):
     q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, args.query_breakdown_chars, args.case_sensitive, args.num_items, args.duration_hours, args.issue_time)
     vertica_connection = vertica.get_vertica_connection()
     q_res = vertica.execute_vertica_query(vertica_connection, q)
+    
+    query_name = 'query_breakdown'
 
     if not q_res or len(q_res) == 0:
         print(f"\n\nQuery Name: {query_name}")
@@ -757,7 +759,6 @@ def execute_query_breakdown(args):
         print('No records found.')
         return
     
-    query_name = 'query_breakdown'
 
     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
 
