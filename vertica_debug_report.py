@@ -826,11 +826,11 @@ if __name__ == "__main__":
     parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
         help="Space-separated list of query names to execute. If empty, all queries will be executed.")
 
-    parser.add_argument("--from-date-time", required=False, default=None, 
-        help="Filter condition for queries with the 'from_date_time' placeholder.")
+    # parser.add_argument("--from-date-time", required=False, default=None, 
+    #     help="Filter condition for queries with the 'from_date_time' placeholder.")
 
-    parser.add_argument("--to-date-time", required=False, default=None, 
-        help="Filter condition for queries with the 'to_date_time' placeholder.")
+    # parser.add_argument("--to-date-time", required=False, default=None, 
+    #     help="Filter condition for queries with the 'to_date_time' placeholder.")
 
     parser.add_argument("--pool-name", required=False, default=None, 
         help="Filter condition for queries with the 'pool_name' placeholder.")
@@ -843,9 +843,6 @@ if __name__ == "__main__":
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
-
-    # parser.add_argument("--only-insights", required=False, action="store_true",
-    #     help="")
     
     parser.add_argument("--duration-hours", required=False, default=3,
         help="Number of hours to look past from issue time.")
@@ -898,16 +895,16 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    is_now = False
-    if args.to_date_time is None and args.from_date_time is None:
-        if args.issue_time is None:
-            is_now = True
-            args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
     queries_to_execute = args.queries_to_execute
     json_file_path = args.inputfilepath
-    
     type = args.type
+
+    is_now = False
+    # if args.to_date_time is None and args.from_date_time is None:
+    if args.issue_time is None:
+        is_now = True
+        args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     if queries_to_execute is not None and len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
 
@@ -941,10 +938,12 @@ if __name__ == "__main__":
     elif query_name == "error_messages" or query_name == "error_messages_raw":
         err_type = type
     
+
+    # "from_date_time": args.from_date_time,
+    # "to_date_time": args.to_date_time,
+
     filters = { # and replacements and args
         "subcluster_name": args.subcluster_name,
-        "from_date_time": args.from_date_time,
-        "to_date_time": args.to_date_time,
         "pool_name": pool_name,
         "user_name": user_name,
         "table_name": args.table_name,
