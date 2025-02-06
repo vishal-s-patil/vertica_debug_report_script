@@ -824,7 +824,7 @@ if __name__ == "__main__":
         help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
 
     parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
-        help="Space-separated list of query names to execute. If empty, all queries will be executed.")
+        help="Comma-separated list of query names to execute. If empty, all queries will be executed.")
 
     # parser.add_argument("--from-date-time", required=False, default=None, 
     #     help="Filter condition for queries with the 'from_date_time' placeholder.")
