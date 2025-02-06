@@ -743,11 +743,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
                 
                 query_result = vertica.execute_vertica_query(vertica_connection, final_query)
-                print()
-                print()
-                print(query_result)
-                print()
-                print()
+
                 if query_result == -1:
                     if verbose:
                         print('QUERY: ', f"{final_query}")
