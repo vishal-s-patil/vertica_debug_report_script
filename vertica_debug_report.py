@@ -962,6 +962,8 @@ if __name__ == "__main__":
         "statement_id": args.statement_id,
     }
 
+    print(filters['txn_id'], filters['statement_id'])
+
     if filters['projection_name'] is None and filters['table_name'] is not None:
         filters['projection_name'] = filters['table_name'] + '_%'
 
