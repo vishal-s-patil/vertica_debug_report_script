@@ -28,7 +28,6 @@ def replace_tables_in_query(query):
         for old, new in replacements:
             if "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
                 query = query.replace(old, new)
-        print('reached', query)
         return query
     except Exception as e:
         print(f"Error while replacing strings in query: {e}")
