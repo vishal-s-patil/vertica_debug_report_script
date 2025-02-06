@@ -757,6 +757,7 @@ def execute_query_breakdown(args):
         print('No records found.')
         return
     
+    query_name = 'query_breakdown'
 
     column_headers = [desc[0] for desc in vertica_connection.cursor().description]
 
