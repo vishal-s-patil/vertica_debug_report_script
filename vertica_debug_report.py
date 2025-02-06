@@ -879,6 +879,9 @@ if __name__ == "__main__":
     parser.add_argument("--schema-name", required=False, default=None, 
         help="")
     
+    parser.add_argument("--projection-name", required=False, default=None, 
+        help="")
+    
     parser.add_argument("--txn-id", required=False, default=None, 
         help="")
     
