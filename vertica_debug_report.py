@@ -905,7 +905,8 @@ if __name__ == "__main__":
         is_now = True
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    if queries_to_execute is not None and len(queries_to_execute) != 0:
+    print(queries_to_execute)
+    if len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
 
     if type is not None:
