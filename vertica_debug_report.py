@@ -23,6 +23,7 @@ def replace_tables_in_query(query):
     ]
 
     query = query.lower()
+    print('reached')
     
     try:
         for old, new in replacements:
