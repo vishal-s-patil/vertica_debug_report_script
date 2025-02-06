@@ -35,6 +35,7 @@ def replace_tables_in_query(query):
     
 
 def replace_conditions(query, conditions_dict):
+    print('conditions_dict', conditions_dict)
     query = query.lower()
     pattern = re.compile(r'\{([^}]+)\}')
     
@@ -903,8 +904,6 @@ if __name__ == "__main__":
     if len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
 
-    print('queries_to_execute', queries_to_execute)
-
     is_now = False
     # if args.to_date_time is None and args.from_date_time is None:
     if args.issue_time is None:
@@ -915,10 +914,6 @@ if __name__ == "__main__":
         if queries_to_execute is not None and len(queries_to_execute) > 1:
             print(f"Multiple queries not allowed when --type is passed.")
             exit()
-    
-    query_name = None
-    if queries_to_execute is not None and len(queries_to_execute) != 0:
-        query_name = queries_to_execute[0] # will only work if passed only one value as general type added.
 
     pool_name = args.pool_name
     user_name = args.user_name
@@ -930,21 +925,22 @@ if __name__ == "__main__":
     session_type_placeholder_2 = None
     err_type = None
 
-    if query_name == "sessions":
-        if type == "active":
-            session_type_placeholder = "is not"
-        elif type == "inactive":
-            session_type_placeholder = "is"
-        else:
-            session_type_placeholder = "is not"
-            session_type_placeholder_2 = "null"
-    elif query_name == "error_messages" or query_name == "error_messages_raw":
-        err_type = type
+    if type is not None:
+        query_name = None
+        if len(queries_to_execute) != 0:
+            query_name = queries_to_execute[0]
+
+        if query_name == "sessions":
+            if type == "active":
+                session_type_placeholder = "is not"
+            elif type == "inactive":
+                session_type_placeholder = "is"
+            else:
+                session_type_placeholder = "is not"
+                session_type_placeholder_2 = "null"
+        elif query_name == "error_messages" or query_name == "error_messages_raw":
+            err_type = type
     
-
-    # "from_date_time": args.from_date_time,
-    # "to_date_time": args.to_date_time,
-
     filters = { # and replacements and args
         "subcluster_name": args.subcluster_name,
         "pool_name": pool_name,
