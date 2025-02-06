@@ -746,7 +746,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
     
-def execute_query_breakdown(args, is_now):
+def execute_query_breakdown(args, is_now, verbose):
     q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, args.query_breakdown_chars, args.case_sensitive, args.num_items, args.duration_hours, args.issue_time)
     
     if not is_now:
@@ -756,6 +756,10 @@ def execute_query_breakdown(args, is_now):
     q_res = vertica.execute_vertica_query(vertica_connection, q)
     
     query_name = 'query_breakdown'
+
+    if verbose:
+        print('QUERY: ', f"{q}")
+        print("-" * 15)
 
     if not q_res or len(q_res) == 0:
         print(f"\n\nQuery Name: {query_name}")
@@ -883,7 +887,7 @@ if __name__ == "__main__":
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
-        execute_query_breakdown(args, is_now)
+        execute_query_breakdown(args, is_now, args.verbose)
         exit()
 
     if args.granularity is None:
