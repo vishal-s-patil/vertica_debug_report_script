@@ -897,19 +897,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     queries_to_execute = args.queries_to_execute
-    print(queries_to_execute)
     json_file_path = args.inputfilepath
     type = args.type
+
+    if len(queries_to_execute) != 0:
+        queries_to_execute = (queries_to_execute[0]).split(',')
+    
+    print()
 
     is_now = False
     # if args.to_date_time is None and args.from_date_time is None:
     if args.issue_time is None:
         is_now = True
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    print(queries_to_execute)
-    if len(queries_to_execute) != 0:
-        queries_to_execute = (queries_to_execute[0]).split(',')
 
     if type is not None:
         if queries_to_execute is not None and len(queries_to_execute) > 1:
