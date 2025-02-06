@@ -751,7 +751,7 @@ def execute_query_breakdown(args, is_now, verbose):
     q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, query_breakdown_chars, args.case_sensitive, int(args.num_items), float(args.duration_hours), args.issue_time)
     
     if not is_now:
-        replace_tables_in_query(q, True)
+        q = replace_tables_in_query(q, True)
 
     vertica_connection = vertica.get_vertica_connection()
     q_res = vertica.execute_vertica_query(vertica_connection, q)
