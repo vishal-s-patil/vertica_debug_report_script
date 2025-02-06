@@ -55,7 +55,7 @@
         ]
     },
     {
-        "query_name": "queue_status",
+        "query_name": "resource_queues",
         "columns": [
             {
                 "columns_name": "cnt",
