@@ -778,6 +778,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 if processed_query_result:
                     if insights_only or with_insights:
                         analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
+                        print('completed analyser.')
                     else:
                         for threshold in thresholds:
                             if query_name == threshold['query_name'] and "_raw" not in query_name:
@@ -801,6 +802,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                         print("No records found")
                     else:
                         analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
+                        print('completed analyser.')
                             
         vertica_connection.close()
     except Exception as e:
