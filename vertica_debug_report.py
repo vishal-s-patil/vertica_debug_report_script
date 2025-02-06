@@ -477,6 +477,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                 
                 if query_result == None or len(query_result) == 0:
                     if item['default_message'] is not "":
+                        item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
                         print(item['default_message'])
                         return
                     else:
@@ -615,6 +616,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                  
                 if flag:
                     if item['default_message'] is not "":
+                        item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
                         print(item['default_message'])
 
             if with_insights:
@@ -741,8 +743,6 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 final_query = replace_conditions(final_query, d)
                 final_query = final_query.replace("<subcluster_name>", filters['subcluster_name'])
-                
-                print('final_query', final_query)
 
                 query_result = vertica.execute_vertica_query(vertica_connection, final_query)
 
