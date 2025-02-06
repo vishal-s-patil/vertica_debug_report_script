@@ -34,20 +34,18 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
     if granularity and not client_breakdown and not query_breakdown_chars:
         # only granularity
         granularity_dimension = granularity_dimension.replace('{duration}', f"{granularity}")
-        d = {
-            "dimension_replacements": granularity_dimension,
-            "groupby_replacements": "1"
-        }
+        
+        d["dimension_replacements"] = granularity_dimension
+        d["groupby_replacements"] = "1"
 
         q = replace_conditions(body, d)
         return q
 
     elif not granularity and client_breakdown and not query_breakdown_chars:
         # only client_breakdown
-        d = {
-            "dimension_replacements": client_breakdown_dimension,
-            "groupby_replacements": "1"
-        }
+        
+        d["dimension_replacements"] = client_breakdown_dimension
+        d["groupby_replacements"] = "1"
 
         q = replace_conditions(body, d)
         return q
@@ -56,10 +54,8 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         # granularity and client_breakdown
         granularity_dimension = granularity_dimension.replace('{duration}', f"{granularity}")
         
-        d = {
-            "dimension_replacements": granularity_dimension + ', ' + client_breakdown_dimension,
-            "groupby_replacements": "1, 2"
-        }
+        d["dimension_replacements"] = granularity_dimension + ', ' + client_breakdown_dimension
+        d["groupby_replacements"] = "1, 2"
 
         q = replace_conditions(body, d)
         return q
@@ -68,10 +64,10 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         # granularity and client_breakdown and query_breakdown_chars
         granularity_dimension = granularity_dimension.replace('{duration}', f"{granularity}")
         query_dimension = query_dimension.replace('{query_breakdown_chars}', f"{query_breakdown_chars}")
-        d = {
-            "dimension_replacements": granularity_dimension + ', ' + client_breakdown_dimension + ', ' + query_dimension,
-            "groupby_replacements": "1, 2, 3"
-        }
+        
+        d["dimension_replacements"] = granularity_dimension + ', ' + client_breakdown_dimension + ', ' + query_dimension
+        d["groupby_replacements"] = "1, 2, 3"
+        
 
         q = replace_conditions(body, d)
         return q
@@ -82,20 +78,12 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         granularity_dimension = granularity_dimension.replace('{duration}', f"{granularity}")
         query_dimension = query_dimension.replace('{query_breakdown_chars}', f"{query_breakdown_chars}")
 
-        d = {
-            "dimension_replacements": granularity_dimension + ", " + client_breakdown_dimension + ", " + query_dimension,
-            "groupby_replacements": "1, 2, 3"
-        }
+        d["dimension_replacements"] = granularity_dimension + ", " + client_breakdown_dimension + ", " + query_dimension
+        d["groupby_replacements"] = "1, 2, 3"
 
-        print('d', d)
-        print()
         q = replace_conditions(body, d)
-        print()
-        print()
-        print('query after replacong', q)
-        print()
-        print()
-        return q
+
+        return q    
 
 if __name__ == "__main__":
     pass
