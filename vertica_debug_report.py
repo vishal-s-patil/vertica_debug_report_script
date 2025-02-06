@@ -683,6 +683,7 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
 
 
 def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
+    print(queries_to_execute)
     try:
         vertica_connection = vertica.get_vertica_connection()
         if not vertica_connection:
@@ -895,7 +896,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
 
-    queries_to_execute = args.queries_to_execute
+    queries_to_execute = args.queries_to_execute[0].split(',')
     json_file_path = args.inputfilepath
     type = args.type
 
