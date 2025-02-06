@@ -748,7 +748,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
     
 def execute_query_breakdown(args, is_now, verbose):
     print(args.num_items)
-    q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, args.query_breakdown_chars, args.case_sensitive, args.num_items, args.duration_hours, args.issue_time)
+    q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, int(args.query_breakdown_chars), args.case_sensitive, int(args.num_items), float(args.duration_hours), args.issue_time)
     
     if not is_now:
         replace_tables_in_query(q)
