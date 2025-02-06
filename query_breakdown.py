@@ -67,7 +67,7 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         granularity_dimension = granularity_dimension.replace('{duration}', f"{granularity}")
         query_dimension = query_dimension.replace('{query_breakdown_chars}', f"{query_breakdown_chars}")
         
-        d["dimension_replacements"] = granularity_dimension + ', ' + client_breakdown_dimension + ', ' + query_dimension
+        d["dimension_replacements"] = granularity_dimension + ', ' + client_breakdown_dimension + ', ' + query_dimension + ', ' + aggregations
         d["groupby_replacements"] = "1, 2, 3"
         
 
