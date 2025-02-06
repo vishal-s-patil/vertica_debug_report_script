@@ -897,6 +897,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     queries_to_execute = args.queries_to_execute
+    print(queries_to_execute)
     json_file_path = args.inputfilepath
     type = args.type
 
