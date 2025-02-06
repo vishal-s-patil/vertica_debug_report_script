@@ -902,8 +902,8 @@ if __name__ == "__main__":
 
     if len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
-    
-    print()
+
+    print('queries_to_execute', queries_to_execute)
 
     is_now = False
     # if args.to_date_time is None and args.from_date_time is None:
