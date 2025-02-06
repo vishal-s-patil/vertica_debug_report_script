@@ -79,7 +79,7 @@
         "columns": [
             {
                 "columns_name": "cnt",
-                "unique_column": "message_category",
+                "unique_column": "type",
                 "threshold": {
                     "ok": -1,
                     "warn": 1,
