@@ -708,8 +708,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     
                 if (queries_to_execute is None or len(queries_to_execute) == 0) and "_raw" in query_name:
                     continue
-                
-                print('final_query', final_query)
+
+                print('final_query', query)
                     
                 if is_now and "select null" not in query.lower():
                     final_query = query
