@@ -310,240 +310,93 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
 
     # if_printref = 0
     for threshold in thresholds:
-        print('query_name: ', threshold['query_name'])
-        if with_insights or insights_only:
-            
-            query_result_show = vertica.execute_vertica_query(vertica_connection, query)
-            if column_headers is not None:
-                query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
-
-            replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
-            replaced_query = replace_row_num_limit(replaced_query, 1000)
-
-            query_result = vertica.execute_vertica_query(vertica_connection, replaced_query)
-           
-            if query_result == -1:
-                print(query_name, ": column not found\n")
-                return
-          
         if threshold['query_name'] == query_name:
-            args = {
-                "subcluster_name": subcluster_name,
-                "user_name": user_name,
-                "pool_name": pool_name,
-                "is_now": is_now,
-                "issue_time": issue_time,
-                "duration": duration,
-            }
-            global is_header_printed
-            if not is_header_printed:
-                is_header_printed = True
-                print_header(args)
+            if with_insights or insights_only:
                 
-            if query_name == "long_running_queries_raw":
-                return
-            if query_name == "resource_pool_status":
-                if pool_name is None:
-                    print('resource_pool_status: Please provide pool name to get insights.')
+                query_result_show = vertica.execute_vertica_query(vertica_connection, query)
+                if column_headers is not None:
+                    query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
+
+                replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
+                replaced_query = replace_row_num_limit(replaced_query, 1000)
+
+                query_result = vertica.execute_vertica_query(vertica_connection, replaced_query)
+            
+                if query_result == -1:
+                    print(query_name, ": column not found\n")
                     return
-                else:
-                    # print(f"\n\nQuery Name: {query_name}")
-                    # print("-" * len(f"Query Name: {query_name}"))
-                    # print(f"Query Description: {query_description}")
-                    # print("-" * len(f"Query Description: {query_description}"))
-                    if verbose:
-                        print('QUERY: ', f"{query}")
-                        print("-" * 15)
-
-                    if query_result is None and (issue_level == 'ok' or issue_level is None):
-                        print(f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.')
-                    else:
-                        if with_insights:
-                            print(f"\n\nQuery Name: {query_name}")
-                            print("-" * len(f"Query Name: {query_name}"))
-                            if query_result_show is not None:
-                                # query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
-                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                            else:
-                                print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                            
-                        total_memory_in_use = 0
-                        total_running_queries = 0
-                        total_memory_borrowed = 0
-                        total_memory_in_use_index = column_headers.index('memory_inuse_kb')
-                        total_running_queries_index = column_headers.index('running_query_count')
-                        total_memory_borrowed_index = column_headers.index('general_memory_borrowed_kb')
-                        for row in query_result:
-                            total_memory_in_use += row[total_memory_in_use_index]
-                            total_running_queries += row[total_running_queries_index]
-                            total_memory_borrowed += row[total_memory_borrowed_index]
-                        
-                        if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
-                            print(f"[\033[92mOK\033[0m] No running queries found.")
-                        elif issue_level == 'ok':
-                            print(f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
-                        if with_insights:
-                            print()
+            
+            if threshold['query_name'] == query_name:
+                args = {
+                    "subcluster_name": subcluster_name,
+                    "user_name": user_name,
+                    "pool_name": pool_name,
+                    "is_now": is_now,
+                    "issue_time": issue_time,
+                    "duration": duration,
+                }
+                global is_header_printed
+                if not is_header_printed:
+                    is_header_printed = True
+                    print_header(args)
                     
+                if query_name == "long_running_queries_raw":
                     return
-            elif query_name == "long_running_queries":
-                if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
-                    print("[\033[92mOK\033[0m] No long running queries.")
-                elif len(query_result) == 1:
-                    status_counts = {}
-                    for _, status, cnt in query_result:
-                        print(status_counts.get(status, 0))
-                        status_counts[status] = status_counts.get(status, 0) + cnt
-                    ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
-                    status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
-                    
-                    # print(f"\n\nQuery Name: {query_name}")
-                    # print("-" * len(f"Query Name: {query_name}"))
-                    # print(f"Query Description: {query_description}")
-                    # print("-" * len(f"Query Description: {query_description}"))
-                    if verbose:
-                        print('QUERY: ', f"{query}")
-                        print("-" * 15)
-
-                    if with_insights:
-                        print(f"\n\nQuery Name: {query_name}")
-                        print("-" * len(f"Query Name: {query_name}"))
-                        if query_result_show is not None:
-                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                        else:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                    
-                    if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                        print("[\033[92mOK\033[0m] No long running queries.")
-
-                    for key, val in status_counts.items():
-                        _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
-                        if key == "warn":
-                            r = (str('\033[93m') + str(val) + str('\033[0m'))
-                            t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                            print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                        elif key == "fatal":
-                            r = (str('\033[91m') + str(val) + str('\033[0m'))
-                            t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                            print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                    if with_insights:
-                        print()
-                else:
-                    status_counts = {}
-                    for _, status, cnt in query_result:
-                        status_counts[status] = status_counts.get(status, 0) + cnt
-                    ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
-                    status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
-                    
-                    # print(f"\n\nQuery Name: {query_name}")
-                    # print("-" * len(f"Query Name: {query_name}"))
-                    # print(f"Query Description: {query_description}")
-                    # print("-" * len(f"Query Description: {query_description}"))
-                    if verbose:
-                        print('QUERY: ', f"{query}")
-                        print("-" * 15)
-
-                    if with_insights:
-                        print(f"\n\nQuery Name: {query_name}")
-                        print("-" * len(f"Query Name: {query_name}"))
-                        if query_result_show is not None:
-                            print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                        else:
-                            print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                    
-                    if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                        print("[\033[92mOK\033[0m] No long running queries.")
-
-                    for key, val in status_counts.items():
-                        _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
-                        if key == "warn":
-                            r = (str('\033[93m') + str(val) + str('\033[0m'))
-                            t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                            print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                        elif key == "fatal":
-                            r = (str('\033[91m') + str(val) + str('\033[0m'))
-                            t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                            print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
-                    if with_insights:
-                        print()
-                return
-              
-            is_result_printed = False
-            for item in threshold['columns']:
-                if item['columns_name'] == "deleted_row_cnt":
-                    if query_result_show is not None:
-                        query_result_show = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                    else:
-                        query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
-                
-                if query_result == None or len(query_result) == 0:
-                    if item['default_message'] is not "":
-                        item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
-                        print(item['default_message'])
+                if query_name == "resource_pool_status":
+                    if pool_name is None:
+                        print('resource_pool_status: Please provide pool name to get insights.')
                         return
                     else:
-                        return
-                
-                index = column_headers.index(item['columns_name'])
-                if index == -1:
-                    print(f"Error: Column '{item['columns_name']}' not found in the query result.")
-                    exit()
-                
-                ok_count, warn_count, fatal_count = 0, 0, 0
-                ok_values, warn_values, fatal_values = set(), set(), set()
-                unique_values = {}
-                total = 0
+                        # print(f"\n\nQuery Name: {query_name}")
+                        # print("-" * len(f"Query Name: {query_name}"))
+                        # print(f"Query Description: {query_description}")
+                        # print("-" * len(f"Query Description: {query_description}"))
+                        if verbose:
+                            print('QUERY: ', f"{query}")
+                            print("-" * 15)
 
-                _, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
-
-                if item['unique_column'] == "":
-                    if item['columns_name'] == "deleted_row_cnt":
-                        column_to_compare_index = column_headers.index("total_row_cnt")
-                        if item['unique_column'] == "":
+                        if query_result is None and (issue_level == 'ok' or issue_level is None):
+                            print(f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.')
+                        else:
+                            if with_insights:
+                                print(f"\n\nQuery Name: {query_name}")
+                                print("-" * len(f"Query Name: {query_name}"))
+                                if query_result_show is not None:
+                                    # query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
+                                    print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                                else:
+                                    print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                                
+                            total_memory_in_use = 0
+                            total_running_queries = 0
+                            total_memory_borrowed = 0
+                            total_memory_in_use_index = column_headers.index('memory_inuse_kb')
+                            total_running_queries_index = column_headers.index('running_query_count')
+                            total_memory_borrowed_index = column_headers.index('general_memory_borrowed_kb')
                             for row in query_result:
-                                if row[index] >= int(row[column_to_compare_index])*(fatal_threshold/100):
-                                    fatal_count+=1
-                                elif row[index] >= int(row[column_to_compare_index])*(warn_threshold/100):
-                                    warn_count+=1
-                                else:
-                                    total += row[index]
-                                    ok_count+=1
-                    else:
-                        for row in query_result:
-                            if row[index] >= fatal_threshold:
-                                fatal_count+=1
-                            elif row[index] >= warn_threshold:
-                                warn_count+=1
-                            else:
-                                total += row[index]
-                                ok_count+=1
-                else:
-                    unique_column = item['unique_column']
-                    unique_column_index = column_headers.index(unique_column)
-                    for row in query_result:
-                        key = row[unique_column_index]
-                        if key not in unique_values:
-                            unique_values[key] = 0  
-                        unique_values[key] += 1  
-
-                    for row in query_result:
-                        for unique_column_value, unique_column_cnt in unique_values.items():
-                            if row[unique_column_index] == unique_column_value:
-                                if row[index] >= fatal_threshold:
-                                    fatal_count+=1
-                                    fatal_values.add(unique_column_value)
-                                elif row[index] >= warn_threshold:
-                                    warn_count+=1
-                                    warn_values.add(unique_column_value)
-                                else:
-                                    ok_count+=1
-                                    ok_values.add(unique_column_value)
-                                    total += row[index]   
-                
-                if ok_count>0 or warn_count>0 or fatal_count>0:
-                    if not is_result_printed:
-                        is_result_printed = True
-                    
+                                total_memory_in_use += row[total_memory_in_use_index]
+                                total_running_queries += row[total_running_queries_index]
+                                total_memory_borrowed += row[total_memory_borrowed_index]
+                            
+                            if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
+                                print(f"[\033[92mOK\033[0m] No running queries found.")
+                            elif issue_level == 'ok':
+                                print(f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
+                            if with_insights:
+                                print()
+                        
+                        return
+                elif query_name == "long_running_queries":
+                    if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
+                        print("[\033[92mOK\033[0m] No long running queries.")
+                    elif len(query_result) == 1:
+                        status_counts = {}
+                        for _, status, cnt in query_result:
+                            print(status_counts.get(status, 0))
+                            status_counts[status] = status_counts.get(status, 0) + cnt
+                        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+                        status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
+                        
                         # print(f"\n\nQuery Name: {query_name}")
                         # print("-" * len(f"Query Name: {query_name}"))
                         # print(f"Query Description: {query_description}")
@@ -556,73 +409,219 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print(f"\n\nQuery Name: {query_name}")
                             print("-" * len(f"Query Name: {query_name}"))
                             if query_result_show is not None:
-                                query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
                                 print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                             else:
-                                query_result = colour_values(query_result, threshold['columns'], column_headers)
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                        
+                        if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
+                            print("[\033[92mOK\033[0m] No long running queries.")
+
+                        for key, val in status_counts.items():
+                            _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
+                            if key == "warn":
+                                r = (str('\033[93m') + str(val) + str('\033[0m'))
+                                t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
+                                print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            elif key == "fatal":
+                                r = (str('\033[91m') + str(val) + str('\033[0m'))
+                                t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
+                                print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                        if with_insights:
+                            print()
+                    else:
+                        status_counts = {}
+                        for _, status, cnt in query_result:
+                            status_counts[status] = status_counts.get(status, 0) + cnt
+                        ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+                        status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
+                        
+                        # print(f"\n\nQuery Name: {query_name}")
+                        # print("-" * len(f"Query Name: {query_name}"))
+                        # print(f"Query Description: {query_description}")
+                        # print("-" * len(f"Query Description: {query_description}"))
+                        if verbose:
+                            print('QUERY: ', f"{query}")
+                            print("-" * 15)
+
+                        if with_insights:
+                            print(f"\n\nQuery Name: {query_name}")
+                            print("-" * len(f"Query Name: {query_name}"))
+                            if query_result_show is not None:
+                                print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                            else:
+                                print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                        
+                        if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
+                            print("[\033[92mOK\033[0m] No long running queries.")
+
+                        for key, val in status_counts.items():
+                            _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
+                            if key == "warn":
+                                r = (str('\033[93m') + str(val) + str('\033[0m'))
+                                t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
+                                print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                            elif key == "fatal":
+                                r = (str('\033[91m') + str(val) + str('\033[0m'))
+                                t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
+                                print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                        if with_insights:
+                            print()
+                    return
                 
-                flag = True
-                is_upper_level_statsus_printed = False
-
-                ok_threshold, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
-
-                if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
-                    if fatal_threshold != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
-                        flag = False
-                        is_upper_level_statsus_printed = True
-                        message = "[\033[91mFATAL\033[0m] "
-                        message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(fatal_threshold ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
-                        message = message.replace('{duration}', str(duration))
-                        if len(fatal_values) > 0:
-                            message = message.replace('{list}', str(fatal_values))
-                            message = message.replace('{cnt}', str(len(fatal_values)))
+                is_result_printed = False
+                for item in threshold['columns']:
+                    if item['columns_name'] == "deleted_row_cnt":
+                        if query_result_show is not None:
+                            query_result_show = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
                         else:
-                            message = message.replace('{cnt}', str(fatal_count))
-                        print(message)
-
-                if issue_level is None or issue_level == "ok" or issue_level == "warn":
-                    if warn_threshold != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
-                        flag = False
-                        is_upper_level_statsus_printed = False
-
-                        message = "[\033[93mWARN\033[0m] "
-                        message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( warn_threshold ) + str('\033[0m')) #  + +  
-                        message = message.replace('{duration}', str(duration))
-                        if len(warn_values) > 0:
-                            message = message.replace('{list}', str(warn_values))
-                            message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
+                            query_result = handle_deleted_row_count(query_result, query_result_show, item, with_insights, threshold, column_headers)
+                    
+                    if query_result == None or len(query_result) == 0:
+                        if item['default_message'] is not "":
+                            item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
+                            print(item['default_message'])
+                            return
                         else:
-                            message = message.replace('{cnt}', str(warn_count))
-                        print(message)
+                            return
+                    
+                    index = column_headers.index(item['columns_name'])
+                    if index == -1:
+                        print(f"Error: Column '{item['columns_name']}' not found in the query result.")
+                        exit()
+                    
+                    ok_count, warn_count, fatal_count = 0, 0, 0
+                    ok_values, warn_values, fatal_values = set(), set(), set()
+                    unique_values = {}
+                    total = 0
 
-                if issue_level is None or issue_level == "ok":
-                    if (ok_threshold != -1 and ok_count > 0) and not is_upper_level_statsus_printed:
-                        flag = False
-                        is_upper_level_statsus_printed = True
-                        # ok_count += warn_count + fatal_count
-                        message = "[\033[92mOK\033[0m] "
+                    _, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
+
+                    if item['unique_column'] == "":
+                        if item['columns_name'] == "deleted_row_cnt":
+                            column_to_compare_index = column_headers.index("total_row_cnt")
+                            if item['unique_column'] == "":
+                                for row in query_result:
+                                    if row[index] >= int(row[column_to_compare_index])*(fatal_threshold/100):
+                                        fatal_count+=1
+                                    elif row[index] >= int(row[column_to_compare_index])*(warn_threshold/100):
+                                        warn_count+=1
+                                    else:
+                                        total += row[index]
+                                        ok_count+=1
+                        else:
+                            for row in query_result:
+                                if row[index] >= fatal_threshold:
+                                    fatal_count+=1
+                                elif row[index] >= warn_threshold:
+                                    warn_count+=1
+                                else:
+                                    total += row[index]
+                                    ok_count+=1
+                    else:
+                        unique_column = item['unique_column']
+                        unique_column_index = column_headers.index(unique_column)
+                        for row in query_result:
+                            key = row[unique_column_index]
+                            if key not in unique_values:
+                                unique_values[key] = 0  
+                            unique_values[key] += 1  
+
+                        for row in query_result:
+                            for unique_column_value, unique_column_cnt in unique_values.items():
+                                if row[unique_column_index] == unique_column_value:
+                                    if row[index] >= fatal_threshold:
+                                        fatal_count+=1
+                                        fatal_values.add(unique_column_value)
+                                    elif row[index] >= warn_threshold:
+                                        warn_count+=1
+                                        warn_values.add(unique_column_value)
+                                    else:
+                                        ok_count+=1
+                                        ok_values.add(unique_column_value)
+                                        total += row[index]   
+                    
+                    if ok_count>0 or warn_count>0 or fatal_count>0:
+                        if not is_result_printed:
+                            is_result_printed = True
                         
-                        message += item['message_template']['ok'].replace('{val_cnt}', str(ok_threshold))
-                        
-                        message = message.replace('{duration}', str(duration))
+                            # print(f"\n\nQuery Name: {query_name}")
+                            # print("-" * len(f"Query Name: {query_name}"))
+                            # print(f"Query Description: {query_description}")
+                            # print("-" * len(f"Query Description: {query_description}"))
+                            if verbose:
+                                print('QUERY: ', f"{query}")
+                                print("-" * 15)
 
-                        message = message.replace('{total}', str(total))
-                        if len(ok_values) > 0:
-                            message = message.replace('{list}', str(ok_values))
-                            message = message.replace('{cnt}', str(len(ok_values)))
-                        else:
-                            message = message.replace('{cnt}', str(ok_count))
-                        print(message)
-                 
-                if flag:
-                    if item['default_message'] is not "":
-                        item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
-                        print(item['default_message'])
+                            if with_insights:
+                                print(f"\n\nQuery Name: {query_name}")
+                                print("-" * len(f"Query Name: {query_name}"))
+                                if query_result_show is not None:
+                                    query_result_show = colour_values(query_result_show, threshold['columns'], column_headers)
+                                    print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                                else:
+                                    query_result = colour_values(query_result, threshold['columns'], column_headers)
+                                    print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                    
+                    flag = True
+                    is_upper_level_statsus_printed = False
 
-            if with_insights:
-                print()
-    print()
+                    ok_threshold, warn_threshold, fatal_threshold = get_thresholds(item['threshold'])
+
+                    if issue_level is None or issue_level == "ok" or issue_level == "warn" or issue_level == "fatal":
+                        if fatal_threshold != -1 and fatal_count > 0 and not is_upper_level_statsus_printed:
+                            flag = False
+                            is_upper_level_statsus_printed = True
+                            message = "[\033[91mFATAL\033[0m] "
+                            message += item['message_template']['fatal'].replace('{val_cnt}', str('\033[91m') + str(fatal_threshold ) + str('\033[0m')) # '\033[91m' + + '\033[0m'
+                            message = message.replace('{duration}', str(duration))
+                            if len(fatal_values) > 0:
+                                message = message.replace('{list}', str(fatal_values))
+                                message = message.replace('{cnt}', str(len(fatal_values)))
+                            else:
+                                message = message.replace('{cnt}', str(fatal_count))
+                            print(message)
+
+                    if issue_level is None or issue_level == "ok" or issue_level == "warn":
+                        if warn_threshold != -1 and warn_count > 0 and not is_upper_level_statsus_printed:
+                            flag = False
+                            is_upper_level_statsus_printed = False
+
+                            message = "[\033[93mWARN\033[0m] "
+                            message += item['message_template']['warn'].replace('{val_cnt}', str('\033[93m') + str( warn_threshold ) + str('\033[0m')) #  + +  
+                            message = message.replace('{duration}', str(duration))
+                            if len(warn_values) > 0:
+                                message = message.replace('{list}', str(warn_values))
+                                message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
+                            else:
+                                message = message.replace('{cnt}', str(warn_count))
+                            print(message)
+
+                    if issue_level is None or issue_level == "ok":
+                        if (ok_threshold != -1 and ok_count > 0) and not is_upper_level_statsus_printed:
+                            flag = False
+                            is_upper_level_statsus_printed = True
+                            # ok_count += warn_count + fatal_count
+                            message = "[\033[92mOK\033[0m] "
+                            
+                            message += item['message_template']['ok'].replace('{val_cnt}', str(ok_threshold))
+                            
+                            message = message.replace('{duration}', str(duration))
+
+                            message = message.replace('{total}', str(total))
+                            if len(ok_values) > 0:
+                                message = message.replace('{list}', str(ok_values))
+                                message = message.replace('{cnt}', str(len(ok_values)))
+                            else:
+                                message = message.replace('{cnt}', str(ok_count))
+                            print(message)
+                    
+                    if flag:
+                        if item['default_message'] is not "":
+                            item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
+                            print(item['default_message'])
+
+                if with_insights:
+                    print()
 
 
 
