@@ -88,6 +88,11 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         }
 
         q = replace_conditions(body, d)
+        print()
+        print()
+        print('query after replacong', q)
+        print()
+        print()
         return q
 
 if __name__ == "__main__":
