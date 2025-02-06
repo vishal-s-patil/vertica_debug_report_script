@@ -73,7 +73,7 @@
     {
         "qid": 13,
         "query_name": "get_query",
-        "query_description": "get query information for a given transaction id and statement id",
+        "query_description": "select node_name, is_executing, processed_row_count, user_name, query_duration_us, query_start, statement_id, transaction_id, query from netstats.query_profiles where transaction_id={txn_id} and statement_id={statement_id};",
         "query": ""
     }
 ]

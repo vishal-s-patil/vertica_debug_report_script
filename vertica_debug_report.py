@@ -698,6 +698,13 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                 
                 if queries_to_execute and query_name not in queries_to_execute:
                     continue
+
+                if (queries_to_execute is None or len(queries_to_execute) == 0) and query_name == 'get_query':
+                    continue
+
+                if "get_query" in queries_to_execute and (filters['txn_id'] is None or filters['statement_id']):
+                    print(f"Please provide txn_id and statement_id.")
+                    continue
                     
                 if (queries_to_execute is None or len(queries_to_execute) == 0) and "_raw" in query_name:
                     continue
