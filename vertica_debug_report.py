@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import re
 import sys
 from vertica import vertica
+from modules.helpers import replace_conditions
+from .query_breakdown import query_breakdown
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
@@ -32,71 +34,6 @@ def replace_tables_in_query(query):
     except Exception as e:
         print(f"Error while replacing strings in query: {e}")
         return query
-    
-
-def replace_conditions(query, conditions_dict):
-    print('conditions_dict', conditions_dict)
-    query = query.lower()
-    pattern = re.compile(r'\{([^}]+)\}')
-    
-    matches = pattern.findall(query)
-    
-    for match in matches:
-        # condition_parts = re.split(r'([<>!=]=?|[><]=?)', match, 1)
-        # condition_parts = re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)
-        # condition_parts = [part.strip() for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE)\b)', match, 1)]
-        condition_parts = [
-            part.strip() 
-            for part in re.split(r'([<>!=]=?|[><]=?|(?i)\b(?:ILIKE|LIKE|IS\s+NOT|IS)\b)', match, 1)
-        ]
-
-        if len(condition_parts) == 3:
-            column_name = condition_parts[0].strip()
-            operator = condition_parts[1].strip()
-            placeholder = match.split(operator, 1)[1].strip()
-            placeholder = placeholder.strip("'")
-
-            flag = 0
-            if placeholder.startswith("%") and placeholder.endswith("%"):
-                flag = 3
-            elif placeholder.startswith("%"):
-                flag = 1
-            elif placeholder.endswith("%"):
-                flag = 2
-
-            if placeholder in conditions_dict:
-                value = conditions_dict[placeholder]
-                
-                if isinstance(value, int) or isinstance(value, float) or placeholder=='session_type_2':
-                    if placeholder=='session_type_2':
-                        new_condition = f"OR {column_name} {operator} {value}"
-                    else:
-                        new_condition = f"AND {column_name} {operator} {value}"
-                else:
-                    if flag == 3:
-                        new_condition = f"AND {column_name} {operator} '%{value}%'"
-                    elif flag == 1:
-                        new_condition = f"AND {column_name} {operator} '%{value}'"
-                    elif flag == 2:
-                        new_condition = f"AND {column_name} {operator} '{value}%'"
-                    else:
-                        new_condition = f"AND {column_name} {operator} '{value}'"
-                
-                query = query.replace(f"{{{match}}}", new_condition)
-        elif len(condition_parts) == 1:
-            placeholder = condition_parts[0].strip("'")
-            if placeholder in conditions_dict:
-                value = conditions_dict[placeholder]
-
-                if isinstance(value, int)  or isinstance(value, float) or placeholder=="err_type" or placeholder=="order_by" or placeholder=='session_type':
-                    new_condition = f"{value}"
-                else:
-                    new_condition = f"'{value}'"
-
-                query = query.replace(f"{{{match}}}", new_condition)
-
-    
-    return re.sub(r'\{[^}]*\}', '', query).strip()
 
 
 def process_query_result_and_highlight_text(query_result, column_headers):
@@ -809,6 +746,24 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
     
+def execute_query_breakdown(args):
+    q = query_breakdown(args.client_breakdown, args.granularity, args.query_pattern, args.query_breakdown_chars, args.case_sensitive, args.num_items, args.duration, args.issue_time)
+    q_res = execute_query_breakdown(q)
+
+    if not q_res or len(q_res) == 0:
+        print(f"\n\nQuery Name: {query_name}")
+        print("-" * len(f"Query Name: {query_name}"))
+        print('No records found.')
+        return
+    
+    vertica_connection = vertica.get_vertica_connection()
+
+    column_headers = [desc[0] for desc in vertica_connection.cursor().description]
+
+    print(f"\n\nQuery Name: {query_name}")
+    print("-" * len(f"Query Name: {query_name}"))
+    print(tabulate(q_res, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+
 
 if __name__ == "__main__":
     parser = MyArgumentParser(description="Args")
@@ -859,7 +814,7 @@ if __name__ == "__main__":
         help="", default=None)
     
     parser.add_argument("--granularity", required=False, 
-        help="Truncate datetime by [hour|min|day]", default='hour')
+        help="Truncate datetime by [hour|min|day]", default=None)
     
     parser.add_argument("--order-by", required=False, 
         help="To order by the result with specified order by columns.", default=None)
@@ -890,6 +845,21 @@ if __name__ == "__main__":
     
     parser.add_argument("--statement-id", required=False, default=None, 
         help="")
+    
+    parser.add_argument("--client-breakdown", required=False, default=False, 
+        help="")
+    
+    parser.add_argument("--query-pattern", required=False, default=None, 
+        help="")
+    
+    parser.add_argument("--query-breakdown-chars", required=False, default=None, 
+        help="")
+    
+    parser.add_argument("--case-sensitive", required=False, default=False, 
+        help="")
+
+
+    # granularity='hour' # default None
 
     if help_flag:
         parser.print_help()
@@ -898,11 +868,23 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     queries_to_execute = args.queries_to_execute
+    if len(queries_to_execute) != 0:
+        queries_to_execute = (queries_to_execute[0]).split(',')
+
+    if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
+        execute_query_breakdown(args)
+        exit()
+
+    # call here and exit
+
+    if args.granularity is None:
+        args.granularity = 'hour'
+
+    
     json_file_path = args.inputfilepath
     type = args.type
 
-    if len(queries_to_execute) != 0:
-        queries_to_execute = (queries_to_execute[0]).split(',')
+    
 
     is_now = False
     # if args.to_date_time is None and args.from_date_time is None:
