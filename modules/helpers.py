@@ -1,5 +1,23 @@
 import re
 
+def push_to_insights_json(insights_json, message, level, query_name):
+    # remove coloring
+    ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
+    message = ansi_escape.sub('', message)
+    
+    # remove status in message
+    message = message.replace('[OK] ', '') 
+    message = message.replace('[WARN] ', '') 
+    message = message.replace('[FATAL] ', '') 
+
+    insights_json[query_name] = insights_json.get('query_name', [])
+    insights_json[query_name].append({
+        "message": message,
+        "status": level
+    })
+
+    return insights_json
+
 def replace_conditions(query, conditions_dict):
     query = query.lower()
     pattern = re.compile(r'\{([^}]+)\}')

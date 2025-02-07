@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import re
 import sys
 from vertica import vertica
-from modules.helpers import replace_conditions
+from modules.helpers import replace_conditions, push_to_insights_json
 from query_breakdown import query_breakdown
 
 with open("config.json", "r") as config_file:
@@ -234,7 +234,8 @@ def get_thresholds(thresholds):
     
     return ok_threshold, warn_threshold, fatal_threshold
 
-def analyse(query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
+
+def analyse(insights_json, query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = "thresholds.json"
     json_data = None
     with open(threshold_json_file_path) as json_file:
@@ -294,7 +295,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                             print("-" * 15)
 
                         if query_result is None and (issue_level == 'ok' or issue_level is None):
-                            print(f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.')
+                            msg = f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.'
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            print(msg)
                         else:
                             if with_insights:
                                 print(f"\n\nQuery Name: {query_name}")
@@ -317,16 +320,22 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 total_memory_borrowed += row[total_memory_borrowed_index]
                             
                             if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
-                                print(f"[\033[92mOK\033[0m] No running queries found.")
+                                msg = f"[\033[92mOK\033[0m] No running queries found."
+                                push_to_insights_json(insights_json, msg, 'OK', query_name)
+                                print(msg)
                             elif issue_level == 'ok':
-                                print(f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool")
+                                msg = f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool"
+                                push_to_insights_json(insights_json, msg, 'OK', query_name)
+                                print(msg)
                             if with_insights:
                                 print()
                         
                         return
                 elif query_name == "long_running_queries":
                     if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
-                        print("[\033[92mOK\033[0m] No long running queries.")
+                        msg = "[\033[92mOK\033[0m] No long running queries."
+                        push_to_insights_json(insights_json, msg, 'OK', query_name)
+                        print(msg)
                     elif len(query_result) == 1:
                         status_counts = {}
                         for _, status, cnt in query_result:
@@ -352,18 +361,24 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         
                         if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                            print("[\033[92mOK\033[0m] No long running queries.")
+                            msg = "[\033[92mOK\033[0m] No long running queries."
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            print(msg)
 
                         for key, val in status_counts.items():
                             _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
                             if key == "warn":
                                 r = (str('\033[93m') + str(val) + str('\033[0m'))
                                 t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                                print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                                msg = f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}"
+                                push_to_insights_json(insights_json, msg, 'WARN', query_name)
+                                print(msg)
                             elif key == "fatal":
                                 r = (str('\033[91m') + str(val) + str('\033[0m'))
                                 t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                                print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                                msg = f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}"
+                                push_to_insights_json(insights_json, msg, 'FATAL', query_name)
+                                print(msg)
                         if with_insights:
                             print()
                     else:
@@ -390,18 +405,24 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
                         
                         if "warn" not in status_counts and "fatal" not in status_counts and (issue_level is 'ok' or issue_level is None):
-                            print("[\033[92mOK\033[0m] No long running queries.")
+                            msg = "[\033[92mOK\033[0m] No long running queries."
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            print(msg)
 
                         for key, val in status_counts.items():
                             _, warn_threshold, fatal_threshold = get_thresholds(threshold['columns'][0]['threshold'])
                             if key == "warn":
                                 r = (str('\033[93m') + str(val) + str('\033[0m'))
                                 t = (str('\033[93m') + str(warn_threshold) + " mins" + str('\033[0m'))
-                                print(f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                                msg = f"[\033[93mWARN\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}"
+                                push_to_insights_json(insights_json, msg, 'WARN', query_name)
+                                print(msg)
                             elif key == "fatal":
                                 r = (str('\033[91m') + str(val) + str('\033[0m'))
                                 t = (str('\033[91m') + str(fatal_threshold) + " mins" + str('\033[0m'))
-                                print(f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}")
+                                msg = f"[\033[91mFATAL\033[0m] {r} queries are running for more than {t} by {list(set([row[column_headers.index('user_name')] for row in query_result]))}"
+                                push_to_insights_json(insights_json, msg, 'FATAL', query_name)
+                                print(msg)
                         if with_insights:
                             print()
                     return
@@ -416,8 +437,9 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                     
                     if query_result == None or len(query_result) == 0:
                         if item['default_message'] is not "":
-                            item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
-                            print(item['default_message'])
+                            msg = item['default_message'].replace('OK', '\033[92mOK\033[0m')
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            print(msg)
                             return
                         else:
                             return
@@ -517,6 +539,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 message = message.replace('{cnt}', str(len(fatal_values)))
                             else:
                                 message = message.replace('{cnt}', str(fatal_count))
+                            push_to_insights_json(insights_json, msg, 'FATAL', query_name)
                             print(message)
 
                     if issue_level is None or issue_level == "ok" or issue_level == "warn":
@@ -532,6 +555,7 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
                             else:
                                 message = message.replace('{cnt}', str(warn_count))
+                            push_to_insights_json(insights_json, msg, 'WARN', query_name)
                             print(message)
 
                     if issue_level is None or issue_level == "ok":
@@ -551,16 +575,17 @@ def analyse(query, verbose, query_name, query_result, query_description, column_
                                 message = message.replace('{cnt}', str(len(ok_values)))
                             else:
                                 message = message.replace('{cnt}', str(ok_count))
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
                             print(message)
                     
                     if flag:
                         if item['default_message'] is not "":
-                            item['default_message'] = item['default_message'].replace('OK', '\033[92mOK\033[0m')
-                            print(item['default_message'])
+                            msg = item['default_message'].replace('OK', '\033[92mOK\033[0m')
+                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            print(msg)
 
                 if with_insights:
                     print()
-
 
 
 def replace_thresholds(query, query_name):
@@ -715,9 +740,14 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
 
+                insights_json = {}
+
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
+                        analyse(insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
+                        print()   
+                        print('insights_json', insights_json)   
+                        print()   
                     else:
                         for threshold in thresholds:
                             if query_name == threshold['query_name'] and "_raw" not in query_name:
@@ -740,8 +770,10 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                             print("-" * 15)
                         print("No records found")
                     else:
-                        analyse(final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
-                            
+                        analyse(insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
+                        print()   
+                        print('insights_json', insights_json)   
+                        print()   
         vertica_connection.close()
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
@@ -793,12 +825,6 @@ if __name__ == "__main__":
 
     parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
         help="Comma-separated list of query names to execute. If empty, all queries will be executed.")
-
-    # parser.add_argument("--from-date-time", required=False, default=None, 
-    #     help="Filter condition for queries with the 'from_date_time' placeholder.")
-
-    # parser.add_argument("--to-date-time", required=False, default=None, 
-    #     help="Filter condition for queries with the 'to_date_time' placeholder.")
 
     parser.add_argument("--pool-name", required=False, default=None, 
         help="Filter condition for queries with the 'pool_name' placeholder.")
