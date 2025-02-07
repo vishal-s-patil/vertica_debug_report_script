@@ -1,20 +1,26 @@
 import re
 
-def push_to_insights_json(insights_json, message, level, query_name):
+def push_to_insights_json(qid, insights_json, message, level, query_name):
     # remove coloring
     ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
     message = ansi_escape.sub('', message)
     
+    colour = 'green' if 'OK' in message else 'red' if 'FATAL' in message else 'yellow'
+
     # remove status in message
     message = message.replace('[OK] ', '') 
     message = message.replace('[WARN] ', '') 
     message = message.replace('[FATAL] ', '') 
 
-    insights_json[query_name] = insights_json.get(query_name, [])
+    insights_json[query_name] = insights_json.get(query_name, {})
+    insights_json[query_name]['insights'] = insights_json[query_name].get('insights', [])
 
-    insights_json[query_name].append({
+    insights_json[query_name]['insights'].append({
         "message": message,
-        "status": level
+        "status": level,
+        'order': qid,
+        'colour': colour,
+        'display': True
     })
 
     return insights_json
