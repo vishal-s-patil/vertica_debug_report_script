@@ -9,7 +9,7 @@ from modules.helpers import replace_conditions
 # duration = 3
 # issue_time = None
 
-def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdown_chars, case_sensitive, num_items, duration, issue_time):
+def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdown_chars, case_sensitive, num_items, duration, issue_time, order_by):
 
     granularity_dimension = """date_trunc('{duration}', query_start::timestamp)"""
 
@@ -20,6 +20,10 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
     body = """SELECT {dimension_replacements} FROM query_profiles WHERE 1=1 { user_name = 'user_name' } and query_start::timestamp >= ( TIMESTAMP { 'issue_time' } - INTERVAL '{duration} hour' ) and query_start::timestamp <= TIMESTAMP { 'issue_time' } {query ILIKE 'query_pattern'} group by {groupby_replacements} order by {order_by} 1 limit {num_items};"""
 
     aggregations = "count(1),(min(query_duration_us)/1000000)::numeric(10,2) min_secs,(max(query_duration_us)/1000000)::numeric(10,2) max_secs,(avg(query_duration_us)/1000000)::numeric(10,2) avg_secs"
+
+    if order_by is not None:
+        order_by = order_by + ','
+        body = body.replace('{order_by}', order_by)
 
     d = {
         "issue_time": issue_time, 
