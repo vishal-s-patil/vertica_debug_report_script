@@ -633,7 +633,7 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
             json_data = json_file.read()
             json_data = json.loads(json_data)
 
-            insights_json = {}
+            # insights_json = {}
             for row in json_data:
                 qid = row["qid"]
                 query_name = row["query_name"]
@@ -787,7 +787,9 @@ if __name__ == "__main__":
         execute_query_breakdown(args, is_now, args.verbose)
         exit()
 
-    execute_queries_from_json(json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+    insights_json = {}
+
+    execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
     
 
@@ -795,6 +797,13 @@ app = Flask(__name__)
 
 @app.route('/globalrefresh', methods=['GET'])
 def greet():
+    args = get_args()
+    filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
+
+    insights_json = {}
+
+    execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+
     name = request.args.get('name', 'Guest')
     age = request.args.get('age', 'unknown')
     
