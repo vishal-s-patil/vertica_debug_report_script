@@ -8,7 +8,7 @@ import sys
 from vertica import vertica
 from modules.helpers import replace_conditions, push_to_insights_json
 from query_breakdown import query_breakdown
-from modules.args_parser import get_args
+from modules.args_parser import get_args, pargse_args
 from flask import Flask, request, jsonify
 
 with open("config.json", "r") as config_file:
@@ -779,101 +779,17 @@ def execute_query_breakdown(args, is_now, verbose):
 
 
 if __name__ == "__main__":
-    args = get_args()
-
-    queries_to_execute = args.queries_to_execute
-    if len(queries_to_execute) != 0:
-        queries_to_execute = (queries_to_execute[0]).split(',')
-
-    is_now = False
-    if args.issue_time is None:
-        is_now = True
-        args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    json_file_path = args.inputfilepath
-    type = args.type
-
-    if type is not None:
-        if queries_to_execute is not None and len(queries_to_execute) > 1:
-            print(f"Multiple queries not allowed when --type is passed.")
-            exit()
-
-    pool_name = args.pool_name
-    user_name = args.user_name
-
-    if pool_name is None and user_name is not None:
-        pool_name = user_name + "_pool"
-
-    session_type_placeholder = "is not"
-    session_type_placeholder_2 = None
-    err_type = None
-
-    query_name = None
-    if type is not None:
-        if len(queries_to_execute) != 0:
-            query_name = queries_to_execute[0]
-
-        if query_name == "sessions":
-            if type == "active":
-                session_type_placeholder = "is not"
-            elif type == "inactive":
-                session_type_placeholder = "is"
-            else:
-                session_type_placeholder = "is not"
-                session_type_placeholder_2 = "null"
-        elif query_name == "error_messages" or query_name == "error_messages_raw":
-            err_type = type
-
-    filters = { # and replacements and args
-        "subcluster_name": args.subcluster_name,
-        "pool_name": pool_name,
-        "user_name": user_name,
-        "table_name": args.table_name,
-        "issue_time": args.issue_time,
-        "user_name": args.user_name,
-        "duration": float(args.duration_hours),
-        "num_items": int(args.num_items),
-        "err_type": err_type,
-        "granularity": 'hour' if args.granularity is None else args.granularity,
-        "order_by": args.order_by,
-        "snapshots": int(args.snapshots),
-        "user_limit": int(args.user_limit),
-        "issue_level": args.issue_level,
-        "session_type": session_type_placeholder,
-        "session_type_2": session_type_placeholder_2,
-        "schema_name": args.schema_name,
-        "projection_name": args.projection_name,
-        "txn_id": args.txn_id,
-        "statement_id": args.statement_id,
-        "verbose": args.verbose
-    }
+    args = get_args()
+    filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
 
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
         execute_query_breakdown(args, is_now, args.verbose)
         exit()
 
-    if filters['projection_name'] is None and filters['table_name'] is not None:
-        filters['projection_name'] = filters['table_name'] + '_%'
-
-    if filters['projection_name'] is not None and filters['schema_name'] is None:
-        print("please provide schema name aswell.")
-        exit()
-
-    insights_only = args.insights_only
-    with_insights = args.with_insights
-
-    if (insights_only or with_insights) and query_name=="long_running_queries_raw":
-        print("Use long_running_queries instead of long_running_queries_raw for insights.")
-        exit()
-
-    if (insights_only or with_insights) and query_name=="error_messages_raw":
-        print("Use error_messages instead of error_messages_raw for insights.")
-        exit()
-    
-    if filters['order_by'] is not None:
-        filters['order_by'] = filters['order_by'] + ','
-
     execute_queries_from_json(json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+
+    
 
 app = Flask(__name__)
 
