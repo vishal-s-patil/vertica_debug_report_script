@@ -12,12 +12,6 @@ def push_to_insights_json(insights_json, message, level, query_name):
 
     insights_json[query_name] = insights_json.get(query_name, [])
 
-    if query_name == 'delete_vectors':
-        print()
-        print(insights_json[query_name])
-        print()
-    
-
     insights_json[query_name].append({
         "message": message,
         "status": level
