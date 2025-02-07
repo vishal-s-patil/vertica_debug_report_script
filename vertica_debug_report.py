@@ -936,8 +936,8 @@ if __name__ == "__main__":
     session_type_placeholder_2 = None
     err_type = None
 
+    query_name = None
     if type is not None:
-        query_name = None
         if len(queries_to_execute) != 0:
             query_name = queries_to_execute[0]
 
