@@ -804,15 +804,15 @@ def greet():
 
     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
-    name = request.args.get('name', 'Guest')
-    age = request.args.get('age', 'unknown')
+    # name = request.args.get('name', 'Guest')
+    # age = request.args.get('age', 'unknown')
     
-    response = {
-        'message': f'Hello, {name}!',
-        'age': age
-    }
+    # response = {
+    #     'message': f'Hello, {name}!',
+    #     'age': age
+    # }
     
-    return jsonify(response)
+    return jsonify(insights_json)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+
+app.run(host='0.0.0.0', port=5000)
