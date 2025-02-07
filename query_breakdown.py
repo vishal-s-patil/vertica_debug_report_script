@@ -17,7 +17,7 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
 
     query_dimension = """left(query, {query_breakdown_chars})"""
 
-    body = """SELECT {dimension_replacements} FROM query_profiles WHERE 1=1 { user_name = 'user_name' } and query_start::timestamp >= ( TIMESTAMP { 'issue_time' } - INTERVAL '{duration} hour' ) and query_start::timestamp <= TIMESTAMP { 'issue_time' } {query ILIKE 'query_pattern'} group by {groupby_replacements} order by {order_by} 1 limit {num_items};"""
+    body = """SELECT {dimension_replacements} FROM query_profiles WHERE 1=1 { user_name = 'user_name' } and query_start::timestamp >= ( TIMESTAMP { 'issue_time' } - INTERVAL '{duration} hour' ) and query_start::timestamp <= TIMESTAMP { 'issue_time' } {query ilike 'query_pattern'} group by {groupby_replacements} order by {order_by} 1 limit {num_items};"""
 
     aggregations = "count(1),(min(query_duration_us)/1000000)::numeric(10,2) min_secs,(max(query_duration_us)/1000000)::numeric(10,2) max_secs,(avg(query_duration_us)/1000000)::numeric(10,2) avg_secs"
 
