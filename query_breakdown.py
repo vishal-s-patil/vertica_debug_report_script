@@ -45,6 +45,7 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         d["dimension_replacements"] = granularity_dimension + ', ' + aggregations
         d["groupby_replacements"] = "1"
 
+        print('d', d)
         q = replace_conditions(body, d)
         return q
 
