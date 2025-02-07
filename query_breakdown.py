@@ -35,6 +35,7 @@ def query_breakdown(client_breakdown, granularity, query_pattern, query_breakdow
         body = body.replace("{query ILIKE 'query_pattern'}", "{query LIKE 'query_pattern'}")
 
     if query_pattern is not None:
+        print('query_pattern', query_pattern)
         d["query_pattern"] = query_pattern
 
     if granularity and not client_breakdown and not query_breakdown_chars:
