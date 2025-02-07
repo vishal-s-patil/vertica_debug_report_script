@@ -214,4 +214,4 @@ def pargse_args():
     if filters['order_by'] is not None:
         filters['order_by'] = filters['order_by'] + ','
 
-    return 
+    return filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute

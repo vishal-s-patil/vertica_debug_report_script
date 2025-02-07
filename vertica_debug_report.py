@@ -621,7 +621,7 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
     return query_result
 
 
-def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
+def execute_queries_from_json(insights_json, json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
     print(queries_to_execute)
     try:
         vertica_connection = vertica.get_vertica_connection()
@@ -778,18 +778,18 @@ def execute_query_breakdown(args, is_now, verbose):
     print(tabulate(q_res, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    args = get_args()
-    filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
+#     args = get_args()
+#     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
 
-    if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
-        execute_query_breakdown(args, is_now, args.verbose)
-        exit()
+#     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
+#         execute_query_breakdown(args, is_now, args.verbose)
+#         exit()
 
-    insights_json = {}
+#     insights_json = {}
 
-    execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+#     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
     
 
