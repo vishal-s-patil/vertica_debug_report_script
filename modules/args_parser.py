@@ -123,10 +123,11 @@ def get_args():
     return parser.parse_args()
 
 
-def pargse_args(query_file_path=None, subcluster_name=None, insights_only=False):
+def pargse_args(query_file_path=None, subcluster_name=None, insights_only=False, queries_to_execute=None):
     args = get_args()
 
-    queries_to_execute = args.queries_to_execute
+    queries_to_execute = args.queries_to_execute if len(args.queries_to_execute) != 0 else queries_to_execute if queries_to_execute is not None else []
+    
     if len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
 
