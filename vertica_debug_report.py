@@ -9,7 +9,7 @@ from vertica import vertica
 from modules.helpers import replace_conditions, push_to_insights_json
 from query_breakdown import query_breakdown
 from modules.args_parser import get_args
-# from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 
 with open("config.json", "r") as config_file:
     config = json.load(config_file)
@@ -789,14 +789,6 @@ if __name__ == "__main__":
     if args.issue_time is None:
         is_now = True
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
-        execute_query_breakdown(args, is_now, args.verbose)
-        exit()
-
-    if args.granularity is None:
-        args.granularity = 'hour'
-
     
     json_file_path = args.inputfilepath
     type = args.type
@@ -831,7 +823,7 @@ if __name__ == "__main__":
                 session_type_placeholder_2 = "null"
         elif query_name == "error_messages" or query_name == "error_messages_raw":
             err_type = type
-    
+
     filters = { # and replacements and args
         "subcluster_name": args.subcluster_name,
         "pool_name": pool_name,
@@ -842,7 +834,7 @@ if __name__ == "__main__":
         "duration": float(args.duration_hours),
         "num_items": int(args.num_items),
         "err_type": err_type,
-        "granularity": args.granularity,
+        "granularity": 'hour' if args.granularity is None else args.granularity,
         "order_by": args.order_by,
         "snapshots": int(args.snapshots),
         "user_limit": int(args.user_limit),
@@ -854,6 +846,10 @@ if __name__ == "__main__":
         "txn_id": args.txn_id,
         "statement_id": args.statement_id,
     }
+
+    if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
+        execute_query_breakdown(args, is_now, args.verbose)
+        exit()
 
     if filters['projection_name'] is None and filters['table_name'] is not None:
         filters['projection_name'] = filters['table_name'] + '_%'
@@ -878,22 +874,19 @@ if __name__ == "__main__":
 
     execute_queries_from_json(json_file_path, filters, args.verbose, is_now, insights_only, with_insights, queries_to_execute)
 
+app = Flask(__name__)
 
-
-
-# app = Flask(__name__)
-
-# @app.route('/globalrefresh', methods=['GET'])
-# def greet():
-#     name = request.args.get('name', 'Guest')
-#     age = request.args.get('age', 'unknown')
+@app.route('/globalrefresh', methods=['GET'])
+def greet():
+    name = request.args.get('name', 'Guest')
+    age = request.args.get('age', 'unknown')
     
-#     response = {
-#         'message': f'Hello, {name}!',
-#         'age': age
-#     }
+    response = {
+        'message': f'Hello, {name}!',
+        'age': age
+    }
     
-#     return jsonify(response)
+    return jsonify(response)
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
