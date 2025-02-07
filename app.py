@@ -6,8 +6,7 @@ app = Flask(__name__)
 
 @app.route('/globalrefresh', methods=['GET'])
 def greet():
-    args = get_args()
-
+    
     subcluster_name = request.args.get('subcluster_name')
     query_file_path = "queries.json"
 

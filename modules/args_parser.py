@@ -38,10 +38,10 @@ def get_args():
         if sys.argv[1] == "--help":
             help_flag = True
         
-    parser.add_argument("--subcluster-name", required=False if help_flag else True, 
+    parser.add_argument("--subcluster-name", required=False if help_flag else False, 
         help="Name of the subcluster.")
 
-    parser.add_argument("--inputfilepath", required=False if help_flag else True, 
+    parser.add_argument("--inputfilepath", required=False if help_flag else False, 
         help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
 
     parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
