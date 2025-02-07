@@ -15,22 +15,23 @@ def greet():
     query_name = request.args.get('query_name', '')
     query_file_path = "queries.json"
 
-    print('query_name', query_name)
-
+    '''
     if query_name != '':
         filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True, query_name)
     else:
         filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True)
-
+    '''
+    
     insights_json = {}
 
-    execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+    # execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
     
-    # hardcoded_insights_json = {"delete_vectors":[{"message":"No outliers in delete vector count","status":"OK"}],"error_messages":[{"message":"No Errors Found","status":"OK"}],"long_running_queries":[{"message":"No long running queries.","status":"OK"}],"query_count":[{"message":"total 4229 queries by 4 users in past 3.0 hours","status":"OK"}],"resource_queues":[{"message":"No Queries in Queue","status":"OK"}],"sessions":[{"message":"No Active Queries","status":"OK"}]}
+    hardcoded_insights_json = {"delete_vectors":[{"message":"No outliers in delete vector count","status":"OK"}],"error_messages":[{"message":"No Errors Found","status":"OK"}],"long_running_queries":[{"message":"No long running queries.","status":"OK"}],"query_count":[{"message":"total 4229 queries by 4 users in past 3.0 hours","status":"OK"}],"resource_queues":[{"message":"No Queries in Queue","status":"OK"}],"sessions":[{"message":"No Active Queries","status":"OK"}]}
 
-    return insights_json
 
-    '''
+    # return insights_json
+    hardcoded_insights_json = {"long_running_queries":{"insights":[{"colour":"green","display":True,"message":"No long running queries.","order":1,"status":"OK"}]}}
+
     redis_client = connect_to_redis()
     
     res_insights_json = get_value(redis_client, 'test')
@@ -38,13 +39,19 @@ def greet():
     last_updated = datetime.strptime(res_insights_json['last_updated'], "%Y-%m-%d %H:%M:%S.%f")
 
     if datetime.now() - last_updated > timedelta(seconds=5):
-        hardcoded_insights_json['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-        # query here 
-        put_value(redis_client, 'test', hardcoded_insights_json)
-        return jsonify(hardcoded_insights_json)
+        if query_name != '':
+            # handle if redis is completely empty (query for all push new json, will not in ui as it does it when page us loaded)
+            # query here
+            res_insights_json[query_name] = hardcoded_insights_json[query_name]
+            put_value(redis_client, 'test', res_insights_json)
+            return res_insights_json
+        else:
+            hardcoded_insights_json['last_updated'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+            # query here 
+            put_value(redis_client, 'test', hardcoded_insights_json)
+            return jsonify(hardcoded_insights_json)
     else:
         res_insights_json = get_value(redis_client, 'test')
         return res_insights_json
-    '''
     
 app.run(host='0.0.0.0', port=5500)
