@@ -656,6 +656,8 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
         with open(json_file_path) as json_file:
             json_data = json_file.read()
             json_data = json.loads(json_data)
+
+            insights_json = {}
             for row in json_data:
                 qid = row["qid"]
                 query_name = row["query_name"]
@@ -740,14 +742,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
 
-                insights_json = {}
-
                 if processed_query_result:
                     if insights_only or with_insights:
-                        analyse(insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
-                        print()   
-                        print('insights_json', insights_json)   
-                        print()   
+                        analyse(insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters) 
                     else:
                         for threshold in thresholds:
                             if query_name == threshold['query_name'] and "_raw" not in query_name:
@@ -771,9 +768,9 @@ def execute_queries_from_json(json_file_path, filters, verbose, is_now, insights
                         print("No records found")
                     else:
                         analyse(insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
-                        print()   
-                        print('insights_json', insights_json)   
-                        print()   
+            print()   
+            print('insights_json', insights_json)   
+            print()               
         vertica_connection.close()
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
