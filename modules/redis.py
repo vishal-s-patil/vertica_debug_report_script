@@ -18,5 +18,5 @@ def get_value(redis_client, key):
 def put_value(redis_client, key, value):
     """Store JSON value in Redis."""
     if isinstance(value, (dict, list)): 
-        value = json.dumps(value)
+        value = json.dumps(value, default=str)
     redis_client.set(key, value)

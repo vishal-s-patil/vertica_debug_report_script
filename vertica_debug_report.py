@@ -790,3 +790,5 @@ if __name__ == "__main__":
     insights_json = {}
 
     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+
+    print(insights_json)
