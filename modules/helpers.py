@@ -10,7 +10,7 @@ def push_to_insights_json(insights_json, message, level, query_name):
     message = message.replace('[WARN] ', '') 
     message = message.replace('[FATAL] ', '') 
 
-    insights_json[query_name] = insights_json.get('query_name', [])
+    insights_json[query_name] = insights_json.get(query_name, [])
 
     if query_name == 'delete_vectors':
         print()
