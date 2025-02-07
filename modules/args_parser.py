@@ -123,7 +123,7 @@ def get_args():
     return parser.parse_args()
 
 
-def pargse_args():
+def pargse_args(query_file_path=None, subcluster_name=None, insights_only=False):
     args = get_args()
 
     queries_to_execute = args.queries_to_execute
@@ -135,7 +135,7 @@ def pargse_args():
         is_now = True
         args.issue_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    json_file_path = args.inputfilepath
+    json_file_path = args.inputfilepath if args.inputfilepath is not None else query_file_path
     type = args.type
 
     if type is not None:
@@ -170,7 +170,7 @@ def pargse_args():
             err_type = type
 
     filters = { # and replacements and args
-        "subcluster_name": args.subcluster_name,
+        "subcluster_name": args.subcluster_name if args.subcluster_name is not None else subcluster_name,
         "pool_name": pool_name,
         "user_name": user_name,
         "table_name": args.table_name,
@@ -200,7 +200,7 @@ def pargse_args():
         print("please provide schema name aswell.")
         exit()
 
-    insights_only = args.insights_only
+    insights_only = args.insights_only if args.insights_only else insights_only
     with_insights = args.with_insights
 
     if (insights_only or with_insights) and query_name=="long_running_queries_raw":

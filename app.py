@@ -7,19 +7,15 @@ app = Flask(__name__)
 @app.route('/globalrefresh', methods=['GET'])
 def greet():
     args = get_args()
-    filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
+
+    subcluster_name = request.args.get('subcluster_name')
+    query_file_path = "queries.json"
+
+    filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True)
 
     insights_json = {}
 
     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
-
-    # name = request.args.get('name', 'Guest')
-    # age = request.args.get('age', 'unknown')
-    
-    # response = {
-    #     'message': f'Hello, {name}!',
-    #     'age': age
-    # }
     
     return jsonify(insights_json)
 
