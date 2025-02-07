@@ -539,7 +539,7 @@ def analyse(insights_json, query, verbose, query_name, query_result, query_descr
                                 message = message.replace('{cnt}', str(len(fatal_values)))
                             else:
                                 message = message.replace('{cnt}', str(fatal_count))
-                            push_to_insights_json(insights_json, msg, 'FATAL', query_name)
+                            push_to_insights_json(insights_json, message, 'FATAL', query_name)
                             print(message)
 
                     if issue_level is None or issue_level == "ok" or issue_level == "warn":
@@ -555,7 +555,7 @@ def analyse(insights_json, query, verbose, query_name, query_result, query_descr
                                 message = message.replace('{cnt}', str(len(warn_values.union(fatal_values))))
                             else:
                                 message = message.replace('{cnt}', str(warn_count))
-                            push_to_insights_json(insights_json, msg, 'WARN', query_name)
+                            push_to_insights_json(insights_json, message, 'WARN', query_name)
                             print(message)
 
                     if issue_level is None or issue_level == "ok":
@@ -575,7 +575,7 @@ def analyse(insights_json, query, verbose, query_name, query_result, query_descr
                                 message = message.replace('{cnt}', str(len(ok_values)))
                             else:
                                 message = message.replace('{cnt}', str(ok_count))
-                            push_to_insights_json(insights_json, msg, 'OK', query_name)
+                            push_to_insights_json(insights_json, message, 'OK', query_name)
                             print(message)
                     
                     if flag:
