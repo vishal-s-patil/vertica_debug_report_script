@@ -33,7 +33,7 @@ def greet():
 
     # hardcoded_insights_json = {"delete_vectors":{"insights":[{"colour":"rvdshjhdbhjsdvhjed","display":True,"message":"abcd","order":10,"status":"FATAL", "last_updated": "2025-02-07 18:56:00.123"},{"colour":"hjbhbdshbhbsdhjbsdhj","display":True,"message":"abcd","order":10,"status":"OK", "last_updated": "2025-02-07 19:56:00.123"}]}}
 
-    hardcoded_insights_json = {"delete_vectors":{"insights":[{"colour":"rvdshjhdbhjsdvhjed","display":True,"message":"fegh","order":10,"status":"FATAL", "last_updated": "2025-02-07 18:49:00.123"},{"colour":"hjbhbdshbhbsdhjbsdhj","display":True,"message":"fegh","order":10,"status":"OK", "last_updated": "2025-02-07 18:49:00.123"}]}}
+    # hardcoded_insights_json = {"delete_vectors":{"insights":[{"colour":"rvdshjhdbhjsdvhjed","display":True,"message":"fegh","order":10,"status":"FATAL", "last_updated": "2025-02-07 18:49:00.123"},{"colour":"hjbhbdshbhbsdhjbsdhj","display":True,"message":"fegh","order":10,"status":"OK", "last_updated": "2025-02-07 18:49:00.123"}]}}
 
     redis_client = connect_to_redis()
     
