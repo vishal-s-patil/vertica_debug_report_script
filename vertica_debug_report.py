@@ -845,6 +845,7 @@ if __name__ == "__main__":
         "projection_name": args.projection_name,
         "txn_id": args.txn_id,
         "statement_id": args.statement_id,
+        "verbose": args.verbose
     }
 
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
@@ -872,7 +873,7 @@ if __name__ == "__main__":
     if filters['order_by'] is not None:
         filters['order_by'] = filters['order_by'] + ','
 
-    execute_queries_from_json(json_file_path, filters, args.verbose, is_now, insights_only, with_insights, queries_to_execute)
+    execute_queries_from_json(json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
 app = Flask(__name__)
 
