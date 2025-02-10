@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refresh Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Vertica debug report</h1>
+
+        <button onclick="refreshGlobal()" class="refresh-btn">🔄 Refresh</button>
+        <p><strong>Last Updated:</strong> <span id="last-updated">{{ data.get('last_updated', 'N/A') }}</span></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Query Name</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>Last Updated</th>
+                    <th>Refresh</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, records in data.items() if key != 'last_updated' %}
+                    {% for record in records.insights %}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td style="color: {{ record.colour }}; font-weight: bold;">{{ record.status }}</td>
+                            <td>{{ record.message }}</td>
+                            <td>🕒 {{ record.last_updated }}</td>
+                            <td>
+                                <button class="refresh-btn" onclick="refreshQuery('{{ key }}')">🔄 Refresh</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+            
+        </table>
+    </div>
+
+    <script>
+        function refreshGlobal() {
+            location.reload();  // Reload the entire page
+            window.location.href = `/`; // Refresh a specific query
+        }
+
+        function refreshQuery(queryName) {
+            window.location.href = `/refresh?query_name=${queryName}`; // Refresh a specific query
+        }
+    </script>
+
+</body>
+</html>
