@@ -315,7 +315,6 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                     elif len(query_result) == 1:
                         status_counts = {}
                         for _, status, cnt in query_result:
-                            print(status_counts.get(status, 0))
                             status_counts[status] = status_counts.get(status, 0) + cnt
                         ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                         status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
@@ -601,7 +600,7 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
     
     for row in query_result:
         delta = row[index]
-        print(delta)  # Debugging print statement
+        # print(delta)  # Debugging print statement
 
         # Construct the formatted time string based on available components
         formatted_parts = []
@@ -622,7 +621,6 @@ def format_relativedelta(query_result, column_headers, column_name="running_time
 
 
 def execute_queries_from_json(insights_json, json_file_path, filters, verbose, is_now, insights_only, with_insights, queries_to_execute=None):
-    print(queries_to_execute)
     try:
         vertica_connection = vertica.get_vertica_connection()
         if not vertica_connection:
@@ -791,4 +789,4 @@ if __name__ == "__main__":
 
     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
-    print(insights_json)
+    # print(insights_json)
