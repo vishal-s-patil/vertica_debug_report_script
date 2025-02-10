@@ -127,7 +127,6 @@ def pargse_args(query_file_path=None, subcluster_name=None, insights_only=False,
     args = get_args()
 
     queries_to_execute = args.queries_to_execute if len(args.queries_to_execute) != 0 else [queries_to_execute] if queries_to_execute is not None else []
-    print('queries_to_execute', queries_to_execute)
     if len(queries_to_execute) != 0:
         queries_to_execute = (queries_to_execute[0]).split(',')
 
