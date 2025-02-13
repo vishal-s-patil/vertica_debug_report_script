@@ -1,4 +1,64 @@
 import re
+from datetime import datetime, timedelta
+
+def get_past_datetime(issue_time, duration):
+    issue_time_dt = datetime.strptime(issue_time, "%Y-%m-%d %H:%M:%S")
+    return str(issue_time_dt - timedelta(hours=duration))
+
+
+def process_query_result_and_highlight_text(query_result, column_headers):
+    # Get the index of the "status" column
+    try:
+        status_index = column_headers.index("status")
+    except ValueError:
+        # If "status" column doesn't exist, return the query result as is
+        return query_result
+
+    # Define colors for each severity level
+    colors = {
+        "ok": "\033[92m",      # Green 
+        "warn": "\033[93m", # Yellow 
+        "fatal": "\033[91m",   # Red 
+    }
+    reset_color = "\033[0m"  # Reset to default
+
+    def apply_color(text):
+        """Apply color to the string if it contains specific keywords."""
+        for severity, color_code in colors.items():
+            if severity in text.lower():
+                text = text.replace(severity, f"{color_code}{severity.upper()}{reset_color}")
+        return text
+
+    def process_row(row):
+        """Process a single row, applying color to the 'status' column."""
+        if status_index < len(row) and isinstance(row[status_index], str):
+            row[status_index] = apply_color(row[status_index])
+        return row
+
+    # Process each row in the query result
+    return [process_row(row) for row in query_result]
+
+
+def replace_tables_in_query(query, force=False):
+    replacements = [
+        ("from sessions", "from netstats.sessions_full"),
+        ("from resource_queues", "from netstats.resource_queues_full"),
+        ("from error_messages", "from netstats.error_messages"),
+        ("from resource_pool_status", "from netstats.resource_pool_status"),
+        ("from query_profiles", "from netstats.query_profiles"),
+        ("from storage_containers", "from netstats.storage_containers")
+    ]
+
+    query = query.lower()
+    
+    try:
+        for old, new in replacements:
+            if force or "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
+                query = query.replace(old, new)
+        return query
+    except Exception as e:
+        print(f"Error while replacing strings in query: {e}")
+        return query
 
 def push_to_insights_json(qid, insights_json, message, level, query_name):
     # remove coloring

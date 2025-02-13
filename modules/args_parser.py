@@ -29,14 +29,10 @@ class MyArgumentParser(argparse.ArgumentParser):
             stralign="left"
         ))
 
-def get_args():
+def get_args(help_flag):
     parser = MyArgumentParser(description="Args")
     # parser = argparse.ArgumentParser(description="Args")
     # parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
-    help_flag = False
-    if len(sys.argv) == 2:
-        if sys.argv[1] == "--help":
-            help_flag = True
         
     parser.add_argument("--subcluster-name", required=False if help_flag else False, 
         help="Subcluster name.")

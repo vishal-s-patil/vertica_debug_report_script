@@ -50,18 +50,20 @@ def greet():
     query_name = request.args.get('query_name', '')
     query_file_path = "queries.json"
 
+    '''
     if query_name != '':
         filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True, query_name)
     else:
         filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True)
+    '''
     
     insights_json = {}
 
-    execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
+    # execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
     
-    # hardcoded_insights_json = { "delete_vectors": { "insights": [ { "colour": "red", "display":True, "message": "4420 projections having > 1% of their total rows as deleted rows", "order": 10, "status": "FATAL", "last_updated": "2025-02-07 18:43:12.123" }, { "colour": "green", "display":True, "message": "No outliers in delete vector count", "order": 10, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "error_messages": { "insights": [ { "colour": "green", "display":True, "message": "No Errors Found", "order": 4, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "long_running_queries": { "insights": [ { "colour": "green", "display":True, "message": "No long running queries.", "order": 1, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "query_count": { "insights": [ { "colour": "yellow", "display":True, "message": "> 2000 queries by users {'contact_summary_ds', 'upload'} in past 3.0 hours", "order": 8, "status": "WARN", "last_updated": "2025-02-07 18:43:12.123" }, { "colour": "green", "display":True, "message": "total 6305 queries by 4 users in past 3.0 hours", "order": 8, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "resource_queues": { "insights": [ { "colour": "green", "display":True, "message": "No Queries in Queue", "order": 6, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "sessions": { "insights": [ { "colour": "green", "display":True, "message": "No Active Queries", "order": 3, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "last_updated": "2025-02-07 18:43:12.123" }
+    hardcoded_insights_json = { "delete_vectors": { "insights": [ { "colour": "red", "display":True, "message": "4420 projections having > 1% of their total rows as deleted rows", "order": 10, "status": "FATAL", "last_updated": "2025-02-07 18:43:12.123" }, { "colour": "green", "display":True, "message": "No outliers in delete vector count", "order": 10, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "error_messages": { "insights": [ { "colour": "green", "display":True, "message": "No Errors Found", "order": 4, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "long_running_queries": { "insights": [ { "colour": "green", "display":True, "message": "No long running queries.", "order": 1, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "query_count": { "insights": [ { "colour": "yellow", "display":True, "message": "> 2000 queries by users {'contact_summary_ds', 'upload'} in past 3.0 hours", "order": 8, "status": "WARN", "last_updated": "2025-02-07 18:43:12.123" }, { "colour": "green", "display":True, "message": "total 6305 queries by 4 users in past 3.0 hours", "order": 8, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "resource_queues": { "insights": [ { "colour": "green", "display":True, "message": "No Queries in Queue", "order": 6, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "sessions": { "insights": [ { "colour": "green", "display":True, "message": "No Active Queries", "order": 3, "status": "OK", "last_updated": "2025-02-07 18:43:12.123" } ] }, "last_updated": "2025-02-07 18:43:12.123" }
 
-    return insights_json
+    # return insights_json
     # hardcoded_insights_json = {"long_running_queries":{"insights":[{"colour":"sajbfjsdbfjabxshdrcisue","display":True,"message":"No long wjhgxfn running queries.","order":1,"status":"OK"}]}}
 
     # hardcoded_insights_json = {"delete_vectors":{"insights":[{"colour":"rvdshjhdbhjsdvhjed","display":True,"message":"abcd","order":10,"status":"FATAL", "last_updated": "2025-02-07 18:56:00.123"},{"colour":"hjbhbdshbhbsdhjbsdhj","display":True,"message":"abcd","order":10,"status":"OK", "last_updated": "2025-02-07 19:56:00.123"}]}}
