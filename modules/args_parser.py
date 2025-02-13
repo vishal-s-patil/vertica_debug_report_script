@@ -119,8 +119,8 @@ def get_args(help_flag):
     return parser.parse_args()
 
 
-def pargse_args(query_file_path=None, subcluster_name=None, insights_only=False, queries_to_execute=None):
-    args = get_args()
+def pargse_args(help_flag, query_file_path=None, subcluster_name=None, insights_only=False, queries_to_execute=None):
+    args = get_args(help_flag)
 
     queries_to_execute = args.queries_to_execute if len(args.queries_to_execute) != 0 else [queries_to_execute] if queries_to_execute is not None else []
     if len(queries_to_execute) != 0:

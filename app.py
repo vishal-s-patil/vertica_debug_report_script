@@ -51,10 +51,11 @@ def greet():
     query_file_path = "queries.json"
 
     '''
+    help_flag = False
     if query_name != '':
-        filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True, query_name)
+        filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag, query_file_path, subcluster_name, True, query_name)
     else:
-        filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(query_file_path, subcluster_name, True)
+        filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag, query_file_path, subcluster_name, True)
     '''
     
     insights_json = {}
