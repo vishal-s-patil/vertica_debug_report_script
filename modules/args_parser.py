@@ -1,5 +1,5 @@
 import argparse
-import tabulate
+from tabulate import tabulate
 import sys
 from datetime import datetime
 
