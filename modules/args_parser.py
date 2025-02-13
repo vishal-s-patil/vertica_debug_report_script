@@ -39,22 +39,22 @@ def get_args():
             help_flag = True
         
     parser.add_argument("--subcluster-name", required=False if help_flag else False, 
-        help="Name of the subcluster.")
+        help="Subcluster name.")
 
     parser.add_argument("--inputfilepath", required=False if help_flag else False, 
-        help="Path to the input CSV file in the format: qid~query_name~query~query_description.")
+        help="Path of input json file.", default="queries.json")
 
     parser.add_argument("--queries-to-execute", required=False, nargs="*", default=[], 
         help="Comma-separated list of query names to execute. If empty, all queries will be executed.")
 
     parser.add_argument("--pool-name", required=False, default=None, 
-        help="Filter condition for queries with the 'pool_name' placeholder.")
+        help="Pool name")
     
     parser.add_argument("--user-name", required=False, default=None, 
-        help="Filter condition for queries with the 'user_name' placeholder.")
+        help="User name")
 
     parser.add_argument("--table-name", required=False, default=None, 
-        help="Filter condition for queries with the 'table_name' placeholder. Supports LIKE/ILIKE with % at the start, end, or both.")
+        help="Table name. wild card '%' can be used.")
 
     parser.add_argument("--verbose", required=False, action="store_true", 
         help="Enable verbose mode to display executed queries.")
@@ -63,10 +63,10 @@ def get_args():
         help="Number of hours to look past from issue time.")
     
     parser.add_argument("--issue-time", required=False, 
-        help="Get the result at a particular time duration.", default=None)
+        help="Execute queries from the issue time to the past 3 hours.", default=None)
     
     parser.add_argument("--num-items", required=False, 
-        help="Number of rows display.", default=5)
+        help="Number of rows to display.", default=5)
     
     parser.add_argument("--type", required=False, 
         help="", default=None)
@@ -75,46 +75,46 @@ def get_args():
         help="Truncate datetime by [hour|min|day]", default=None)
     
     parser.add_argument("--order-by", required=False, 
-        help="To order by the result with specified order by columns.", default=None)
+        help="To order the result with specified columns.", default=None)
     
     parser.add_argument("--snapshots", required=False, 
-        help="Number of snapshots to display", default=5)
+        help="Number of snapshots to display.", default=5)
     
     parser.add_argument("--issue-level", required=False, 
-        help="To see result of a particular issue level [ok|warn|fatal]", default=None)
+        help="To see result only with specified issue level [ok|warn|fatal]", default=None)
     
     parser.add_argument("--user-limit", required=False, 
         help="Number of user to display", default=5)
 
     parser.add_argument("--insights-only", required=False, action="store_true", 
-        help="To see the insights without result table.")
+        help="To see the insights without tables.")
 
     parser.add_argument("--with-insights", required=False, action="store_true", 
-        help="To see the insights along with the result table.")
+        help="To see the insights along with the result tables.")
     
     parser.add_argument("--schema-name", required=False, default=None, 
-        help="")
+        help="Schema name")
     
     parser.add_argument("--projection-name", required=False, default=None, 
-        help="")
+        help="Projection name. Wild card '%' is supported.")
     
     parser.add_argument("--txn-id", required=False, default=None, 
-        help="")
+        help="Transaction ID")
     
     parser.add_argument("--statement-id", required=False, default=None, 
-        help="")
+        help="Statement ID")
     
     parser.add_argument("--client-breakdown", required=False, action="store_true", 
-        help="")
+        help="Client level breakdown.")
     
     parser.add_argument("--query-pattern", required=False, default=None, 
-        help="")
+        help="Query pattern. Wild card '%' is supported.")
     
     parser.add_argument("--query-breakdown-chars", required=False, default=None, 
-        help="")
+        help="Number of characters in query to display.")
     
     parser.add_argument("--case-sensitive", required=False, default=False, 
-        help="")
+        help="If set, --query-pattern passed will be case sensitive while matching in the query.")
 
     if help_flag:
         parser.print_help()
