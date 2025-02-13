@@ -1,86 +1,20 @@
 import json
+import sys
 from dotenv import load_dotenv
 from tabulate import tabulate
-import argparse
 from datetime import datetime, timedelta
 import re
-import sys
 from vertica import vertica
-from modules.helpers import replace_conditions, push_to_insights_json
+from modules.helpers import replace_conditions, push_to_insights_json, replace_tables_in_query, process_query_result_and_highlight_text
+from modules.helpers import get_past_datetime
 from query_breakdown import query_breakdown
 from modules.args_parser import get_args, pargse_args
-from flask import Flask, request, jsonify
-
-with open("config.json", "r") as config_file:
-    config = json.load(config_file)
-
-load_dotenv()
-
-def replace_tables_in_query(query, force=False):
-    replacements = [
-        ("from sessions", "from netstats.sessions_full"),
-        ("from resource_queues", "from netstats.resource_queues_full"),
-        ("from error_messages", "from netstats.error_messages"),
-        ("from resource_pool_status", "from netstats.resource_pool_status"),
-        ("from query_profiles", "from netstats.query_profiles"),
-        ("from storage_containers", "from netstats.storage_containers")
-    ]
-
-    query = query.lower()
-    
-    try:
-        for old, new in replacements:
-            if force or "from_date_time" in query or "to_date_time" in query or "issue_time" in query:
-                query = query.replace(old, new)
-        return query
-    except Exception as e:
-        print(f"Error while replacing strings in query: {e}")
-        return query
-
-
-def process_query_result_and_highlight_text(query_result, column_headers):
-    # Get the index of the "status" column
-    try:
-        status_index = column_headers.index("status")
-    except ValueError:
-        # If "status" column doesn't exist, return the query result as is
-        return query_result
-
-    # Define colors for each severity level
-    colors = {
-        "ok": "\033[92m",      # Green 
-        "warn": "\033[93m", # Yellow 
-        "fatal": "\033[91m",   # Red 
-    }
-    reset_color = "\033[0m"  # Reset to default
-
-    def apply_color(text):
-        """Apply color to the string if it contains specific keywords."""
-        for severity, color_code in colors.items():
-            if severity in text.lower():
-                text = text.replace(severity, f"{color_code}{severity.upper()}{reset_color}")
-        return text
-
-    def process_row(row):
-        """Process a single row, applying color to the 'status' column."""
-        if status_index < len(row) and isinstance(row[status_index], str):
-            row[status_index] = apply_color(row[status_index])
-        return row
-
-    # Process each row in the query result
-    return [process_row(row) for row in query_result]
-
 
 
 def get_error_messages_query():
     return """
     select * from (( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'memory' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%memory%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'session' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%session%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'resource' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%resource%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'all' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } ORDER BY event_timestamp limit { num_items } ) ) as x order by {order_by} event_timestamp;
     """
-
-
-def get_past_datetime(issue_time, duration):
-    issue_time_dt = datetime.strptime(issue_time, "%Y-%m-%d %H:%M:%S")
-    return str(issue_time_dt - timedelta(hours=duration))
 
 
 def get_ips_and_nodes(subcluster_name):
@@ -112,10 +46,8 @@ def print_header(args):
         "Issue Duration": f"For past {args['duration']} hours from now." if args['is_now'] else "From " + get_past_datetime(args["issue_time"], args['duration']) + " To " + str(args["issue_time"])
     }
 
-    # Convert dict to list of lists, excluding None values
     table_data = [[k, v] for k, v in d.items() if v is not None]
 
-    # Print the table without headers
     print(tabulate(table_data, tablefmt="grid"))
 
 
@@ -777,8 +709,12 @@ def execute_query_breakdown(args, is_now, verbose):
 
 
 if __name__ == "__main__":
-    
-    args = get_args()
+    help_flag = False
+    if len(sys.argv) == 2:
+        if sys.argv[1] == "--help":
+            help_flag = True
+
+    args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args()
 
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
