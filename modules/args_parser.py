@@ -16,7 +16,7 @@ class MyArgumentParser(argparse.ArgumentParser):
         for action in self._actions:
             # Add rows to the table
             table_data.append([
-                f"--{action.dest}",
+                f"--{(action.dest).replace('_', '-')}",
                 "mandatory" if action.dest in self.mandatory_arguments else "optional",
                 action.help
             ])
