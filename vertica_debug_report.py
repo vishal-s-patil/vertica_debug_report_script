@@ -10,6 +10,7 @@ from modules.helpers import get_past_datetime
 from query_breakdown import query_breakdown
 from modules.args_parser import get_args, pargse_args
 
+THRESHOLD_FILE_PATH="thresholds.json"
 
 def get_error_messages_query():
     return """
@@ -144,7 +145,7 @@ def get_thresholds(thresholds):
 
 
 def analyse(qid, insights_json, query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
-    threshold_json_file_path = "thresholds.json"
+    threshold_json_file_path = THRESHOLD_FILE_PATH
     json_data = None
     with open(threshold_json_file_path) as json_file:
         json_data = json_file.read()
@@ -496,7 +497,7 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
 
 
 def replace_thresholds(query, query_name):
-    threshold_json_file_path = "thresholds.json"
+    threshold_json_file_path = THRESHOLD_FILE_PATH
     json_data = None
     with open(threshold_json_file_path) as json_file:
         json_data = json_file.read()
@@ -638,7 +639,7 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                 if query_result and len(query_result) > 0:
                     processed_query_result = process_query_result_and_highlight_text(query_result, column_headers)
                 
-                threshold_json_file_path = "thresholds.json"
+                threshold_json_file_path = THRESHOLD_FILE_PATH
                 json_data = None
                 with open(threshold_json_file_path) as json_file:
                     json_data = json_file.read()
