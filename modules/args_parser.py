@@ -65,7 +65,7 @@ def get_args(help_flag):
         help="Number of rows to display.", default=5)
     
     parser.add_argument("--type", required=False, 
-        help="", default=None)
+        help="query specific filter", default=None)
     
     parser.add_argument("--granularity", required=False, 
         help="Truncate datetime by [hour|min|day]", default=None)
