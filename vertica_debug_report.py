@@ -714,6 +714,9 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         if sys.argv[1] == "--help":
             help_flag = True
+    elif len(sys.argv) == 1:
+        if sys.argv[1] == "--help":
+            help_flag = True
 
     args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag)
