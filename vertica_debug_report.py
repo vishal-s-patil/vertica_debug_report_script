@@ -733,6 +733,7 @@ if __name__ == "__main__":
                 pass
             else:
                 pass
+        sys.exit(0)
 
     args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag)
