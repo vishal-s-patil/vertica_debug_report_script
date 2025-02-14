@@ -1,3 +1,5 @@
+# testTag
+
 #!/usr/bin/env python3
 
 import json
@@ -18,7 +20,6 @@ def get_error_messages_query():
     return """
     select * from (( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'memory' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%memory%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'session' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%session%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'resource' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } and em.message ilike '%resource%' ORDER BY event_timestamp limit { num_items } ) UNION ( select n.subcluster_name, em.transaction_id, em.statement_id, em.event_timestamp, em.user_name, 'all' as type, SUBSTRING(em.message, 1, 50) from netstats.error_messages as em JOIN nodes AS n ON n.node_name = em.node_name where 1 = 1 { user_name = 'user_name' } and em.event_timestamp >= ( TIMESTAMP { 'from_date_time' } { to_date_time } { 'issue_time' } - INTERVAL '{duration} hour' ) and n.subcluster_name = '<subcluster_name>' and em.event_timestamp <= { 'from_date_time' } { 'to_date_time' } { 'issue_time' } ORDER BY event_timestamp limit { num_items } ) ) as x order by {order_by} event_timestamp;
     """
-
 
 def get_ips_and_nodes(subcluster_name):
     query = f"select node_address, node_name from nodes where subcluster_name='{subcluster_name}';"
