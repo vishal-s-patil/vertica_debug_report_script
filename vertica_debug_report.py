@@ -728,12 +728,15 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--list":
             nodes = get_nodes()
-            subclusters = [2]
-            ips = [1]
-            nodes = nodes[0]
-            print(nodes)
+
+            subclusters, ips, nodes_names = [], [], []
+            for node in nodes:
+                subclusters.append(node[2])
+                ips.append(node[1])
+                nodes_names.append(node[0])
             print(subclusters)
             print(ips)
+            print(nodes_names)
             # if sys.argv[2] == "nodes":
             #     pass
             # else:
