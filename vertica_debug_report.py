@@ -729,11 +729,11 @@ if __name__ == "__main__":
         if sys.argv[1] == "--list":
             nodes = get_nodes()
 
-            subclusters, ips, nodes_names = [], [], []
+            subclusters, ips, nodes_names = set(), set(), set()
             for node in nodes:
-                subclusters.append(node[2])
-                ips.append(node[1])
-                nodes_names.append(node[0])
+                subclusters.add(node[2])
+                ips.add(node[1])
+                nodes_names.add(node[0])
             print(subclusters)
             print(ips)
             print(nodes_names)
