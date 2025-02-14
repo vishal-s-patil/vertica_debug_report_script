@@ -728,11 +728,11 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--list":
             nodes = get_nodes()
-            print()
-            if sys.argv[2] == "nodes":
-                pass
-            else:
-                pass
+            print(nodes)
+            # if sys.argv[2] == "nodes":
+            #     pass
+            # else:
+            #     pass
         sys.exit(0)
 
     args = get_args(help_flag)
