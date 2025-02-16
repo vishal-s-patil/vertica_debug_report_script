@@ -734,13 +734,17 @@ if __name__ == "__main__":
                 subclusters.append(node[2])
                 ips.append(node[1])
                 nodes_names.append(node[0])
-            if sys.argv[2] == "nodes":
+            try:
+                if sys.argv[2] == "nodes":
+                    print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
+                elif sys.argv[2] == "subclusters":
+                    print(tabulate([[item] for item in list(set(subclusters))], headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
+                else:
+                    print("Invalid argument. Use --list nodes or --list subclusters or --list")
+                    pass
+            except Exception as e:
                 print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
-            elif sys.argv[2] == "subclusters":
-                print(tabulate([[item] for item in list(set(subclusters))], headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
-            else:
-                print("Invalid argument. Use --list nodes or --list subclusters or --list")
-                pass
+                sys.exit(1)
         sys.exit(0)
 
     args = get_args(help_flag)
