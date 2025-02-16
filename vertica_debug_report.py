@@ -731,9 +731,9 @@ if __name__ == "__main__":
 
             subclusters, ips, nodes_names = [], [], []
             for node in nodes:
-                subclusters.add(node[2])
-                ips.add(node[1])
-                nodes_names.add(node[0])
+                subclusters.append(node[2])
+                ips.append(node[1])
+                nodes_names.append(node[0])
             if sys.argv[2] == "nodes":
                 print(tabulate([nodes, ips, subclusters], headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
             else:
