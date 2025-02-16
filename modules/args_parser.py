@@ -20,11 +20,11 @@ class MyArgumentParser(argparse.ArgumentParser):
                 "mandatory" if action.dest in self.mandatory_arguments else "optional",
                 action.help
             ])
-            table_data.append([
-                f"--list",
-                "optional",
-                "use for listing nodes and subclusters [ex: --list [nodes|subclusters]]"
-            ])
+        table_data.append([
+            f"--list",
+            "optional",
+            "use for listing nodes and subclusters [ex: --list [nodes|subclusters]]"
+        ])
         
         # Print the table with headers
         print(tabulate(
