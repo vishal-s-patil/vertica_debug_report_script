@@ -729,13 +729,13 @@ if __name__ == "__main__":
         if sys.argv[1] == "--list":
             nodes = get_nodes()
 
-            subclusters, ips, nodes_names = set(), set(), set()
+            subclusters, ips, nodes_names = [], [], []
             for node in nodes:
                 subclusters.add(node[2])
                 ips.add(node[1])
                 nodes_names.add(node[0])
             if sys.argv[2] == "nodes":
-                print('nodes')
+                print(tabulate([nodes, ips, subclusters], headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
             else:
                 print('else')
                 pass
