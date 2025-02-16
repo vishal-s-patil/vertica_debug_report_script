@@ -738,7 +738,7 @@ if __name__ == "__main__":
                 print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
             elif sys.argv[2] == "subclusters":
                 print(set(subclusters))
-                print(tabulate(list(set(subclusters)), headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
+                print(tabulate([[item] for item in list(set(subclusters))], headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
             else:
                 print('else')
                 pass
