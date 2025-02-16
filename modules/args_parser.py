@@ -23,7 +23,7 @@ class MyArgumentParser(argparse.ArgumentParser):
             table_data.append([
                 f"--list",
                 "optional",
-                "use for listing nodes and subclusters"
+                "use for listing nodes and subclusters [ex: --list [nodes|subclusters]]"
             ])
         
         # Print the table with headers
