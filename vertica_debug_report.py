@@ -734,13 +734,11 @@ if __name__ == "__main__":
                 subclusters.add(node[2])
                 ips.add(node[1])
                 nodes_names.add(node[0])
-            print(subclusters)
-            print(ips)
-            print(nodes_names)
-            # if sys.argv[2] == "nodes":
-            #     pass
-            # else:
-            #     pass
+            if sys.argv[2] == "nodes":
+                print('nodes')
+            else:
+                print('else')
+                pass
         sys.exit(0)
 
     args = get_args(help_flag)
