@@ -735,7 +735,7 @@ if __name__ == "__main__":
                 ips.append(node[1])
                 nodes_names.append(node[0])
             if sys.argv[2] == "nodes":
-                print(tabulate([nodes, ips, subclusters], headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
+                print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
             else:
                 print('else')
                 pass
