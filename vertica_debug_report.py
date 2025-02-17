@@ -618,6 +618,7 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                 
                 if query_name == "error_messages_raw":
                     if filters["err_type"] is None:
+                        print('reached..')
                         final_query = get_error_messages_query()
 
                 if "end as status" in query.lower():
