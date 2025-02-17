@@ -617,9 +617,9 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                 for key, val in filters.items():
                     if val is not None:
                         d[key] = val
-                if query_name == "error_messages_raw":
-                    if filters["err_type"] is None:
-                        final_query = get_error_messages_query()
+                # if query_name == "error_messages_raw":
+                #     if filters["err_type"] is None:
+                #         final_query = get_error_messages_query(filters["err_type"])
 
                 if "end as status" in query.lower():
                     final_query = replace_thresholds(final_query, query_name)
