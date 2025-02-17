@@ -718,17 +718,17 @@ def execute_query_breakdown(args, is_now, verbose):
 
 
 examples  = [
-    ['long_running_queries:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries'],
-    ['long_running_queries_raw:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries_raw'],
-    ['sessions:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions'],
-    ['error_messages:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages'],
-    ['error_messages_raw:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages_raw'],
-    ['resource_queues:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=resource_queues'],
-    ['sessions_exceeded:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions_exceeded'],
-    ['delete_vectors:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=delete_vectors'],
-    ['catalog_size:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=catalog_size'],
-    ['performance_buckets:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=performance_buckets --user-name=contact_summary'],
-    ['get_query:', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=get_query --txn-id=117093590328410146 --statement-id=1']
+    ['long_running_queries', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries'],
+    ['long_running_queries_raw', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries_raw'],
+    ['sessions', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions'],
+    ['error_messages', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages'],
+    ['error_messages_raw', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages_raw'],
+    ['resource_queues', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=resource_queues'],
+    ['sessions_exceeded', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions_exceeded'],
+    ['delete_vectors', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=delete_vectors'],
+    ['catalog_size', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=catalog_size'],
+    ['performance_buckets', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=performance_buckets --user-name=contact_summary'],
+    ['get_query', 'genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=get_query --txn-id=117093590328410146 --statement-id=1']
 ]
 
 if __name__ == "__main__":
