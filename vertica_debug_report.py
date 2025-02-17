@@ -749,13 +749,13 @@ if __name__ == "__main__":
     args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag)
 
+    print('printing')
     if len(queries_to_execute) != 0 and 'query_breakdown' in queries_to_execute:
         execute_query_breakdown(args, is_now, args.verbose)
         exit()
 
     insights_json = {}
 
-    print('printing')
     execute_queries_from_json(insights_json, json_file_path, filters, filters['verbose'], is_now, insights_only, with_insights, queries_to_execute)
 
     # print(insights_json)
