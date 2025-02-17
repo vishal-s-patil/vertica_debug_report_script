@@ -741,7 +741,6 @@ if __name__ == "__main__":
                     print(tabulate([[item] for item in list(set(subclusters))], headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
                 else:
                     print("Invalid argument. Use --list nodes or --list subclusters or --list")
-                    pass
             except Exception as e:
                 print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
                 sys.exit(1)
