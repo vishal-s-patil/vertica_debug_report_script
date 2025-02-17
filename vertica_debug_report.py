@@ -717,6 +717,20 @@ def execute_query_breakdown(args, is_now, verbose):
     print(tabulate(q_res, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
 
 
+examples  = """
+long_running_queries: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries
+long_running_queries_raw: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=long_running_queries_raw
+sessions: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions
+error_messages: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages
+error_messages_raw: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=error_messages_raw
+resource_queues: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=resource_queues
+sessions_exceeded: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=sessions_exceeded
+delete_vectors: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=delete_vectors
+catalog_size: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=catalog_size
+performance_buckets: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=performance_buckets --user-name=contact_summary
+get_query: genie --subcluster-name="secondary_subcluster_1" --queries-to-execute=get_query --txn-id=117093590328410146 --statement-id=1
+"""
+
 if __name__ == "__main__":
     help_flag = False
     if len(sys.argv) == 2:
@@ -738,6 +752,8 @@ if __name__ == "__main__":
                     print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
                 elif sys.argv[2] == "subclusters":
                     print(tabulate([[item] for item in list(set(subclusters))], headers=['subcluster'], tablefmt='grid', floatfmt=".2f"))   
+                elif sys.argv[2] == "examples":
+                    print(examples)
                 else:
                     print("Invalid argument. Use --list nodes or --list subclusters or --list")
             except Exception as e:
