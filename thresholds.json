@@ -42,8 +42,8 @@
                 "unique_column": "user_name",
                 "threshold": {
                     "ok": 0,
-                    "warn": 50,
-                    "fatal": 100
+                    "warn": 20,
+                    "fatal": 50
                 },
                 "message_template": {
                     "ok": "{cnt} users having total {total} Active Queries.",
