@@ -21,11 +21,6 @@ def get_nodes():
     return vertica.execute_vertica_query(connection, query)
 
 
-def get_error_messages_query():
-    return """
-    
-    """
-
 def get_ips_and_nodes(subcluster_name):
     query = f"select node_address, node_name from nodes where subcluster_name='{subcluster_name}';"
     connection = vertica.get_vertica_connection()
