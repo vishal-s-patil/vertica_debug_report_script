@@ -608,8 +608,9 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                         print('Please provide a user name to use performance_buckets')
                     continue
 
+                print('reached...')
+                print(is_now, query_past)
                 if not is_now and query_past == "":
-                    print('reached...')
                     final_query = replace_tables_in_query(final_query)
 
                 d = {}
