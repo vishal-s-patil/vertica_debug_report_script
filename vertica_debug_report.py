@@ -743,9 +743,7 @@ if __name__ == "__main__":
             except Exception as e:
                 print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
                 sys.exit(1)
-        sys.exit(0)
-    print('printing')
-    
+            sys.exit(0)
 
     args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag)
