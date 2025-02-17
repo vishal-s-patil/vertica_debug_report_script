@@ -724,7 +724,6 @@ if __name__ == "__main__":
             help_flag = True
     elif len(sys.argv) == 1:
         help_flag = True
-    print('printing')
     if len(sys.argv) >= 2:
         if sys.argv[1] == "--list":
             nodes = get_nodes()
@@ -745,6 +744,8 @@ if __name__ == "__main__":
                 print(tabulate(nodes, headers=['node', 'ip', 'subcluster'], tablefmt='grid', floatfmt=".2f"))   
                 sys.exit(1)
         sys.exit(0)
+    print('printing')
+    
 
     args = get_args(help_flag)
     filters, is_now, insights_only, with_insights, json_file_path, queries_to_execute = pargse_args(help_flag)
