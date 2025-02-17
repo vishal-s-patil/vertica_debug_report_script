@@ -40,7 +40,7 @@ def get_args(help_flag):
     # parser.add_argument("--help", required=False, action="store_true", help="show all command line args with description")
         
     parser.add_argument("--subcluster-name", required=False if help_flag else False, 
-        help="Subcluster name.")
+        help="Subcluster name.", default=None)
 
     parser.add_argument("--inputfilepath", required=False if help_flag else False, 
         help="Path of input json file.", default="queries.json")
@@ -121,7 +121,12 @@ def get_args(help_flag):
         parser.print_help()
         exit(0)
     
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args['subcluster_name'] is None:
+        print('Please provide a subcluster name.')
+        print('Use --list subclusters to list the subclusters.')
+        sys.exit(0)
+    return args
 
 
 def pargse_args(help_flag, query_file_path=None, subcluster_name=None, insights_only=False, queries_to_execute=None):
