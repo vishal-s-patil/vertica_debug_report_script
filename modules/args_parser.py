@@ -124,7 +124,7 @@ def get_args(help_flag):
     args = parser.parse_args()
     if args.subcluster_name is None:
         print('Please provide a subcluster name.')
-        print('Use --list subclusters to list the subclusters.')
+        print('Use "--list subclusters" to list the subclusters.')
         sys.exit(0)
     return args
 
