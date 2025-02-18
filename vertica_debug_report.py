@@ -175,14 +175,13 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
     # if_printref = 0
 
     for threshold in thresholds:
+        print('reached....')
         if threshold['query_name'] == query_name:
             if with_insights or insights_only:    
                 query_result, query_result_show = handle_query_result_when_insights(vertica_connection, query, column_headers)
                 if query_result == -1:
                     print(query_name, ": column not found\n")
                     return
-
-            print('reached....')
             
             if threshold['query_name'] == query_name:
                 args = {
