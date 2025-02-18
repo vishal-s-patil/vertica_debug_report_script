@@ -181,6 +181,8 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                 if query_result == -1:
                     print(query_name, ": column not found\n")
                     return
+
+            print('reached....')
             
             if threshold['query_name'] == query_name:
                 args = {
