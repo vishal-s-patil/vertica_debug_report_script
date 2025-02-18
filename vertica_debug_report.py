@@ -173,6 +173,7 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
     query_result_show = None
 
     # if_printref = 0
+    print('reached.......')
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
             if with_insights or insights_only:    
@@ -656,7 +657,6 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
 
-                print('reached.......')
                 if processed_query_result:
                     if insights_only or with_insights:
                         analyse(qid, insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters) 
