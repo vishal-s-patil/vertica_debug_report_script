@@ -175,7 +175,6 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
     # if_printref = 0
 
     for threshold in thresholds:
-        print('reached....', threshold['query_name'])
         if threshold['query_name'] == query_name:
             if with_insights or insights_only:    
                 query_result, query_result_show = handle_query_result_when_insights(vertica_connection, query, column_headers)
@@ -250,17 +249,11 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                         
                         return
                 elif query_name == "long_running_queries":
-                    print('query_result..', query_result)
-                    print('query_result..', len(query_result))
-                    print('query_result..', issue_level)
-                    
                     if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
-                        print('if')
                         msg = "[\033[92mOK\033[0m] No long running queries."
                         push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
                         print(msg)
                     elif len(query_result) == 1:
-                        print('else')
                         status_counts = {}
                         for _, status, cnt in query_result:
                             status_counts[status] = status_counts.get(status, 0) + cnt
@@ -305,7 +298,6 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                         if with_insights:
                             print()
                     else:
-                        print('esle')
                         status_counts = {}
                         for q_res in query_result:
                             if len(q_res) == 3:
