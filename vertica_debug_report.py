@@ -608,7 +608,6 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                         print('Please provide a user name to use performance_buckets')
                     continue
 
-                print(is_now, query_past)
                 if not is_now and query_past == "":
                     final_query = replace_tables_in_query(final_query)
 
@@ -656,8 +655,6 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                 if thresholds is None:
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
-
-                print('reached.......')
 
                 if processed_query_result:
                     if insights_only or with_insights:
