@@ -12,7 +12,7 @@ class MyArgumentParser(argparse.ArgumentParser):
     def print_help(self, *args, **kwargs):
         """Override print_help to customize the output."""
         table_data = []
-        print("All the mandatory fields are optional when --help is used.")
+        print("This script analyzes database performance, helping identify issues using filters and timeframes. It provides clear insights, making it easier to pinpoint problem areas and optimize operations.")
         for action in self._actions:
             # Add rows to the table
             table_data.append([
