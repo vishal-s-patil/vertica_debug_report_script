@@ -147,6 +147,19 @@ def get_thresholds(thresholds):
     return ok_threshold, warn_threshold, fatal_threshold
 
 
+def handle_query_result_when_insights(vertica_connection, query, column_headers):
+    query_result_show = vertica.execute_vertica_query(vertica_connection, query)
+    if column_headers is not None:
+        query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
+
+    replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
+    replaced_query = replace_row_num_limit(replaced_query, 1000)
+
+    query_result = vertica.execute_vertica_query(vertica_connection, replaced_query)
+
+    return query_result, query_result_show
+
+
 def analyse(qid, insights_json, query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = THRESHOLD_FILE_PATH
     json_data = None
@@ -162,17 +175,8 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
     # if_printref = 0
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
-            if with_insights or insights_only:
-                
-                query_result_show = vertica.execute_vertica_query(vertica_connection, query)
-                if column_headers is not None:
-                    query_result_show = process_query_result_and_highlight_text(query_result_show, column_headers)
-
-                replaced_query = re.sub(r"LIMIT\s+\d+", "", query, flags=re.IGNORECASE)
-                replaced_query = replace_row_num_limit(replaced_query, 1000)
-
-                query_result = vertica.execute_vertica_query(vertica_connection, replaced_query)
-            
+            if with_insights or insights_only:    
+                query_result, query_result_show = handle_query_result_when_insights(vertica_connection, query, column_headers)
                 if query_result == -1:
                     print(query_name, ": column not found\n")
                     return
