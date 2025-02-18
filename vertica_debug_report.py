@@ -251,10 +251,12 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                         return
                 elif query_name == "long_running_queries":
                     if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
+                        print('if')
                         msg = "[\033[92mOK\033[0m] No long running queries."
                         push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
                         print(msg)
                     elif len(query_result) == 1:
+                        print('else')
                         status_counts = {}
                         for _, status, cnt in query_result:
                             status_counts[status] = status_counts.get(status, 0) + cnt
