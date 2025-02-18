@@ -307,7 +307,11 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                     else:
                         print('esle')
                         status_counts = {}
-                        for _, status, cnt in query_result:
+                        for q_res in query_result:
+                            if len(q_res) == 3:
+                                _, status, cnt =  q_res
+                            else:
+                                _, _, status, cnt = q_res
                             status_counts[status] = status_counts.get(status, 0) + cnt
                         ansi_escape = re.compile(r'\x1b\[[0-9;]*m')
                         status_counts= {ansi_escape.sub('', key): value for key, value in status_counts.items()}
