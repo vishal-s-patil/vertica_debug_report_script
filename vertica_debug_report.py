@@ -305,6 +305,7 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                         if with_insights:
                             print()
                     else:
+                        print('esle')
                         status_counts = {}
                         for _, status, cnt in query_result:
                             status_counts[status] = status_counts.get(status, 0) + cnt
