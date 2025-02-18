@@ -607,7 +607,6 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                         print('Please provide a user name to use performance_buckets')
                     continue
 
-                print('reached...')
                 print(is_now, query_past)
                 if not is_now and query_past == "":
                     final_query = replace_tables_in_query(final_query)
@@ -684,6 +683,7 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                     else:
                         analyse(qid, insights_json, final_query, verbose, query_name, processed_query_result, query_description, column_headers, insights_only, with_insights, filters["duration"], filters["pool_name"], filters["issue_level"], is_now, filters['user_name'],filters['subcluster_name'], filters['issue_time'], vertica_connection, filters)
         vertica_connection.close()
+        print('reached.......')
     except Exception as e:
         print(f"Error while processing the CSV file or executing queries: {e}")
     
