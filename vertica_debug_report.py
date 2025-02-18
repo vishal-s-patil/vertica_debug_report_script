@@ -185,10 +185,6 @@ def handle_resource_pool_status_analysis(qid, pool_name, verbose, query, query_r
             total_memory_in_use, total_running_queries, total_memory_borrowed = 0
             total_memory_in_use_index, total_running_queries_index, total_memory_borrowed_index = column_headers.index('memory_inuse_kb'), column_headers.index('running_query_count'), column_headers.index('general_memory_borrowed_kb')
 
-
-
-
-            
             for row in query_result:
                 total_memory_in_use += row[total_memory_in_use_index]
                 total_running_queries += row[total_running_queries_index]
