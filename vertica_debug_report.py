@@ -160,6 +160,52 @@ def handle_query_result_when_insights(vertica_connection, query, column_headers)
     return query_result, query_result_show
 
 
+def handle_resource_pool_status_analysis(qid, pool_name, verbose, query, query_result, issue_level, query_name, query_result_show, column_headers):
+    if pool_name is None:
+        print('resource_pool_status: Please provide pool name to get insights.')
+    else:
+        if verbose:
+            print('QUERY: ', f"{query}")
+            print("-" * 15)
+
+        if query_result is None and (issue_level == 'ok' or issue_level is None):
+            msg = f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.'
+            push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
+            print(msg)
+        else:
+            if with_insights:
+                print(f"\n\nQuery Name: {query_name}")
+                print("-" * len(f"Query Name: {query_name}"))
+                if query_result_show is not None:
+                    # query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
+                    print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                else:
+                    print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
+                
+            total_memory_in_use, total_running_queries, total_memory_borrowed = 0
+            total_memory_in_use_index, total_running_queries_index, total_memory_borrowed_index = column_headers.index('memory_inuse_kb'), column_headers.index('running_query_count'), column_headers.index('general_memory_borrowed_kb')
+
+
+
+
+            
+            for row in query_result:
+                total_memory_in_use += row[total_memory_in_use_index]
+                total_running_queries += row[total_running_queries_index]
+                total_memory_borrowed += row[total_memory_borrowed_index]
+            
+            if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
+                msg = f"[\033[92mOK\033[0m] No running queries found."
+                push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
+                print(msg)
+            elif issue_level == 'ok':
+                msg = f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool"
+                push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
+                print(msg)
+            if with_insights:
+                print()    
+
+
 def analyse(qid, insights_json, query, verbose, query_name, query_result, query_description, column_headers, insights_only, with_insights, duration, pool_name, issue_level, is_now, user_name, subcluster_name, issue_time, vertica_connection, filters):
     threshold_json_file_path = THRESHOLD_FILE_PATH
     json_data = None
@@ -199,55 +245,8 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
                 if query_name == "long_running_queries_raw":
                     return
                 if query_name == "resource_pool_status":
-                    if pool_name is None:
-                        print('resource_pool_status: Please provide pool name to get insights.')
-                        return
-                    else:
-                        # print(f"\n\nQuery Name: {query_name}")
-                        # print("-" * len(f"Query Name: {query_name}"))
-                        # print(f"Query Description: {query_description}")
-                        # print("-" * len(f"Query Description: {query_description}"))
-                        if verbose:
-                            print('QUERY: ', f"{query}")
-                            print("-" * 15)
-
-                        if query_result is None and (issue_level == 'ok' or issue_level is None):
-                            msg = f'[\033[92mOK\033[0m] No running queries found for given pool name or subclutser.'
-                            push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
-                            print(msg)
-                        else:
-                            if with_insights:
-                                print(f"\n\nQuery Name: {query_name}")
-                                print("-" * len(f"Query Name: {query_name}"))
-                                if query_result_show is not None:
-                                    # query_result_show = colour_values(query_result_show, threshold['query_name']['columns'], column_headers)
-                                    print(tabulate(query_result_show, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                                else:
-                                    print(tabulate(query_result, headers=column_headers, tablefmt='grid', floatfmt=".2f"))
-                                
-                            total_memory_in_use = 0
-                            total_running_queries = 0
-                            total_memory_borrowed = 0
-                            total_memory_in_use_index = column_headers.index('memory_inuse_kb')
-                            total_running_queries_index = column_headers.index('running_query_count')
-                            total_memory_borrowed_index = column_headers.index('general_memory_borrowed_kb')
-                            for row in query_result:
-                                total_memory_in_use += row[total_memory_in_use_index]
-                                total_running_queries += row[total_running_queries_index]
-                                total_memory_borrowed += row[total_memory_borrowed_index]
-                            
-                            if total_running_queries == 0 and (issue_level == 'ok' or issue_level is None):
-                                msg = f"[\033[92mOK\033[0m] No running queries found."
-                                push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
-                                print(msg)
-                            elif issue_level == 'ok':
-                                msg = f"[\033[92mOK\033[0m] Having {total_running_queries} running queries with {total_memory_in_use} kb in use and borrowed {total_memory_borrowed} kb from general pool"
-                                push_to_insights_json(qid, insights_json, msg, 'OK', query_name)
-                                print(msg)
-                            if with_insights:
-                                print()
-                        
-                        return
+                    handle_resource_pool_status_analysis(qid, pool_name, verbose, query, query_result, issue_level, query_name, query_result_show, column_headers)
+                    return
                 elif query_name == "long_running_queries":
                     if (query_result is None or len(query_result) == 0) and (issue_level == 'ok' or issue_level is None):
                         msg = "[\033[92mOK\033[0m] No long running queries."
