@@ -173,7 +173,7 @@ def analyse(qid, insights_json, query, verbose, query_name, query_result, query_
     query_result_show = None
 
     # if_printref = 0
-    print('reached.......')
+
     for threshold in thresholds:
         if threshold['query_name'] == query_name:
             if with_insights or insights_only:    
@@ -656,6 +656,8 @@ def execute_queries_from_json(insights_json, json_file_path, filters, verbose, i
                 if thresholds is None:
                     print(f"Error reading {threshold_json_file_path}")
                     exit()
+
+                print('reached.......')
 
                 if processed_query_result:
                     if insights_only or with_insights:
