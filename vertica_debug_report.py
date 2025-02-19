@@ -14,7 +14,6 @@ from modules.args_parser import get_args, pargse_args
 
 THRESHOLD_FILE_PATH="thresholds.json"
 
-
 def get_nodes():
     connection = vertica.get_vertica_connection()
     query = "select node_name, node_address, subcluster_name from nodes;"
