@@ -76,6 +76,13 @@
         "query_description": "",
         "query": "select node_name, is_executing, processed_row_count, user_name, query_duration_us, query_start, statement_id, transaction_id, query from query_profiles where transaction_id={txn_id} and statement_id={statement_id};",
         "query_past": "select node_name, is_executing, processed_row_count, user_name, query_duration_us, query_start, statement_id, transaction_id, query from netstats.query_profiles where transaction_id={txn_id} and statement_id={statement_id};"
+    },
+    {
+        "qid": 14,
+        "query_name": "nodes_status",
+        "query_description": "",
+        "query": "select count(1) total_nodes,sum(case when node_state='UP' then 0 else 1 end) down_nodes from nodes;",
+        "query_past": "select count(1) total_nodes,sum(case when node_state='UP' then 0 else 1 end) down_nodes from nodes;"
     }
 ]
 
