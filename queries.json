@@ -81,8 +81,8 @@
         "qid": 14,
         "query_name": "nodes_status",
         "query_description": "",
-        "query": "select count(1) total_nodes,sum(case when node_state='UP' then 0 else 1 end) down_nodes from nodes;",
-        "query_past": "select count(1) total_nodes,sum(case when node_state='UP' then 0 else 1 end) down_nodes from nodes;"
+        "query": "select count(1) total_nodes,sum(case when node_state=upper('UP') then 0 else 1 end) down_nodes from nodes;",
+        "query_past": "select count(1) total_nodes,sum(case when node_state=upper('UP') then 0 else 1 end) down_nodes from nodes;"
     }
 ]
 
